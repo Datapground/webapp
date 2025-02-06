@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import SideNavigation from '../components/SideNaivgation';
+import SideNavigation from '../components/SideNavigation';
 
 const RootLayout = () => {
   return (
