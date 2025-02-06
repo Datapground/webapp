@@ -15,16 +15,20 @@
 }
 
 .vertical-rounded-tab {
-  --r: 35px;
+  --r: 20px; /* Adjusted radius */
 
-  line-height: 4;
-  padding-inline: 0.5em;
-  border-block: var(--r) solid #0000;
+  line-height: 1; /* Adjusted height */
+  padding-inline: 0.3rem; /* Adjusted padding */
+  border-block: var(--r) solid transparent;
   border-radius: var(--r) 0 0 var(--r) / calc(2 * var(--r));
-  mask:
-    radial-gradient(var(--r) at 0 var(--r), #0000 98%, #000 101%) 100%
+
+  -webkit-mask:
+    radial-gradient(var(--r) at 0 var(--r), transparent 90%, black 99%) 100%
       calc(-1 * var(--r)) / var(--r) 100% repeat-y,
-    conic-gradient(#000 0 0) padding-box;
-  background: white border-box; /* border-box is needed for a gradient coloration */
-  width: 100%;
+    conic-gradient(black 0 0) padding-box;
+  mask:
+    radial-gradient(var(--r) at 0 var(--r), transparent 98%, black 99%) 100%
+      calc(-1 * var(--r)) / var(--r) 100% repeat-y,
+    conic-gradient(black 0 0) padding-box;
+  background: white;
 }
