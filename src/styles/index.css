@@ -13,3 +13,18 @@
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
+
+.vertical-rounded-tab {
+  --r: 35px;
+
+  line-height: 4;
+  padding-inline: 0.5em;
+  border-block: var(--r) solid #0000;
+  border-radius: var(--r) 0 0 var(--r) / calc(2 * var(--r));
+  mask:
+    radial-gradient(var(--r) at 0 var(--r), #0000 98%, #000 101%) 100%
+      calc(-1 * var(--r)) / var(--r) 100% repeat-y,
+    conic-gradient(#000 0 0) padding-box;
+  background: white border-box; /* border-box is needed for a gradient coloration */
+  width: 100%;
+}
