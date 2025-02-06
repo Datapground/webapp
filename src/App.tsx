@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import RootLayout from './layouts/RootLayout';
 import Recovery from './pages/Recovery';
+import VerifyOtp from './pages/VerifyOtp';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
 
       {/* Recover password */}
       <Route path="/auth/recovery" element={<Recovery />} />
+      <Route path="/auth/verify" element={<VerifyOtp />} />
 
       {/* Protected Routes (With Sidebar) */}
       <Route path="/" element={<RootLayout />}>
