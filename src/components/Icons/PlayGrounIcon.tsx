@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PlaygroundIcon = (props) => {
+const PlayGrounIcon = (props) => {
   return (
     <svg
       viewBox="0 0 16 16"
@@ -32,4 +32,4 @@ const PlaygroundIcon = (props) => {
   );
 };
 
-export default PlaygroundIcon;
+export default PlayGrounIcon;
