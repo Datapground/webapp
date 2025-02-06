@@ -130,7 +130,12 @@ const SideNavigation = () => {
                 >
                   <Link
                     to={path}
-                    className={`flex items-center py-2 gap-3 my-[5px] rounded-l-[30px] w-full text-sm text-[#414042] px-4 ${isActive ? `bg-gradient-to-r ${gradientClass} text-white` : ''}`}
+                    className={`flex items-center py-2 gap-3 my-[5px] rounded-l-[30px] w-full text-sm text-[#414042] px-4 ${
+                      isActive
+                        ? `bg-gradient-to-r from-generator to bg-white text-white`
+                        : ''
+                    }`}
+                    // className={`flex items-center py-2 gap-3 my-[5px] rounded-l-[30px] w-full text-sm text-[#414042] px-4 ${isActive ? `bg-gradient-to-r ${gradientClass} text-white` : ''}`}
                   >
                     <Icon
                       className={`w-[16px] h-[16px] stroke-[#414042] ${isActive ? 'stroke-white' : ''}`}
@@ -149,6 +154,7 @@ const SideNavigation = () => {
           <div className="line h-[1px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-4"></div>
 
           {/* AccountsItems */}
+          <p className="text-xs text-[#414042] py-3 -ml-4">Accounts</p>
           {accounts.map(({ path, label, Icon }, index) => {
             const isActive = location.pathname === path;
             return (
