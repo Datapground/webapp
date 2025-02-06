@@ -5,6 +5,7 @@ import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 type LoginFormInputs = {
   email: string;
@@ -126,7 +127,9 @@ const Login: React.FC = () => {
 
           <p className="text-center text-sm text-[#414042]/50 font-primary my-4 self-center mt-6">
             Don’t have an account yet?{' '}
-            <span className="text-[#5F5FC9]">Register for free</span>
+            <Link to={'/auth/register'} className="text-[#5F5FC9]">
+              Register for free
+            </Link>
           </p>
         </div>
 

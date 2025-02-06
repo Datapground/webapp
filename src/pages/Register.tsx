@@ -6,6 +6,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
 import { IoIosCheckmark } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 
 type RegisterFormInputs = {
   name: string;
@@ -236,8 +237,10 @@ const Register: React.FC = () => {
           </div>
 
           <p className="text-center text-sm text-[#414042]/50 font-primary my-4 self-center mt-6">
-            Don’t have an account yet?{' '}
-            <span className="text-[#5F5FC9]">Register for free</span>
+            Already have an account?{' '}
+            <Link to={'/auth/login'} className="text-[#5F5FC9]">
+              Login
+            </Link>
           </p>
         </div>
 

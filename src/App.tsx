@@ -3,12 +3,16 @@ import { Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import RootLayout from './layouts/RootLayout';
+import Recovery from './pages/Recovery';
 
 const App = () => {
   return (
     <Routes>
       <Route path="/auth/login" element={<Login />} />
       <Route path="/auth/register" element={<Register />} />
+
+      {/* Recover password */}
+      <Route path="/auth/recovery" element={<Recovery />} />
 
       {/* Protected Routes (With Sidebar) */}
       <Route path="/" element={<RootLayout />}>
