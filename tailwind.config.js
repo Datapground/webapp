@@ -4,6 +4,19 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: '0rem',
+          lg: '0rem',
+        },
+        screens: {
+          sm: '100%',
+          md: '1200px',
+          lg: '1340px',
+          '2xl': '1400px',
+        },
+      },
       fontFamily: {
         primary: ['var(--font-primary)'],
       },

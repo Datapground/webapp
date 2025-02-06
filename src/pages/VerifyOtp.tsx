@@ -31,7 +31,7 @@ const VerifyOtp: React.FC = () => {
         alt="robot"
         className="object-contain absolute h-full top-0 -left-[15%] pointer-events-none opacity-90"
       />
-      <div className="w-full h-full bg-white rounded-[40px] lg:grid grid-cols-5 relative">
+      <div className="container w-full h-full bg-white rounded-[40px] lg:grid grid-cols-5 relative">
         <div className="col-span-2 h-full rounded-[40px] flex flex-col justify-center items-start xl:p-16 p-8">
           <Lottie
             animationData={logoAnimation}
@@ -61,7 +61,7 @@ const VerifyOtp: React.FC = () => {
               )}
             />
             <button className="text-base font-primary text-white bg-btn rounded-[40px] block w-full md:h-[50px] h-[40px] mt-4">
-              Send OTP
+              Verify
             </button>
 
             {/* Timer & Resend Button */}
