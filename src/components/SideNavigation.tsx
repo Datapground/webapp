@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Lottie from 'lottie-react';
 import logoAnimation from '../constants/LogoAnimation.json';
 import { Link, useLocation } from 'react-router-dom';
@@ -41,21 +41,6 @@ const accounts = [
 
 const SideNavigation = () => {
   const location = useLocation();
-  const path = location.pathname;
-
-  const [activeColor, setActiveColor] = React.useState<string>(''); // Default background
-
-  useEffect(() => {
-    if (path === '/generator') {
-      setActiveColor('generator');
-    } else if (path === '/predictor') {
-      setActiveColor('predictor');
-    } else if (path === '/extender') {
-      setActiveColor('extender');
-    } else {
-      setActiveColor('');
-    }
-  }, [path]);
 
   return (
     <nav
@@ -113,10 +98,6 @@ const SideNavigation = () => {
           {tools.map(({ path, label, Icon }, index) => {
             const isActive = location.pathname === path;
 
-            const gradientClass = activeColor
-              ? `from-${path.substring(1)} to-white`
-              : 'from-default to-white';
-
             return (
               <div key={path}>
                 {/* Item Above */}
@@ -135,10 +116,9 @@ const SideNavigation = () => {
                         ? `bg-gradient-to-r from-generator to bg-white text-white`
                         : ''
                     }`}
-                    // className={`flex items-center py-2 gap-3 my-[5px] rounded-l-[30px] w-full text-sm text-[#414042] px-4 ${isActive ? `bg-gradient-to-r ${gradientClass} text-white` : ''}`}
                   >
                     <Icon
-                      className={`w-[16px] h-[16px] stroke-[#414042] ${isActive ? 'stroke-white' : ''}`}
+                      className={`w-[16px] h-[16px] stroke-[#414042] ${isActive} ${isActive ? 'stroke-white' : ''}`}
                     />
                     {label}
                   </Link>

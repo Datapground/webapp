@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import SideNavigation from '../components/SideNavigation';
+import TopBar from '../components/TopBar';
 
 const RootLayout = () => {
   const location = useLocation();
@@ -19,7 +20,9 @@ const RootLayout = () => {
   return (
     <div className={`min-h-screen flex ${bgColor} `}>
       <SideNavigation />
-      <div className={`flex-1 p-6`}>
+
+      <div className={`flex flex-col p-6 w-full`}>
+        <TopBar />
         <Outlet />
       </div>
     </div>
