@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import Lottie from 'lottie-react';
-import logoAnimation from '../constants/LogoAnimation.json';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { useForm } from 'react-hook-form';
 
@@ -33,12 +31,12 @@ const ResetPassword: React.FC = () => {
       />
       <div className="container w-full h-full bg-white rounded-[40px] lg:grid grid-cols-5 relative">
         <div className="col-span-2 h-full rounded-[40px] flex flex-col justify-center items-start xl:p-16 p-8">
-          <Lottie
-            animationData={logoAnimation}
-            loop={true}
-            className="h-[60px] w-[250px]"
+          <img
+            src="/logo.png"
+            alt="Logo"
+            className="h-[50px] w-[250px] object-contain"
           />
-          <p className="text-sm font-primary text-[#414042] mt-4">
+          <p className="text-sm font-primary text-[#414042] mt-8">
             You have successfully enter correct OTP and now you able to change
             password, now type your new password and keep it safe
           </p>

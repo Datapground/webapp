@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
-import Lottie from 'lottie-react';
-import logoAnimation from '../constants/LogoAnimation.json';
 import { Link, useLocation } from 'react-router-dom';
 import ActivityIcon from './Icons/ActivityIcon';
 import InviteIcon from './Icons/InviteIcon';
@@ -91,12 +88,14 @@ const SideNavigation = () => {
       className={`w-64 flex flex-col justify-between items-center rounded-[40px] bg-[#E3ECFF]`}
     >
       <div className="w-full relative z-50">
-        <div className="p-4 pb-3">
-          <Lottie
-            animationData={logoAnimation}
-            loop
-            className="h-[40px] w-[190px] mx-auto"
-          />
+        <div className="p-4">
+          <Link to={'/playground'}>
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="h-[30px] w-[180px] mx-auto object-contain pointer-events-none"
+            />
+          </Link>
         </div>
 
         <div className="w-full pl-8 z-50">
