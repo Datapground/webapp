@@ -1,25 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 import SideNavigation from '../components/SideNavigation';
+import TopBar from '../components/TopBar';
 
 const RootLayout = () => {
-  const location = useLocation();
-  const [bgColor, setBgColor] = useState<string>('generator');
-  useEffect(() => {
-    const path = location.pathname;
-
-    if (path === '/generator' || path === '/extender') {
-      setBgColor('bg-extenderBackground');
-    } else if (path === '/predictor') {
-      setBgColor('bg-predictorBackground');
-    } else {
-      setBgColor('bg-white');
-    }
-  }, [location]);
   return (
-    <div className={`min-h-screen flex ${bgColor} `}>
+    <div className={`min-h-screen flex`}>
       <SideNavigation />
       <div className={`flex-1 p-6`}>
+        <TopBar />
         <Outlet />
       </div>
     </div>
