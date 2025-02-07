@@ -118,7 +118,7 @@ const SideNavigation = () => {
                     }`}
                   >
                     <Icon
-                      className={`w-[16px] h-[16px] stroke-[#414042] ${isActive} ${isActive ? 'stroke-white' : ''}`}
+                      className={`w-[16px] h-[16px] stroke-[#414042] ${isActive ? 'stroke-white' : ''}`}
                     />
                     {label}
                   </Link>
