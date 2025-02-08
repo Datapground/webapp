@@ -1,92 +1,21 @@
-import React, { CSSProperties, useState } from 'react';
 // import SelectOption from '../components/SelectOption';
+import React, { Fragment, useEffect, useState } from 'react';
 import TextRemove from '../components/Icons/TextRemove';
-import LogoIcon from '../components/Icons/LogoIcon';
 import PenIcon from '../components/Icons/PenIcon';
-import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import SettingsIcon from '../components/Icons/SettingsIcon';
-import Select, { GroupBase, components } from 'react-select';
-import ChevronDownIcon from '../components/Icons/ChevronDownIcon';
+
+import TopBar from '../components/TopBar';
 import GeneratorIcon from '../components/Icons/GeneratorIcon';
-
-// Define types for options
-type OptionType = {
-  value: string;
-  label: string;
-  Icon?: React.ElementType;
-};
-
-// Styles
-const groupStyles: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-};
-
-// Function to format group labels with count badge
-const formatGroupLabel = (data: GroupBase<OptionType>) => (
-  <div style={groupStyles}>
-    <span>{data.label}</span>
-  </div>
-);
-
-// Sample grouped data (Customize this)
-const groupedOptions: GroupBase<OptionType>[] = [
-  {
-    label: 'Models',
-    options: [
-      { value: 'merlin', label: 'Merlin Generator', Icon: GeneratorIcon },
-      { value: 'elixir', label: 'Elixir Predictor', Icon: GeneratorIcon },
-      { value: 'gold', label: 'Gold Extender', Icon: GeneratorIcon },
-      { value: 'oracle', label: 'Oracle Extender', Icon: GeneratorIcon },
-    ],
-  },
-];
-
-// Custom Single Value Component (Centered)
-const customSingleValue = ({ data }: { data: OptionType }) => (
-  <div className="flex items-center text-center -mt-5 gap-2 text-[#414042]">
-    {data.Icon && <data.Icon className="w-[16px] h-[16px] stroke-generator" />}
-    {data.label}
-  </div>
-);
-
-// Custom Option Component
-const customOption = (props: any) => {
-  const { data, innerRef, innerProps, isSelected } = props;
-  return (
-    <div
-      ref={innerRef}
-      {...innerProps}
-      className={`flex justify-start items-center gap-2 pl-4 p-2 cursor-pointer ${
-        isSelected ? 'bg-generator text-white' : 'hover:bg-gray-100'
-      }`}
-    >
-      {data.Icon && (
-        <data.Icon
-          className={`w-[16px] h-[16px] ${isSelected ? 'stroke-white' : 'stroke-generator'}`}
-        />
-      )}
-      {data.label}
-    </div>
-  );
-};
-
-// Custom Dropdown Indicator (Pink Color)
-const customDropdownIndicator = (props: any) => {
-  return (
-    <components.DropdownIndicator {...props}>
-      <ChevronDownIcon className={`w-[16px] h-[16px] stroke-generator`} />
-    </components.DropdownIndicator>
-  );
-};
+import GeneratorSelect from '../components/generator/Select';
+import { useSearchParams } from 'react-router-dom';
 
 const Generator: React.FC = () => {
   const [speed, setSpeed] = useState(50);
   const [temperature, setTemperature] = useState(40);
   const [rows, setRows] = useState(70);
   const [accuracy, setAccuracy] = useState(30);
+  const [text, setText] = useState('');
 
   const handleSpeed = (_event: Event, newValue: number | number[]) => {
     setSpeed(newValue as number);
@@ -104,125 +33,121 @@ const Generator: React.FC = () => {
     setAccuracy(newValue as number);
   };
 
+  // useEffect(() => {
+  //   const modal = searchParams.get('modal');
+
+  //   if (modal) {
+  //     setModalStyles({
+  //       borderColor: `border-${modal}`,
+  //       bgColor: `bg-${modal}-main`, // Adjust the class name according to your CSS
+  //       tabColor: `tab-${modal}`, // Change this to the correct class if needed
+  //     });
+  //   } else {
+  //     setModalStyles({
+  //       borderColor: '',
+  //       bgColor: '',
+  //       tabColor: '',
+  //     });
+  //   }
+
+  //   console.log('Updated Styles:', modalStyles);
+  // }, [searchParams]);
+
   return (
-    <div>
-      {/** Generator Top */}
-      <div className="flex justify-between items-center w-full my-3">
+    <Fragment>
+      {/* Top bar */}
+      <TopBar containerClassName="justify-between">
+        <aside className="flex justify-start items-center gap-3">
+          <GeneratorIcon className="fill-[#414042] w-[26px] h-[23.59px]" />
+          <h2 className="text-[26px] font-primary font-medium">
+            The Generator
+          </h2>
+        </aside>
+      </TopBar>
+
+      {/* Generator bar */}
+      <div className="flex justify-between items-center w-full">
         <div className="flex items-center gap-3">
           <p className="text-sm text-[#414042]">Model</p>
 
           <div className="flex w-[300px] ">
             {/* <SelectOption /> */}
-            <Select<OptionType, false, GroupBase<OptionType>>
-              options={groupedOptions}
-              formatGroupLabel={formatGroupLabel}
-              defaultValue={groupedOptions[0].options[0]}
-              placeholder="Select a Model..."
-              // onChange={handleChange}
-              className={`w-[300px] text-[#414042] text-sm border border-generator rounded-[10px]
-  `}
-              isSearchable={false}
-              styles={{
-                control: (base) => ({
-                  ...base,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  outline: 'none',
-                  border: 'none',
-                  boxShadow: base.isFocused ? '0 0 0 2px #C32782' : 'none',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  backgroundColor: 'transparent',
-                  padding: '5px 10px',
-                }),
-                menu: (base) => ({
-                  ...base,
-                  zIndex: 100,
-                  borderRadius: '10px',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                }),
-                option: (provided, state) => ({
-                  ...provided,
-                  backgroundColor: state.isSelected ? 'pink' : 'transparent',
-                  color: state.isSelected ? 'white' : '#414042',
-                  cursor: 'pointer',
-                }),
-              }}
-              components={{
-                Option: customOption,
-                SingleValue: customSingleValue,
-                DropdownIndicator: customDropdownIndicator,
-                IndicatorSeparator: () => null,
-              }}
-            />
+            <GeneratorSelect />
           </div>
         </div>
 
-        {/** Taublar Data */}
+        {/** Tabular Data */}
         <div className="flex items-center gap-3">
-          <span>
-            <p className="py-2 px-3 border border-generator  text-generator text-md">
-              Taublar Data
+          <button>
+            <p
+              className={`py-2 px-3 border border-generator text-generator text-md`}
+            >
+              Tabular Data
             </p>
-          </span>
-          <span className="border border-generator rounded-[10px]  py-2 ">
-            <input
-              type="text"
-              placeholder="input date here"
-              className="bg-transparent outline-none text-[#414042] px-2"
-            />
-          </span>
+          </button>
+          <input
+            type="text"
+            placeholder="Natural Language Input"
+            className="bg-transparent outline-none border-none text-[#414042] px-2"
+          />
         </div>
       </div>
 
-      {/**Generator Content */}
-      <div className=" flex justify-between gap-5 items-center">
-        {/** Generator Main */}
-        <div className="min-h-screen flex flex-col gap-3 w-full">
-          {/** Input */}
-          <div className=" flex flex-col flex-grow border border-generator rounded-[5px] p-5 relative">
-            <div className="flex items-start w-full">
+      {/* Generator Content */}
+      <div className="grid grid-cols-7 gap-4 mt-4">
+        <div className="flex flex-col gap-3 w-full col-span-5">
+          <div className="border border-[#C32782]/60 rounded-[5px] relative p-4">
+            <div className="relative">
               <textarea
-                id="text"
-                name="text"
-                cols={10}
-                rows={3}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
                 placeholder="Write an explanation about the topic you want to generate data about and its fields...."
-                className="w-full bg-transparent outline-none text-[#414042] text-[20px] font-[400] scrollbar-hide resize-none overflow-hidden"
+                className="min-h-[260px] w-full h-full bg-transparent outline-none border-none text-sm text-[#414042] placeholder:text-[#414042] resize-none overflow-hidden"
               />
-              <TextRemove className={`w-[30px] h-[30px] stroke-generator`} />
+              <button
+                className="absolute top-0 right-0 z-10"
+                onClick={() => setText('')}
+              >
+                <TextRemove
+                  className={`w-[30px] h-[30px] fill-[#C32782]/50 relative`}
+                />
+              </button>
             </div>
-            <button className="flex gap-1 absolute right-5 bottom-5 items-center w-[150px] bg-generator rounded-md px-5 p-2 text-center text-[#FFFFFF] text-[18px] font-[600]">
-              <PenIcon className={`w-[22px] h-[22px] stroke-white`} />
-              Generate
-            </button>
+            <aside className="flex justify-end">
+              <button className="bg-[#C32782] py-2 px-6 text-sm rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap">
+                <PenIcon className={`w-[22px] h-[22px] fill-white`} />
+                Generate
+              </button>
+            </aside>
           </div>
 
           {/** Output */}
-          <h2 className="text-[#414042] text-[26px] font-[700]">Output</h2>
-          <div className=" flex flex-col items-center flex-grow border border-generator rounded-[5px] justify-center">
-            {/** if no result  */} <LogoIcon />
-            <h3 className="text-[#414042] text-[20px] font-[600]">
+          <h2 className="text-[#414042] text-[20px] font-primary font-semibold">
+            Output
+          </h2>
+          <div className=" flex flex-col items-center flex-grow border border-[#C32782]/60 rounded-[5px] justify-center">
+            <img
+              src="/logo-icon.png"
+              alt="logo"
+              className="object-contain w-[70px] h-[70px] pointer-events-none"
+            />
+            <h3 className="text-[#414042] text-base font-semibold">
               Not Result Yet
             </h3>
-            <p className="text-[#414042] text-[a8px] font-[400]">
+            <p className="text-[#414042] text-sm font-primary">
               The Generation is being performed
             </p>
           </div>
         </div>
 
-        {/** Settings Side */}
-        <div className="min-h-screen w-[300px] ">
+        <div className="col-span-2">
           <span className="flex items-center justify-start gap-2 text-[#414042] text-[16px] font-[400] bg-generatorLight rounded-[10px] p-2 text-center">
             <SettingsIcon className={`w-[14px] h-[14px] stroke-[#414042]`} />
             Settings
           </span>
 
-          {/** Settings */}
           <div className="mt-3">
-            <Box sx={{ width: 300, textAlign: 'center' }}>
+            <div>
               <span className="flex items-center justify-between">
                 Speed
                 <label className="p-1 bg-slate-50 rounded-md border px-4 py-1 text-sm font-[200]">
@@ -241,9 +166,9 @@ const Generator: React.FC = () => {
                   '& .MuiSlider-rail': { backgroundColor: '#C3278233' }, // Rail (unfilled part)
                 }}
               />
-            </Box>
+            </div>
 
-            <Box sx={{ width: 300 }}>
+            <div>
               <span className="flex items-center justify-between">
                 Temperature
                 <label className="p-1 bg-slate-50 rounded-md border px-4 py-1 text-sm font-[200]">
@@ -263,9 +188,9 @@ const Generator: React.FC = () => {
                   '& .MuiSlider-rail': { backgroundColor: '#A077A866' }, // Rail (unfilled part)
                 }}
               />
-            </Box>
+            </div>
 
-            <Box sx={{ width: 300, textAlign: 'center' }}>
+            <div>
               <span className="flex items-center justify-between">
                 Rows
                 <label className="p-1 bg-slate-50 rounded-md border px-4 py-1 text-sm font-[200]">
@@ -284,9 +209,9 @@ const Generator: React.FC = () => {
                   '& .MuiSlider-rail': { backgroundColor: '#1E647F66' }, // Rail (unfilled part)
                 }}
               />
-            </Box>
+            </div>
 
-            <Box sx={{ width: 300, textAlign: 'center' }}>
+            <div>
               <span className="flex items-center justify-between">
                 Accuracy
                 <label className="p-1 bg-slate-50 rounded-md border px-4 py-1 text-sm font-[200]">
@@ -305,7 +230,7 @@ const Generator: React.FC = () => {
                   '& .MuiSlider-rail': { backgroundColor: '#59B1FE33' }, // Rail (unfilled part)
                 }}
               />
-            </Box>
+            </div>
 
             {/** Examples */}
             <div className="mt-4 border-t pt-2">
@@ -334,7 +259,7 @@ const Generator: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

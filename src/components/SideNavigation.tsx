@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Lottie from 'lottie-react';
 import logoAnimation from '../constants/LogoAnimation.json';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import ActivityIcon from './Icons/ActivityIcon';
 import InviteIcon from './Icons/InviteIcon';
 import GeneratorIcon from './Icons/GeneratorIcon';
@@ -16,6 +16,7 @@ import UsageIcon from './Icons/UsageIcon';
 import BillingIcon from './Icons/BillingIcon';
 import SettingsIcon from './Icons/SettingsIcon';
 import PlaygroundIcon from './Icons/PlaygroundIcon';
+import path from 'path';
 
 const navItems = [
   { path: '/playground', label: 'Playground', Icon: PlaygroundIcon },
@@ -24,27 +25,6 @@ const navItems = [
   { path: '/blueprints', label: 'Blueprints', Icon: BluePrintIcon },
   { path: '/workflows', label: 'Workflows', Icon: WorkFlowsIcon },
   { path: '/connections', label: 'Connections', Icon: Connections },
-];
-
-const tools = [
-  {
-    path: '/generator',
-    label: 'The Generator',
-    bgClass: 'bg-generator-merlin',
-    Icon: GeneratorIcon,
-  },
-  {
-    path: '/predictor',
-    label: 'The Predictor',
-    bgClass: 'bg-predictor-main',
-    Icon: PredictorIcon,
-  },
-  {
-    path: '/extender',
-    label: 'The Extender',
-    bgClass: 'bg-extender-main',
-    Icon: ExtenderIcon,
-  },
 ];
 
 const accounts = [
@@ -56,8 +36,44 @@ const accounts = [
 
 const SideNavigation = () => {
   const location = useLocation();
-
   const pathname = location.pathname;
+  const [searchParams] = useSearchParams();
+
+  const [generatorBgClass, setGeneratorBgClass] = useState(
+    'bg-generator-merlin'
+  );
+
+  useEffect(() => {
+    const modal = searchParams.get('modal');
+    setGeneratorBgClass(
+      modal ? `bg-generator-${modal}` : 'bg-generator-merlin'
+    );
+  }, [searchParams]);
+
+  useEffect(() => {
+    console.log('Updated generatorBgClass:', generatorBgClass);
+  }, [generatorBgClass]);
+
+  const tools = [
+    {
+      path: '/generator',
+      label: 'The Generator',
+      bgClass: generatorBgClass, // Uses **updated** state
+      Icon: GeneratorIcon,
+    },
+    {
+      path: '/predictor',
+      label: 'The Predictor',
+      bgClass: 'bg-predictor-main',
+      Icon: PredictorIcon,
+    },
+    {
+      path: '/extender',
+      label: 'The Extender',
+      bgClass: 'bg-extender-main',
+      Icon: ExtenderIcon,
+    },
+  ];
 
   useEffect(() => {
     // Define colors separately for body and .vertical-rounded-tab elements
@@ -137,24 +153,27 @@ const SideNavigation = () => {
 
           {/* Divider */}
           <div className="line h-[1px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-4"></div>
-          {tools.map(({ path, label, bgClass, Icon }) => (
-            <div
-              key={path}
-              className={`relative ${pathname === path ? 'ml-[-4px] my-[-24px] vertical-rounded-tab -z-50' : 'z-30'}`}
-            >
-              <Link
-                to={path}
-                className={`flex items-center py-2 gap-3 my-[5px] rounded-l-[30px] w-full text-sm text-[#414042] px-4 ${
-                  pathname === path ? `${bgClass} text-white` : ''
-                }`}
+          {tools.map(({ path, label, bgClass, Icon }) => {
+            const isActive = location.pathname === path;
+
+            return (
+              <div
+                key={path}
+                className={`relative ${isActive ? 'ml-[-4px] my-[-24px] vertical-rounded-tab -z-50' : 'z-30'}`}
               >
-                <Icon
-                  className={`w-[16px] h-[16px] stroke-[#414042] ${pathname === path ? 'stroke-white' : ''}`}
-                />
-                {label}
-              </Link>
-            </div>
-          ))}
+                <Link
+                  to={path}
+                  className={`flex items-center py-2 gap-3 my-[5px] rounded-l-[30px] w-full text-sm px-4 
+          ${isActive ? `${bgClass} text-white` : 'text-[#414042]'}`}
+                >
+                  <Icon
+                    className={`w-[16px] h-[16px] fill-[#414042] ${isActive ? 'fill-white' : ''}`}
+                  />
+                  {label}
+                </Link>
+              </div>
+            );
+          })}
 
           {/* Divider */}
           <div className="line h-[1px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-4"></div>
