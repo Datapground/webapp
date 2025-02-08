@@ -30,3 +30,21 @@
       calc(-1 * var(--r)) / var(--r) 100% repeat-y,
     conic-gradient(black 0 0) padding-box;
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e55057; /* Removed incorrect quotes */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f3f3f3;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #e55057 #f3f3f3; /* No quotes needed */
+}

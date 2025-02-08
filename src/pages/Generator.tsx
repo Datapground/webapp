@@ -8,7 +8,6 @@ import SettingsIcon from '../components/Icons/SettingsIcon';
 import TopBar from '../components/TopBar';
 import GeneratorIcon from '../components/Icons/GeneratorIcon';
 import GeneratorSelect from '../components/generator/Select';
-import { useSearchParams } from 'react-router-dom';
 
 const Generator: React.FC = () => {
   const [speed, setSpeed] = useState(50);

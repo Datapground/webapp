@@ -119,7 +119,7 @@ const SideNavigation = () => {
           {navItems.map(({ path, label, Icon }, index) => {
             const isActive = pathname === path;
             return (
-              <div key={path} className="relative">
+              <div key={path} className="relative ">
                 {/* Item Above */}
                 {navItems.length - index >= 0 && (
                   <div className="absolute top-full w-full z-40"></div>
