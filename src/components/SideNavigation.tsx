@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Lottie from 'lottie-react';
 import logoAnimation from '../constants/LogoAnimation.json';
 import { Link, useLocation } from 'react-router-dom';
@@ -27,9 +27,24 @@ const navItems = [
 ];
 
 const tools = [
-  { path: '/generator', label: 'The Generator', Icon: GeneratorIcon },
-  { path: '/predictor', label: 'The Predictor', Icon: PredictorIcon },
-  { path: '/extender', label: 'The Extender', Icon: ExtenderIcon },
+  {
+    path: '/generator',
+    label: 'The Generator',
+    bgClass: 'bg-generator-merlin',
+    Icon: GeneratorIcon,
+  },
+  {
+    path: '/predictor',
+    label: 'The Predictor',
+    bgClass: 'bg-predictor-main',
+    Icon: PredictorIcon,
+  },
+  {
+    path: '/extender',
+    label: 'The Extender',
+    bgClass: 'bg-extender-main',
+    Icon: ExtenderIcon,
+  },
 ];
 
 const accounts = [
@@ -42,11 +57,39 @@ const accounts = [
 const SideNavigation = () => {
   const location = useLocation();
 
+  const pathname = location.pathname;
+
+  useEffect(() => {
+    // Define colors separately for body and .vertical-rounded-tab elements
+    const backgroundColors: Record<string, { body: string; tab: string }> = {
+      '/generator': { body: '#C3278208', tab: '#FDF8FB' },
+      '/predictor': { body: '#E6555D0D', tab: '#FDF6F6' },
+      '/extender': { body: '#C3278208', tab: '#FDF8FB' },
+    };
+    const { body: bodyBg, tab: tabBg } = backgroundColors[pathname] || {
+      body: '#ffffff',
+      tab: '#ffffff',
+    };
+    // Change body background color
+    document.body.style.backgroundColor = bodyBg;
+    // Change background color of elements with the class .vertical-rounded-tab
+    const elements = document.querySelectorAll('.vertical-rounded-tab');
+    elements.forEach((el) => {
+      (el as HTMLElement).style.backgroundColor = tabBg;
+    });
+
+    return () => {
+      document.body.style.backgroundColor = ''; // Reset on unmount
+      elements.forEach((el) => {
+        (el as HTMLElement).style.backgroundColor = '';
+      });
+    };
+  }, [pathname]);
+
   return (
     <nav
-      className={`w-64 flex flex-col justify-between items-center rounded-[40px] bg-side-navigation pb-4 `}
+      className={`w-64 flex flex-col justify-between items-center rounded-[40px] bg-[#E3ECFF] pb-4 `}
     >
-      {/* Logo */}
       <div className="w-full relative z-50">
         <div className="p-4">
           <Lottie
@@ -56,10 +99,9 @@ const SideNavigation = () => {
           />
         </div>
 
-        {/* NavItems */}
         <div className="w-full pl-8 z-50">
           {navItems.map(({ path, label, Icon }, index) => {
-            const isActive = location.pathname === path;
+            const isActive = pathname === path;
             return (
               <div key={path} className="relative">
                 {/* Item Above */}
@@ -93,50 +135,33 @@ const SideNavigation = () => {
             );
           })}
 
+          {/* Divider */}
           <div className="line h-[1px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-4"></div>
+          {tools.map(({ path, label, bgClass, Icon }) => (
+            <div
+              key={path}
+              className={`relative ${pathname === path ? 'ml-[-4px] my-[-24px] vertical-rounded-tab -z-50' : 'z-30'}`}
+            >
+              <Link
+                to={path}
+                className={`flex items-center py-2 gap-3 my-[5px] rounded-l-[30px] w-full text-sm text-[#414042] px-4 ${
+                  pathname === path ? `${bgClass} text-white` : ''
+                }`}
+              >
+                <Icon
+                  className={`w-[16px] h-[16px] stroke-[#414042] ${pathname === path ? 'stroke-white' : ''}`}
+                />
+                {label}
+              </Link>
+            </div>
+          ))}
 
-          {tools.map(({ path, label, Icon }, index) => {
-            const isActive = location.pathname === path;
-
-            return (
-              <div key={path}>
-                {/* Item Above */}
-                {tools.length - index >= 0 && (
-                  <div className="absolute top-full w-full z-40"></div>
-                )}
-
-                <div
-                  key={path}
-                  className={`relative ${isActive ? 'ml-[-4px] my-[-24px] vertical-rounded-tab -z-50' : 'z-30'}`}
-                >
-                  <Link
-                    to={path}
-                    className={`flex items-center py-2 gap-3 my-[5px] rounded-l-[30px] w-full text-sm text-[#414042] px-4 ${
-                      isActive
-                        ? `bg-gradient-to-r from-generator to bg-white text-white`
-                        : ''
-                    }`}
-                  >
-                    <Icon
-                      className={`w-[16px] h-[16px] stroke-[#414042] ${isActive ? 'stroke-white' : ''}`}
-                    />
-                    {label}
-                  </Link>
-                </div>
-
-                {index < tools.length - 1 && (
-                  <div className="absolute top-full w-full z-40"></div>
-                )}
-              </div>
-            );
-          })}
-
+          {/* Divider */}
           <div className="line h-[1px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-4"></div>
-
-          {/* AccountsItems */}
+          {/* Accounts Items */}
           <p className="text-xs text-[#414042] py-3 -ml-4">Accounts</p>
           {accounts.map(({ path, label, Icon }, index) => {
-            const isActive = location.pathname === path;
+            const isActive = pathname === path;
             return (
               <div key={path} className="relative">
                 {/* Item Above */}

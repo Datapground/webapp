@@ -10,7 +10,6 @@ const ChevronDownIcon = (props) => {
     >
       <path
         d="M3.83203 6.1308L7.57035 9.86912L11.3087 6.1308"
-        stroke="#414042"
         strokeWidth="1.1215"
         strokeLinecap="round"
         strokeLinejoin="round"

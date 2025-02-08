@@ -1,35 +1,33 @@
 import React from 'react';
-import GeneratorIcon from './Icons/GeneratorIcon';
 import BookIcon from './Icons/BookIcon';
 import QuestionIcon from './Icons/QuestionIcon';
 import BellIcon from './Icons/BellIcon';
 import ChevronDownIcon from './Icons/ChevronDownIcon';
 import { useLocation } from 'react-router-dom';
-import PredictorIcon from './Icons/PredictorIcon';
-import ExtenderIcon from './Icons/ExtenderIcon';
+import PredictorImg from './Icons/PredictorImg';
+import ExtenderImg from './Icons/ExtenderImg';
+import GeneratorImg from './Icons/GeneratorImg';
 
 function TopBar() {
   const path = useLocation().pathname;
 
   const TopBarHeading =
-    path === '/generator'
-      ? 'The Generator'
-      : path === '/predictor'
-        ? 'The Predictor'
-        : 'The Extender';
+    path.split('/')[1].charAt(0).toUpperCase() + path.split('/')[1].slice(1);
 
   const TopBarIcon =
     path === '/generator'
-      ? GeneratorIcon
+      ? GeneratorImg
       : path === '/predictor'
-        ? PredictorIcon
-        : ExtenderIcon;
+        ? PredictorImg
+        : ExtenderImg;
 
   return (
     <div className="flex justify-between items-center w-full">
       <div className="flex items-center gap-3">
         <TopBarIcon className={`w-[30px] h-[30px] stroke-[#414042]`} />
-        <h2 className="text-[36px] font-600 text-[#414042]">{TopBarHeading}</h2>
+        <h2 className="text-[36px] font-600 text-[#414042]">
+          {'The ' + TopBarHeading}
+        </h2>
       </div>
 
       <div className="flex justify-between gap-2 items-center">
@@ -43,8 +41,11 @@ function TopBar() {
           <BellIcon className={`w-[17px] h-[17px] stroke-[#414042]`} />
         </span>
 
-        <span className="flex flex-grow items-center gap-2 p-3 rounded-full bg-white shadow-md align-center ">
-          <img src="/LogoIcon.svg " className="w-[17px] h-[17px]" />
+        <span className="flex flex-grow items-center gap-2 p-1 rounded-full bg-white shadow-md align-center ">
+          <img
+            src="/ME_Profile.jpeg "
+            className="w-[24px] h-[24px] rounded-full"
+          />
           <ChevronDownIcon className={`w-[17px] h-[17px] stroke-[#414042]`} />
         </span>
       </div>
