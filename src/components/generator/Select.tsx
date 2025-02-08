@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties } from 'react';
 import Select, {
   DropdownIndicatorProps,
   GroupBase,
@@ -10,7 +10,6 @@ import GeneratorIcon from '../Icons/GeneratorIcon';
 import ElixirIcon from '../Icons/ElixirIcon';
 import GoldIcon from '../Icons/GoldIcon';
 import OracleIcon from '../Icons/OracleIcon';
-import { useSearchParams } from 'react-router-dom';
 
 // Define types for options
 type OptionType = {
@@ -19,21 +18,21 @@ type OptionType = {
   Icon?: React.ElementType;
 };
 
-// Styles
+// Group label styling
 const groupStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
 };
 
-// Function to format group labels with count badge
+// Format group labels
 const formatGroupLabel = (data: GroupBase<OptionType>) => (
   <div style={groupStyles}>
     <span>{data.label}</span>
   </div>
 );
 
-// Sample grouped data (Customize this)
+// Predefined grouped options
 const groupedOptions: GroupBase<OptionType>[] = [
   {
     label: 'Models',
@@ -46,48 +45,30 @@ const groupedOptions: GroupBase<OptionType>[] = [
   },
 ];
 
-// Custom Single Value Component (Centered)
-const customSingleValue = ({
-  data,
-  selectProps,
-}: {
-  data: OptionType;
-  selectProps: { iconColor: string; bgColor?: string }; // Allow bgColor
-}) => (
-  <div
-    className="flex items-center text-center -mt-5 gap-2"
-    style={{ color: selectProps.iconColor }}
-  >
-    {data.Icon && (
-      <data.Icon
-        className="w-[16px] h-[16px]"
-        style={{ fill: selectProps.iconColor }}
-      />
-    )}
+// Custom Single Value Component
+const customSingleValue = ({ data }: { data: OptionType }) => (
+  <div className="flex items-center -mt-5 gap-2 text-generator">
+    {data.Icon && <data.Icon className="w-[16px] h-[16px] fill-generator" />}
     {data.label}
   </div>
 );
 
 // Custom Option Component
-const customOption = (
-  props: OptionProps<OptionType, false> & { iconColor: string; bgColor: string }
-) => {
+const customOption = (props: OptionProps<OptionType, false>) => {
   const { data, innerRef, innerProps, isSelected } = props;
   return (
     <div
       ref={innerRef}
       {...innerProps}
-      className={`flex justify-start items-center gap-2 pl-4 p-2 cursor-pointer ${
-        isSelected ? 'text-white' : 'hover:bg-gray-100'
+      className={`flex items-center gap-2 pl-4 p-2 cursor-pointer ${
+        isSelected ? 'bg-[#C32782] text-white' : 'hover:bg-gray-100'
       }`}
-      style={{
-        backgroundColor: isSelected ? props.bgColor : 'transparent',
-      }}
     >
       {data.Icon && (
         <data.Icon
-          className="w-[16px] h-[16px]"
-          style={{ fill: isSelected ? 'white' : props.iconColor }}
+          className={`w-[16px] h-[16px] fill-white
+        ${isSelected ? 'fill-white' : 'fill-[#C32782]'}
+        `}
         />
       )}
       {data.label}
@@ -95,89 +76,24 @@ const customOption = (
   );
 };
 
-// Custom Dropdown Indicator (Pink Color)
+// Custom Dropdown Indicator
 const customDropdownIndicator = (
-  props: DropdownIndicatorProps<OptionType, false> & { chevronColor: string }
-) => {
-  return (
-    <components.DropdownIndicator {...props}>
-      <ChevronDownIcon
-        className="w-[16px] h-[16px]"
-        style={{ stroke: props.chevronColor }}
-      />
-    </components.DropdownIndicator>
-  );
-};
+  props: DropdownIndicatorProps<OptionType, false>
+) => (
+  <components.DropdownIndicator {...props}>
+    <ChevronDownIcon className="w-[16px] h-[16px] stroke-white" />
+  </components.DropdownIndicator>
+);
 
 const GeneratorSelect = () => {
-  const [bgColor, setBgColor] = useState('#C32782');
-  const [borderColor, setBorderColor] = useState('#C327824D');
-  const [chevronColor, setChevronColor] = useState('#C32782');
-  const [iconColor, setIconColor] = useState('#C32782');
-  const [selectedOption, setSelectedOption] = useState<OptionType | null>(
-    groupedOptions[0].options[0]
-  );
-
-  const [searchParams, setSearchParams] = useSearchParams('');
-  const handleChange = (option: OptionType | null) => {
-    if (option) {
-      setSelectedOption(option);
-      setSearchParams({ model: option.value });
-    }
-  };
-
-  useEffect(() => {
-    const colors = {
-      merlin: {
-        bg: '#C32782',
-        border: '#C327824D',
-        chevron: '#C32782',
-        icon: '#C32782',
-      },
-      elixir: {
-        bg: '#A077A8',
-        border: '#A077A84D',
-        chevron: '#A077A8',
-        icon: '#A077A8',
-      },
-      gold: {
-        bg: '#1E647F',
-        border: '#1E647F4D',
-        chevron: '#1E647F',
-        icon: '#1E647F',
-      },
-      oracle: {
-        bg: '#59B1FE',
-        border: '#59B1FE4D',
-        chevron: '#59B1FE',
-        icon: '#59B1FE',
-      },
-    };
-
-    const selected = colors[selectedOption?.value || 'merlin'];
-
-    setBgColor(selected.bg);
-    setBorderColor(selected.border);
-    setChevronColor(selected.chevron);
-    setIconColor(selected.icon);
-  }, [selectedOption]);
-
   return (
-    <div
-      className=""
-      style={{
-        backgroundColor: 'transparent',
-        border: `1px solid ${borderColor}`,
-        borderRadius: '10px',
-      }}
-    >
+    <div className="rounded-[10px] bg-transparent text-generator border-[#C32782] border">
       <Select<OptionType, false, GroupBase<OptionType>>
         options={groupedOptions}
         formatGroupLabel={formatGroupLabel}
         defaultValue={groupedOptions[0].options[0]}
         placeholder="Select a Model..."
-        onChange={handleChange}
-        className="w-[270px] text-[#414042] text-sm rounded-[10px]"
+        className="w-[270px] text-generator text-sm rounded-[10px]"
         isSearchable={false}
         styles={{
           control: (base) => ({
@@ -189,6 +105,7 @@ const GeneratorSelect = () => {
             cursor: 'pointer',
             backgroundColor: 'transparent',
             padding: '5px',
+            color: 'white',
           }),
           menu: (base) => ({
             ...base,
@@ -198,20 +115,15 @@ const GeneratorSelect = () => {
           }),
           option: (provided, state) => ({
             ...provided,
-            backgroundColor: state.isSelected ? bgColor : 'transparent',
-            color: state.isSelected ? 'white' : '#414042',
+            backgroundColor: state.isSelected ? '#C32782' : 'transparent',
+            color: state.isSelected ? 'white' : '#C32782',
             cursor: 'pointer',
           }),
         }}
         components={{
-          Option: (props) => customOption({ ...props, iconColor, bgColor }),
-          SingleValue: (props) =>
-            customSingleValue({
-              data: props.data,
-              selectProps: { ...props.selectProps, iconColor, bgColor },
-            }),
-          DropdownIndicator: (props) =>
-            customDropdownIndicator({ ...props, chevronColor }),
+          SingleValue: customSingleValue,
+          Option: customOption,
+          DropdownIndicator: customDropdownIndicator,
           IndicatorSeparator: () => null,
         }}
       />
