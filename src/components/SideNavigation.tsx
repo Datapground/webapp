@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Lottie from 'lottie-react';
 import logoAnimation from '../constants/LogoAnimation.json';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
@@ -16,7 +16,6 @@ import UsageIcon from './Icons/UsageIcon';
 import BillingIcon from './Icons/BillingIcon';
 import SettingsIcon from './Icons/SettingsIcon';
 import PlaygroundIcon from './Icons/PlaygroundIcon';
-import path from 'path';
 
 const navItems = [
   { path: '/playground', label: 'Playground', Icon: PlaygroundIcon },
@@ -25,6 +24,21 @@ const navItems = [
   { path: '/blueprints', label: 'Blueprints', Icon: BluePrintIcon },
   { path: '/workflows', label: 'Workflows', Icon: WorkFlowsIcon },
   { path: '/connections', label: 'Connections', Icon: Connections },
+];
+
+const tools = [
+  {
+    path: '/predictor',
+    label: 'The Predictor',
+    bgClass: 'bg-predictor-main',
+    Icon: PredictorIcon,
+  },
+  {
+    path: '/extender',
+    label: 'The Extender',
+    bgClass: 'bg-extender-main',
+    Icon: ExtenderIcon,
+  },
 ];
 
 const accounts = [
@@ -38,69 +52,100 @@ const SideNavigation = () => {
   const location = useLocation();
   const pathname = location.pathname;
   const [searchParams] = useSearchParams();
-
-  const [generatorBgClass, setGeneratorBgClass] = useState(
-    'bg-generator-merlin'
-  );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const model = searchParams.get('model');
 
   useEffect(() => {
-    const modal = searchParams.get('modal');
-    setGeneratorBgClass(
-      modal ? `bg-generator-${modal}` : 'bg-generator-merlin'
-    );
-  }, [searchParams]);
-
-  useEffect(() => {
-    console.log('Updated generatorBgClass:', generatorBgClass);
-  }, [generatorBgClass]);
-
-  const tools = [
-    {
-      path: '/generator',
-      label: 'The Generator',
-      bgClass: generatorBgClass, // Uses **updated** state
-      Icon: GeneratorIcon,
-    },
-    {
-      path: '/predictor',
-      label: 'The Predictor',
-      bgClass: 'bg-predictor-main',
-      Icon: PredictorIcon,
-    },
-    {
-      path: '/extender',
-      label: 'The Extender',
-      bgClass: 'bg-extender-main',
-      Icon: ExtenderIcon,
-    },
-  ];
-
-  useEffect(() => {
-    // Define colors separately for body and .vertical-rounded-tab elements
+    // Define background colors for body and tab
     const backgroundColors: Record<string, { body: string; tab: string }> = {
-      '/generator': { body: '#C3278208', tab: '#FDF8FB' },
+      '/generator': {
+        body:
+          model === 'elixir'
+            ? '#A077A80D'
+            : model === 'gold'
+              ? '#1E647F0D'
+              : model === 'oracle'
+                ? '#59B1FE0D'
+                : '#C3278208', // Default merlin color
+        tab:
+          model === 'elixir'
+            ? '#FAFAFD'
+            : model === 'gold'
+              ? '#F9FAFC'
+              : model === 'oracle'
+                ? '#FAFAFF'
+                : '#FDF8FB', // Default merlin color
+      },
       '/predictor': { body: '#E6555D0D', tab: '#FDF6F6' },
       '/extender': { body: '#C3278208', tab: '#FDF8FB' },
     };
+
     const { body: bodyBg, tab: tabBg } = backgroundColors[pathname] || {
       body: '#ffffff',
       tab: '#ffffff',
     };
+
     // Change body background color
     document.body.style.backgroundColor = bodyBg;
+
     // Change background color of elements with the class .vertical-rounded-tab
     const elements = document.querySelectorAll('.vertical-rounded-tab');
     elements.forEach((el) => {
       (el as HTMLElement).style.backgroundColor = tabBg;
     });
 
+    // Dynamically set the CSS variable for --generator-color
+    const modelColor =
+      model === 'elixir'
+        ? '#A077A8'
+        : model === 'gold'
+          ? '#1E647F'
+          : model === 'oracle'
+            ? '#59B1FE'
+            : '#C32782';
+
+    document.documentElement.style.setProperty('--generator-color', modelColor);
+
+    const navBgColor =
+      model === 'elixir'
+        ? 'linear-gradient(90deg, #A077A8 -4.54%, rgba(160, 119, 168, 0.776) 51.38%, rgba(255, 255, 255, 0) 100%)'
+        : model === 'gold'
+          ? 'linear-gradient(90deg, #1E647F -4.54%, rgba(30, 100, 127, 0.776) 51.38%, rgba(255, 255, 255, 0) 100%)'
+          : model === 'oracle'
+            ? 'linear-gradient(90deg, #59B1FE -4.54%, rgba(89, 177, 254, 0.776) 51.38%, rgba(255, 255, 255, 0) 100%)'
+            : 'linear-gradient(90deg, #C32782 -4.54%, rgba(195, 39, 130, 0.776) 43.82%, rgba(255, 255, 255, 0) 100%)';
+
+    document.documentElement.style.setProperty(
+      '--generator-nav-bg',
+      navBgColor
+    );
+
+    // Dynamically set the CSS variable for --generator-color
+    const generatorLight =
+      model === 'elixir'
+        ? '#A077A866'
+        : model === 'gold'
+          ? '#1E647F66'
+          : model === 'oracle'
+            ? '#59B1FE66'
+            : '#C3278233';
+
+    document.documentElement.style.setProperty(
+      '--generator-light-color',
+      generatorLight
+    );
+
+    // Cleanup: Reset on unmount
     return () => {
       document.body.style.backgroundColor = ''; // Reset on unmount
       elements.forEach((el) => {
         (el as HTMLElement).style.backgroundColor = '';
       });
+      document.documentElement.style.removeProperty('--generator-color'); // Reset model color
+      document.documentElement.style.removeProperty('--generator-nav-bg');
+      document.documentElement.style.removeProperty('--generator-light-color');
     };
-  }, [pathname]);
+  }, [pathname, model]);
 
   return (
     <nav
@@ -153,9 +198,27 @@ const SideNavigation = () => {
 
           {/* Divider */}
           <div className="line h-[1px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-4"></div>
+          <div
+            className={`relative ${location.pathname === '/generator' ? 'ml-[-4px] my-[-24px] vertical-rounded-tab -z-50' : 'z-30'}`}
+          >
+            <Link
+              to={'/generator?model=merlin'}
+              className={`flex items-center py-2 gap-3 my-[5px] rounded-l-[30px] w-full text-sm px-4 ${location.pathname === '/generator' ? `text-white` : 'text-[#414042]'}`}
+              style={{
+                background:
+                  location.pathname === '/generator'
+                    ? 'var(--generator-nav-bg)'
+                    : '',
+              }}
+            >
+              <GeneratorIcon
+                className={`w-[16px] h-[16px] fill-[#414042] ${location.pathname === '/generator' ? 'fill-white' : ''}`}
+              />
+              The Generator
+            </Link>
+          </div>
           {tools.map(({ path, label, bgClass, Icon }) => {
             const isActive = location.pathname === path;
-
             return (
               <div
                 key={path}
@@ -163,8 +226,7 @@ const SideNavigation = () => {
               >
                 <Link
                   to={path}
-                  className={`flex items-center py-2 gap-3 my-[5px] rounded-l-[30px] w-full text-sm px-4 
-          ${isActive ? `${bgClass} text-white` : 'text-[#414042]'}`}
+                  className={`flex items-center py-2 gap-3 my-[5px] rounded-l-[30px] w-full text-sm px-4 ${isActive ? `${bgClass} text-white` : 'text-[#414042]'}`}
                 >
                   <Icon
                     className={`w-[16px] h-[16px] fill-[#414042] ${isActive ? 'fill-white' : ''}`}
