@@ -1,5 +1,5 @@
 // import SelectOption from '../components/SelectOption';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import TextRemove from '../components/Icons/TextRemove';
 import PenIcon from '../components/Icons/PenIcon';
 import Slider from '@mui/material/Slider';
@@ -32,26 +32,6 @@ const Generator: React.FC = () => {
     setAccuracy(newValue as number);
   };
 
-  // useEffect(() => {
-  //   const modal = searchParams.get('modal');
-
-  //   if (modal) {
-  //     setModalStyles({
-  //       borderColor: `border-${modal}`,
-  //       bgColor: `bg-${modal}-main`, // Adjust the class name according to your CSS
-  //       tabColor: `tab-${modal}`, // Change this to the correct class if needed
-  //     });
-  //   } else {
-  //     setModalStyles({
-  //       borderColor: '',
-  //       bgColor: '',
-  //       tabColor: '',
-  //     });
-  //   }
-
-  //   console.log('Updated Styles:', modalStyles);
-  // }, [searchParams]);
-
   return (
     <Fragment>
       {/* Top bar */}
@@ -70,7 +50,6 @@ const Generator: React.FC = () => {
           <p className="text-sm text-[#414042]">Model</p>
 
           <div className="flex w-[300px] ">
-            {/* <SelectOption /> */}
             <GeneratorSelect />
           </div>
         </div>
@@ -95,7 +74,7 @@ const Generator: React.FC = () => {
       {/* Generator Content */}
       <div className="grid grid-cols-7 gap-4 mt-4">
         <div className="flex flex-col gap-3 w-full col-span-5">
-          <div className="border border-[#C32782]/60 rounded-[5px] relative p-4">
+          <div className="border border-generator rounded-[5px] relative p-4">
             <div className="relative">
               <textarea
                 value={text}
@@ -108,12 +87,12 @@ const Generator: React.FC = () => {
                 onClick={() => setText('')}
               >
                 <TextRemove
-                  className={`w-[30px] h-[30px] fill-[#C32782]/50 relative`}
+                  className={`w-[30px] h-[30px] fill-generator relative`}
                 />
               </button>
             </div>
             <aside className="flex justify-end">
-              <button className="bg-[#C32782] py-2 px-6 text-sm rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap">
+              <button className="bg-generator py-2 px-6 text-sm rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap">
                 <PenIcon className={`w-[22px] h-[22px] fill-white`} />
                 Generate
               </button>
@@ -124,7 +103,7 @@ const Generator: React.FC = () => {
           <h2 className="text-[#414042] text-[20px] font-primary font-semibold">
             Output
           </h2>
-          <div className=" flex flex-col items-center flex-grow border border-[#C32782]/60 rounded-[5px] justify-center">
+          <div className=" flex flex-col items-center flex-grow border border-generator rounded-[5px] justify-center">
             <img
               src="/logo-icon.png"
               alt="logo"
@@ -140,7 +119,12 @@ const Generator: React.FC = () => {
         </div>
 
         <div className="col-span-2">
-          <span className="flex items-center justify-start gap-2 text-[#414042] text-[16px] font-[400] bg-generatorLight rounded-[10px] p-2 text-center">
+          <span
+            className="flex items-center justify-start gap-2 text-[#414042] text-[16px] font-[400] rounded-[10px] p-2 text-center"
+            style={{
+              background: 'var(--generator-light-color)',
+            }}
+          >
             <SettingsIcon className={`w-[14px] h-[14px] stroke-[#414042]`} />
             Settings
           </span>

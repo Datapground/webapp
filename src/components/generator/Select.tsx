@@ -1,10 +1,12 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import Select, {
   DropdownIndicatorProps,
   GroupBase,
   OptionProps,
   components,
 } from 'react-select';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 import ChevronDownIcon from '../Icons/ChevronDownIcon';
 import GeneratorIcon from '../Icons/GeneratorIcon';
 import ElixirIcon from '../Icons/ElixirIcon';
@@ -47,8 +49,20 @@ const groupedOptions: GroupBase<OptionType>[] = [
 
 // Custom Single Value Component
 const customSingleValue = ({ data }: { data: OptionType }) => (
-  <div className="flex items-center -mt-5 gap-2 text-generator">
-    {data.Icon && <data.Icon className="w-[16px] h-[16px] fill-generator" />}
+  <div
+    className="flex items-center -mt-5 gap-2"
+    style={{
+      color: 'var(--generator-color)',
+    }}
+  >
+    {data.Icon && (
+      <data.Icon
+        className="w-[16px] h-[16px]"
+        style={{
+          fill: 'var(--generator-color)',
+        }}
+      />
+    )}
     {data.label}
   </div>
 );
@@ -60,15 +74,20 @@ const customOption = (props: OptionProps<OptionType, false>) => {
     <div
       ref={innerRef}
       {...innerProps}
-      className={`flex items-center gap-2 pl-4 p-2 cursor-pointer ${
-        isSelected ? 'bg-[#C32782] text-white' : 'hover:bg-gray-100'
-      }`}
+      className={`flex items-center gap-2 p-2 pl-4 cursor-pointer rounded-md transition-all`}
+      style={{
+        background: isSelected
+          ? 'var(--generator-color)'
+          : 'rgba(243 244 246, 0.1)',
+        color: isSelected ? 'white' : '',
+      }}
     >
       {data.Icon && (
         <data.Icon
-          className={`w-[16px] h-[16px] fill-white
-        ${isSelected ? 'fill-white' : 'fill-[#C32782]'}
-        `}
+          className={`w-4 h-4`}
+          style={{
+            fill: isSelected ? 'white' : 'var(--generator-color)',
+          }}
         />
       )}
       {data.label}
@@ -81,53 +100,80 @@ const customDropdownIndicator = (
   props: DropdownIndicatorProps<OptionType, false>
 ) => (
   <components.DropdownIndicator {...props}>
-    <ChevronDownIcon className="w-[16px] h-[16px] stroke-white" />
+    <ChevronDownIcon
+      className="w-[16px] h-[16px]"
+      style={{
+        stroke: 'var(--generator-color)',
+      }}
+    />
   </components.DropdownIndicator>
 );
 
 const GeneratorSelect = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+
+  // Extract "model" query parameter from URL
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const model = queryParams.get('model');
+
+    // Find the matching option
+    const foundOption =
+      groupedOptions[0].options.find((opt) => opt.value === model) || null;
+
+    setSelectedOption(foundOption);
+  }, [location.search]);
+
   return (
-    <div className="rounded-[10px] bg-transparent text-generator border-[#C32782] border">
-      <Select<OptionType, false, GroupBase<OptionType>>
-        options={groupedOptions}
-        formatGroupLabel={formatGroupLabel}
-        defaultValue={groupedOptions[0].options[0]}
-        placeholder="Select a Model..."
-        className="w-[270px] text-generator text-sm rounded-[10px]"
-        isSearchable={false}
-        styles={{
-          control: (base) => ({
-            ...base,
-            outline: 'none',
-            border: 'none',
-            boxShadow: 'none',
-            borderRadius: '10px',
-            cursor: 'pointer',
-            backgroundColor: 'transparent',
-            padding: '5px',
-            color: 'white',
-          }),
-          menu: (base) => ({
-            ...base,
-            borderRadius: '10px',
-            overflow: 'hidden',
-            cursor: 'pointer',
-          }),
-          option: (provided, state) => ({
-            ...provided,
-            backgroundColor: state.isSelected ? '#C32782' : 'transparent',
-            color: state.isSelected ? 'white' : '#C32782',
-            cursor: 'pointer',
-          }),
-        }}
-        components={{
-          SingleValue: customSingleValue,
-          Option: customOption,
-          DropdownIndicator: customDropdownIndicator,
-          IndicatorSeparator: () => null,
-        }}
-      />
-    </div>
+    <Select
+      options={groupedOptions}
+      formatGroupLabel={formatGroupLabel}
+      placeholder="Select a model"
+      className="w-[270px] text-sm rounded-[10px]"
+      isSearchable={false}
+      value={selectedOption} // Set default selected value
+      onChange={(e) => {
+        navigate(`/generator?model=${e?.value}`);
+      }}
+      styles={{
+        control: (base) => ({
+          ...base,
+          outline: 'none',
+          border: '1px solid var(--generator-color)',
+          boxShadow: 'none',
+          borderRadius: '10px',
+          cursor: 'pointer',
+          backgroundColor: 'transparent',
+          padding: '5px',
+          color: 'white',
+          ':hover': {
+            border: '1px solid var(--generator-color)',
+          },
+        }),
+        menu: (base) => ({
+          ...base,
+          borderRadius: '10px',
+          overflow: 'hidden',
+          cursor: 'pointer',
+        }),
+        option: (provided, state) => ({
+          ...provided,
+          backgroundColor: state.isSelected
+            ? 'var(--generator-color)'
+            : 'transparent',
+          color: state.isSelected ? 'white' : 'var(--generator-color)',
+          cursor: 'pointer',
+        }),
+      }}
+      components={{
+        SingleValue: customSingleValue,
+        Option: customOption,
+        DropdownIndicator: customDropdownIndicator,
+        IndicatorSeparator: () => null,
+      }}
+    />
   );
 };
 

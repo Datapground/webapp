@@ -5,6 +5,14 @@
 
 :root {
   --font-primary: 'BR Candor', sans-serif;
+  --generator-color: #c32782;
+  --generator-light-color: #c3278233;
+  --generator-nav-bg: linear-gradient(
+    90deg,
+    #c32782 -4.54%,
+    rgba(195, 39, 130, 0.776) 43.82%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
 
 * {
