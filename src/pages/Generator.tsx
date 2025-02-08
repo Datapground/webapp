@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import SelectOption from '../components/SelectOption';
+import React, { Fragment, useState } from 'react';
 import TextRemove from '../components/Icons/TextRemove';
-import LogoIcon from '../components/Icons/LogoIcon';
 import PenIcon from '../components/Icons/PenIcon';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import SettingsIcon from '../components/Icons/SettingsIcon';
+import TopBar from '../components/TopBar';
+import GeneratorIcon from '../components/Icons/GeneratorIcon';
+import GeneratorSelect from '../components/generator/Select';
 
 const Generator: React.FC = () => {
   const [speed, setSpeed] = useState(50);
@@ -30,81 +31,93 @@ const Generator: React.FC = () => {
   };
 
   return (
-    <div>
-      {/** Generator Top */}
-      <div className="flex justify-between items-center w-full my-3">
+    <Fragment>
+      {/* Top bar */}
+      <TopBar containerClassName="justify-between">
+        <aside className="flex justify-start items-center gap-3">
+          <GeneratorIcon className="fill-[#414042] w-[26px] h-[23.59px]" />
+          <h2 className="text-[26px] font-primary font-medium">
+            The Generator
+          </h2>
+        </aside>
+      </TopBar>
+
+      {/* Generator bar */}
+      <div className="flex justify-between items-center w-full">
         <div className="flex items-center gap-3">
           <p className="text-sm text-[#414042]">Model</p>
 
           {/** Select Option */}
           <div className="flex w-[300px] ">
-            <SelectOption />
+            <GeneratorSelect />
           </div>
         </div>
 
-        {/** Taublar Data */}
+        {/** Tabular Data */}
         <div className="flex items-center gap-3">
-          <span>
+          <button>
             <p className="py-2 px-3 border border-generator  text-generator text-md">
-              Taublar Data
+              Tabular Data
             </p>
-          </span>
-          <span className="border border-generator rounded-[10px]  py-2 ">
-            <input
-              type="text"
-              placeholder="input date here"
-              className="bg-transparent outline-none text-[#414042] px-2"
-            />
-          </span>
+          </button>
+          <input
+            type="text"
+            placeholder="Natural Language Input"
+            className="bg-transparent outline-none border-none text-[#414042] px-2"
+          />
         </div>
       </div>
 
-      {/**Generator Content */}
-      <div className=" flex justify-between gap-5 items-center">
-        {/** Generator Main */}
-        <div className="min-h-screen flex flex-col gap-3 w-full">
-          {/** Input */}
-          <div className=" flex flex-col flex-grow border border-generator rounded-[5px] p-5 relative">
-            <div className="flex items-start w-full">
+      {/* Generator Content */}
+      <div className="grid grid-cols-7 gap-4 mt-4">
+        <div className="flex flex-col gap-3 w-full col-span-5">
+          <div className="border border-[#C32782]/60 rounded-[5px] relative p-4">
+            <div className="relative">
               <textarea
-                id="text"
-                name="text"
-                cols={10}
-                rows={3}
                 placeholder="Write an explanation about the topic you want to generate data about and its fields...."
-                className="w-full bg-transparent outline-none text-[#414042] text-[20px] font-[400] scrollbar-hide resize-none overflow-hidden"
+                className="min-h-[260px] w-full h-full bg-transparent outline-none border-none text-sm text-[#414042] placeholder:text-[#414042] resize-none overflow-hidden"
               />
-              <TextRemove className={`w-[30px] h-[30px] stroke-generator`} />
+              <button className=" absolute top-0 right-0 z-10">
+                <TextRemove
+                  className={`w-[30px] h-[30px] fill-[#C32782]/50 relative`}
+                />
+              </button>
             </div>
-            <button className="flex gap-1 absolute right-5 bottom-5 items-center w-[150px] bg-generator rounded-md px-5 p-2 text-center text-[#FFFFFF] text-[18px] font-[600]">
-              <PenIcon className={`w-[22px] h-[22px] stroke-white`} />
-              Generate
-            </button>
+            <aside className="flex justify-end">
+              <button className="bg-[#C32782] py-2 px-6 text-sm rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap">
+                <PenIcon className={`w-[22px] h-[22px] fill-white`} />
+                Generate
+              </button>
+            </aside>
           </div>
 
           {/** Output */}
-          <h2 className="text-[#414042] text-[26px] font-[700]">Output</h2>
-          <div className=" flex flex-col items-center flex-grow border border-generator rounded-[5px] justify-center">
-            {/** if no result  */} <LogoIcon />
-            <h3 className="text-[#414042] text-[20px] font-[600]">
+          <h2 className="text-[#414042] text-[20px] font-primary font-semibold">
+            Output
+          </h2>
+          <div className=" flex flex-col items-center flex-grow border border-[#C32782]/60 rounded-[5px] justify-center">
+            <img
+              src="/logo-icon.png"
+              alt="logo"
+              className="object-contain w-[70px] h-[70px] pointer-events-none"
+            />
+            <h3 className="text-[#414042] text-base font-semibold">
               Not Result Yet
             </h3>
-            <p className="text-[#414042] text-[a8px] font-[400]">
+            <p className="text-[#414042] text-sm font-primary">
               The Generation is being performed
             </p>
           </div>
         </div>
 
-        {/** Settings Side */}
-        <div className="min-h-screen w-[300px] ">
+        <div className="col-span-2">
           <span className="flex items-center justify-start gap-2 text-[#414042] text-[16px] font-[400] bg-generatorLight rounded-[10px] p-2 text-center">
             <SettingsIcon className={`w-[14px] h-[14px] stroke-[#414042]`} />
             Settings
           </span>
 
-          {/** Settings */}
           <div className="mt-3">
-            <Box sx={{ width: 300, textAlign: 'center' }}>
+            <div>
               <span className="flex items-center justify-between">
                 Speed
                 <label className="p-1 bg-slate-50 rounded-md border px-4 py-1 text-sm font-[200]">
@@ -123,9 +136,9 @@ const Generator: React.FC = () => {
                   '& .MuiSlider-rail': { backgroundColor: '#C3278233' }, // Rail (unfilled part)
                 }}
               />
-            </Box>
+            </div>
 
-            <Box sx={{ width: 300 }}>
+            <Box>
               <span className="flex items-center justify-between">
                 Temperature
                 <label className="p-1 bg-slate-50 rounded-md border px-4 py-1 text-sm font-[200]">
@@ -147,7 +160,7 @@ const Generator: React.FC = () => {
               />
             </Box>
 
-            <Box sx={{ width: 300, textAlign: 'center' }}>
+            <Box>
               <span className="flex items-center justify-between">
                 Rows
                 <label className="p-1 bg-slate-50 rounded-md border px-4 py-1 text-sm font-[200]">
@@ -168,7 +181,7 @@ const Generator: React.FC = () => {
               />
             </Box>
 
-            <Box sx={{ width: 300, textAlign: 'center' }}>
+            <Box>
               <span className="flex items-center justify-between">
                 Accuracy
                 <label className="p-1 bg-slate-50 rounded-md border px-4 py-1 text-sm font-[200]">
@@ -216,7 +229,7 @@ const Generator: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

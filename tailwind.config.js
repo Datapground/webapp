@@ -38,7 +38,9 @@ module.exports = {
         default: '#5183F0',
         defaultLight: '#5183F033',
       },
-      boxShadow: {},
+      boxShadow: {
+        'nav-icon': '3.33px 3.33px 26.67px 0px #00000014',
+      },
       backgroundImage: {
         btn: 'linear-gradient(90deg, #2EE1E2 -3.75%, #49CDFE 27.32%, #6A59C1 73.65%, #9541A3 109.25%)',
         login:

@@ -1,7 +1,12 @@
 import React, { CSSProperties } from 'react';
-import Select, { GroupBase, components } from 'react-select';
-import GeneratorIcon from './Icons/GeneratorIcon';
-import ChevronDownIcon from './Icons/ChevronDownIcon';
+import Select, {
+  DropdownIndicatorProps,
+  GroupBase,
+  OptionProps,
+  components,
+} from 'react-select';
+import ChevronDownIcon from '../Icons/ChevronDownIcon';
+import GeneratorIcon from '../Icons/GeneratorIcon';
 
 // Define types for options
 type OptionType = {
@@ -40,13 +45,13 @@ const groupedOptions: GroupBase<OptionType>[] = [
 // Custom Single Value Component (Centered)
 const customSingleValue = ({ data }: { data: OptionType }) => (
   <div className="flex items-center text-center -mt-5 gap-2 text-[#414042]">
-    {data.Icon && <data.Icon className="w-[16px] h-[16px] stroke-generator" />}
+    {data.Icon && <data.Icon className="w-[16px] h-[16px] fill-generator" />}
     {data.label}
   </div>
 );
 
 // Custom Option Component
-const customOption = (props: any) => {
+const customOption = (props: OptionProps<OptionType, false>) => {
   const { data, innerRef, innerProps, isSelected } = props;
   return (
     <div
@@ -58,7 +63,7 @@ const customOption = (props: any) => {
     >
       {data.Icon && (
         <data.Icon
-          className={`w-[16px] h-[16px] ${isSelected ? 'stroke-white' : 'stroke-generator'}`}
+          className={`w-[16px] h-[16px] ${isSelected ? 'fill-white' : 'fill-generator'}`}
         />
       )}
       {data.label}
@@ -67,7 +72,9 @@ const customOption = (props: any) => {
 };
 
 // Custom Dropdown Indicator (Pink Color)
-const customDropdownIndicator = (props: any) => {
+const customDropdownIndicator = (
+  props: DropdownIndicatorProps<OptionType, false>
+) => {
   return (
     <components.DropdownIndicator {...props}>
       <ChevronDownIcon className={`w-[16px] h-[16px] stroke-generator`} />
@@ -75,8 +82,7 @@ const customDropdownIndicator = (props: any) => {
   );
 };
 
-// Dropdown component
-const SelectOption = () => {
+const GeneratorSelect = () => {
   // trying to update the generator color based on the selected model
 
   // here i have to implement the logic when i click select the different modal theme updated accordingly
@@ -99,33 +105,29 @@ const SelectOption = () => {
       defaultValue={groupedOptions[0].options[0]}
       placeholder="Select a Model..."
       // onChange={handleChange}
-      className={`w-[300px] text-[#414042] text-sm border border-generator rounded-[10px]
+      className={`w-[270px] text-[#414042] text-sm border border-generator rounded-[10px]
   `}
       isSearchable={false}
       styles={{
         control: (base) => ({
           ...base,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
           outline: 'none',
           border: 'none',
-          boxShadow: base.isFocused ? '0 0 0 2px #C32782' : 'none',
-          borderRadius: '10px',
+          boxShadow: base.isFocused ? '0 0 0 2px #c3278260' : 'none',
+          borderRadius: '16px',
           cursor: 'pointer',
           backgroundColor: 'transparent',
-          padding: '5px 10px',
+          padding: '5px',
         }),
         menu: (base) => ({
           ...base,
-          zIndex: 100,
           borderRadius: '10px',
           overflow: 'hidden',
           cursor: 'pointer',
         }),
         option: (provided, state) => ({
           ...provided,
-          backgroundColor: state.isSelected ? 'pink' : 'transparent',
+          backgroundColor: state.isSelected ? '#c3278260' : 'transparent',
           color: state.isSelected ? 'white' : '#414042',
           cursor: 'pointer',
         }),
@@ -140,4 +142,4 @@ const SelectOption = () => {
   );
 };
 
-export default SelectOption;
+export default GeneratorSelect;

@@ -1,56 +1,46 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { ReactNode } from 'react';
 import BookIcon from './Icons/BookIcon';
 import QuestionIcon from './Icons/QuestionIcon';
 import BellIcon from './Icons/BellIcon';
 import ChevronDownIcon from './Icons/ChevronDownIcon';
-import { useLocation } from 'react-router-dom';
-import PredictorImg from './Icons/PredictorImg';
-import ExtenderImg from './Icons/ExtenderImg';
-import GeneratorImg from './Icons/GeneratorImg';
+import { cn } from '../utils/tailwindClassesMerge';
 
-function TopBar() {
-  const path = useLocation().pathname;
+type Props = {
+  containerClassName?: string;
+  children?: ReactNode;
+};
 
-  const TopBarHeading =
-    path.split('/')[1].charAt(0).toUpperCase() + path.split('/')[1].slice(1);
-
-  const TopBarIcon =
-    path === '/generator'
-      ? GeneratorImg
-      : path === '/predictor'
-        ? PredictorImg
-        : ExtenderImg;
-
+const TopBar: React.FC<Props> = ({ children, containerClassName }) => {
   return (
-    <div className="flex justify-between items-center w-full">
-      <div className="flex items-center gap-3">
-        <TopBarIcon className={`w-[30px] h-[30px] stroke-[#414042]`} />
-        <h2 className="text-[36px] font-600 text-[#414042]">
-          {'The ' + TopBarHeading}
-        </h2>
-      </div>
+    <nav
+      className={cn('flex justify-end items-center mb-4', containerClassName)}
+    >
+      {children}
 
-      <div className="flex justify-between gap-2 items-center">
-        <span className="p-2 rounded-full bg-white shadow-md align-center m-auto">
+      <div className="sm:flex hidden justify-between gap-3 items-center">
+        <button className="p-3 rounded-full bg-white shadow-nav-icon">
           <BookIcon className={`w-[17px] h-[17px] stroke-[#414042] `} />
-        </span>
-        <span className="p-2 rounded-full bg-white shadow-md align-center m-auto">
+        </button>
+        <button className="p-3 rounded-full bg-white shadow-nav-icon">
           <QuestionIcon className={`w-[17px] h-[17px] stroke-[#414042]`} />
-        </span>
-        <span className="p-3 rounded-full bg-white shadow-md align-center m-auto">
+        </button>
+        <button className="p-4 rounded-full bg-white shadow-nav-icon">
           <BellIcon className={`w-[17px] h-[17px] stroke-[#414042]`} />
-        </span>
+        </button>
 
-        <span className="flex flex-grow items-center gap-2 p-1 rounded-full bg-white shadow-md align-center ">
+        <button className="flex justify-center items-center gap-2 p-1 rounded-full bg-white shadow-nav-icon">
           <img
-            src="/ME_Profile.jpeg "
-            className="w-[24px] h-[24px] rounded-full"
+            src="https://media.istockphoto.com/id/1388648617/photo/confident-caucasian-young-man-in-casual-denim-clothes-with-arms-crossed-looking-at-camera.jpg?s=612x612&w=0&k=20&c=YxctPklAOJMmy6Tolyvn45rJL3puk5RlKt39FO46ZeA="
+            className="w-[32px] h-[32px] rounded-full overflow-hidden object-cover"
           />
-          <ChevronDownIcon className={`w-[17px] h-[17px] stroke-[#414042]`} />
-        </span>
+          <ChevronDownIcon
+            className={`w-[17px] h-[17px] stroke-[#414042] mr-1`}
+          />
+        </button>
       </div>
-    </div>
+    </nav>
   );
-}
+};
 
 export default TopBar;
