@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select, {
   DropdownIndicatorProps,
   GroupBase,
@@ -13,23 +13,9 @@ import ElixirIcon from '../Icons/ElixirIcon';
 import GoldIcon from '../Icons/GoldIcon';
 import OracleIcon from '../Icons/OracleIcon';
 
-// Define types for options
-type OptionType = {
-  value: string;
-  label: string;
-  Icon?: React.ElementType;
-};
-
-// Group label styling
-const groupStyles: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-};
-
 // Format group labels
 const formatGroupLabel = (data: GroupBase<OptionType>) => (
-  <div style={groupStyles}>
+  <div className="flex justify-between items-center">
     <span>{data.label}</span>
   </div>
 );
@@ -143,7 +129,7 @@ const GeneratorSelect = () => {
           outline: 'none',
           border: '1px solid var(--generator-color)',
           boxShadow: 'none',
-          borderRadius: '10px',
+          borderRadius: '16px',
           cursor: 'pointer',
           backgroundColor: 'transparent',
           padding: '5px',
@@ -154,16 +140,8 @@ const GeneratorSelect = () => {
         }),
         menu: (base) => ({
           ...base,
-          borderRadius: '10px',
+          borderRadius: '16px',
           overflow: 'hidden',
-          cursor: 'pointer',
-        }),
-        option: (provided, state) => ({
-          ...provided,
-          backgroundColor: state.isSelected
-            ? 'var(--generator-color)'
-            : 'transparent',
-          color: state.isSelected ? 'white' : 'var(--generator-color)',
           cursor: 'pointer',
         }),
       }}

@@ -3,7 +3,6 @@ import TopBar from '../components/TopBar';
 import PredictorIcon from '../components/Icons/PredictorIcon';
 import FileIcon from '../components/Icons/FileIcon';
 import PredictorSelect from '../components/predictor/Select';
-import PredictorFileSelect from '../components/predictor/FileSelect';
 import SettingsIcon from '../components/Icons/SettingsIcon';
 import ToggleButton from './../components/predictor/CustomSwitch';
 import { Slider } from '@mui/material';
@@ -12,6 +11,34 @@ import PenIcon from '../components/Icons/PenIcon';
 import DeleteIcon from '../components/Icons/DeleteIcon';
 
 const columns = ['Columns A', 'Columns B', 'Columns C', 'Columns D'];
+
+const inputFiles = [
+  { id: 1, text: 'The quick brown fox jumps over the lazy dog.' },
+  {
+    id: 2,
+    text: "Life is what happens when you're busy making other plans.",
+  },
+  {
+    id: 3,
+    text: 'To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.',
+  },
+  {
+    id: 4,
+    text: 'Do not go where the path may lead, go instead where there is no path and leave a trail.',
+  },
+  {
+    id: 5,
+    text: 'Success is not final, failure is not fatal: it is the courage to continue that counts.',
+  },
+  { id: 6, text: "It always seems impossible until it's done." },
+  { id: 7, text: 'Happiness depends upon ourselves.' },
+  { id: 8, text: "Believe you can and you're halfway there." },
+  {
+    id: 9,
+    text: 'What lies behind us and what lies before us are tiny matters compared to what lies within us.',
+  },
+  { id: 10, text: 'Dream big and dare to fail.' },
+];
 
 const Predictor: React.FC = () => {
   const [search, setSearch] = useState(60);
@@ -33,34 +60,6 @@ const Predictor: React.FC = () => {
     }
   };
 
-  const inputFiles = [
-    { id: 1, text: 'The quick brown fox jumps over the lazy dog.' },
-    {
-      id: 2,
-      text: "Life is what happens when you're busy making other plans.",
-    },
-    {
-      id: 3,
-      text: 'To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.',
-    },
-    {
-      id: 4,
-      text: 'Do not go where the path may lead, go instead where there is no path and leave a trail.',
-    },
-    {
-      id: 5,
-      text: 'Success is not final, failure is not fatal: it is the courage to continue that counts.',
-    },
-    { id: 6, text: "It always seems impossible until it's done." },
-    { id: 7, text: 'Happiness depends upon ourselves.' },
-    { id: 8, text: "Believe you can and you're halfway there." },
-    {
-      id: 9,
-      text: 'What lies behind us and what lies before us are tiny matters compared to what lies within us.',
-    },
-    { id: 10, text: 'Dream big and dare to fail.' },
-  ];
-
   return (
     <Fragment>
       {/* Top bar */}
@@ -76,44 +75,51 @@ const Predictor: React.FC = () => {
       {/* Predictor */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <p className="text-sm text-[#414042] font-semibold">
-            Select Predictor
-          </p>
+          <p className="text-sm text-[#414042] font-medium">Select Predictor</p>
           <div className="flex w-[300px] ">
-            <PredictorSelect />
+            <PredictorSelect
+              options={[
+                {
+                  label: 'Predictor',
+                  options: [
+                    { value: 'Predictor 1', label: 'Predictor 1' },
+                    { value: 'Predictor 2', label: 'Predictor 2' },
+                    { value: 'Predictor 3', label: 'Predictor 3' },
+                  ],
+                },
+              ]}
+              placeholder="No predictor selected"
+            />
           </div>
         </div>
-
+        {/* Status */}
         <div className="flex items-center gap-3">
-          <label className="text-[14px] text-[#414042] font-primary ">
-            Status: <span className="text-green-700 font-bold ">Active</span>
+          <label className="text-sm text-[#414042] font-primary ">
+            Status:{' '}
+            <span className="text-green-700 font-semibold ">Active</span>
           </label>
           <DeleteIcon className="w-[20px] h-[20px] stroke-[#E55057] cursor-pointer" />
         </div>
       </div>
 
-      <div className="grid grid-cols-8 gap-4 mt-4 w-full">
-        {/** Input Section*/}
-
+      <section className="grid grid-cols-8 gap-4 mt-4 w-full">
         <div className="flex flex-col gap-3 w-full col-span-6">
-          {/** Input */}
-
           <div className="border border-[#E55057] border-dashed rounded-[5px] relative p-4">
             <div className="relative">
               <div className="min-h-[260px] flex flex-col gap-3 items-center justify-center">
-                <h2 className="text-[#414042] text-[18px] font-primary font-semibold ">
+                <h2 className="text-[#414042] text-base font-semibold">
                   Create Predictor
                 </h2>
-                <div className="flex items-center px-4 py-2 gap-2 border  border-[#E55057] rounded-[5px]">
-                  <FileIcon className={`w-[20px] h-[20px] fill-predictor`} />
+                <div className="flex items-center px-4 py-1.5 gap-2 border  border-[#E55057] rounded-[5px]">
+                  <FileIcon className={`w-[18px] h-[18px] fill-predictor`} />
                   <label htmlFor="input" className="">
-                    <p className="text-predictor text-[14px] font-primary font-semibold">
+                    <p className="text-predictor text-xs font-primary font-semibold">
                       Choose File
                     </p>
                   </label>
                   <input id="input" type="file" className="hidden" />
                 </div>
-                <p className="text-[#414042] font-primary text-[14px] mt-1">
+                <p className="text-[#414042] font-primary text-sm font-light">
                   or drag and drop a .csv, .xlsv, .json file here to upload
                 </p>
               </div>
@@ -129,8 +135,6 @@ const Predictor: React.FC = () => {
           <h2 className="text-[#414042] text-[20px] font-primary font-semibold">
             Input
           </h2>
-
-          {/** Input Details */}
           <div className="border border-[#E55057] border-dashed rounded-[5px] relative">
             <div className="flex items-center gap-3 overflow-hidden w-full">
               <div className="flex flex-col gap-3 overflow-y-auto w-full max-h-[300px] p-2 custom-scrollbar">
@@ -146,20 +150,29 @@ const Predictor: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/** File Formate */}
-        <div className="col-span-2">
+        <aside className="col-span-2">
           <h3 className="text-md font-semibold text-[#414042] mb-2">
             File Formate
           </h3>
 
-          {/* <SelectOption /> */}
-          <PredictorFileSelect />
+          <PredictorSelect
+            options={[
+              {
+                label: 'formats',
+                options: [
+                  { value: '.csv', label: '.csv' },
+                  { value: '.xlsm', label: '.xlsm' },
+                  { value: '.json', label: '.json' },
+                ],
+              },
+            ]}
+            placeholder="No file selected"
+          />
 
-          {/** File Guidlines */}
+          {/** File Guidelines */}
           <div className="my-5">
             <h3 className="text-md font-semibold text-[#414042]">
-              File Guidlines
+              File Guidelines
             </h3>
 
             <ul className="mt-2 space-y-2">
@@ -222,17 +235,16 @@ const Predictor: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
-        <button
+        </aside>
+        {/* <button
           className="bg-[#E55057] py-2 px-6 text-sm rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap"
           onClick={() => setModalOpen(true)}
         >
           Open Modal
-        </button>
-      </div>
+        </button> */}
+      </section>
 
-      {/** Create Predictor Modal */}
-
+      {/* Create Predictor Modal */}
       {modalOpen && (
         <div>
           <div
@@ -352,7 +364,7 @@ const Predictor: React.FC = () => {
                       </div>
                       <div className="flex justify-between">
                         <p className="text-[10px] text-[#414042] font-primary ">
-                          Remove Outliters
+                          Remove Outliers
                         </p>
                         <ToggleButton
                           defaultChecked={true}
