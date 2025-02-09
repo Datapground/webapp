@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-import Lottie from 'lottie-react';
-import logoAnimation from '../constants/LogoAnimation.json';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import ActivityIcon from './Icons/ActivityIcon';
 import InviteIcon from './Icons/InviteIcon';
@@ -149,15 +147,17 @@ const SideNavigation = () => {
 
   return (
     <nav
-      className={`w-64 flex flex-col justify-between items-center rounded-[40px] bg-[#E3ECFF] pb-4 `}
+      className={`w-64 flex flex-col justify-between items-center rounded-[40px] bg-[#E3ECFF]`}
     >
       <div className="w-full relative z-50">
         <div className="p-4">
-          <Lottie
-            animationData={logoAnimation}
-            loop
-            className="h-[40px] w-[190px] mx-auto"
-          />
+          <Link to={'/playground'}>
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="h-[30px] w-[180px] mx-auto object-contain pointer-events-none"
+            />
+          </Link>
         </div>
 
         <div className="w-full pl-8 z-50">
@@ -238,9 +238,9 @@ const SideNavigation = () => {
           })}
 
           {/* Divider */}
-          <div className="line h-[1px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-4"></div>
+          <div className="line h-[1px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-3"></div>
           {/* Accounts Items */}
-          <p className="text-xs text-[#414042] py-3 -ml-4">Accounts</p>
+          <p className="text-xs text-[#414042] pb-3 -ml-4">Accounts</p>
           {accounts.map(({ path, label, Icon }, index) => {
             const isActive = pathname === path;
             return (
@@ -279,8 +279,8 @@ const SideNavigation = () => {
       </div>
 
       {/* Settings */}
-      <div className="mt-8 mx-auto bg-white text-center text-sm rounded-[30px] w-[40%]">
-        <button className="py-2 px-4 flex items-center gap-[5px] text-center text-[#414042]">
+      <div className="p-4">
+        <button className="py-2 px-8 flex items-center gap-[5px] text-center text-[#414042] rounded-[40px] bg-white">
           <SettingsIcon className="w-[16px] h-[16px] stroke-[#414042]" />{' '}
           Settings
         </button>
