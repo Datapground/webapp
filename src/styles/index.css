@@ -56,3 +56,12 @@
   scrollbar-width: thin;
   scrollbar-color: #e55057 #f3f3f3; /* No quotes needed */
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

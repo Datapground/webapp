@@ -72,8 +72,8 @@ const Generator: React.FC = () => {
       </div>
 
       {/* Generator Content */}
-      <div className="grid grid-cols-7 gap-4 mt-4">
-        <div className="flex flex-col gap-3 w-full col-span-5">
+      <div className="grid grid-cols-8 gap-4 mt-4">
+        <div className="flex flex-col gap-3 w-full col-span-6">
           <div className="border border-generator rounded-[5px] relative p-4">
             <div className="relative">
               <textarea

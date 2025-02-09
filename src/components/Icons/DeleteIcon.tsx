@@ -3,40 +3,12 @@ import React from 'react';
 const DeleteIcon = (props) => {
   return (
     <svg
-      viewBox="0 0 28 28"
+      viewBox="0 0 33 33"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <mask
-        id="mask0_451_7547"
-        // style="mask-type:luminance"
-        maskUnits="userSpaceOnUse"
-        x="0"
-        y="0"
-        width="28"
-        height="28"
-      >
-        <path
-          d="M4.625 5.25098V26.501H23.375V5.25098H4.625Z"
-          strokeWidth="2.5"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M11.5 11.501V19.626M16.5 11.501V19.626M1.5 5.25098H26.5"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M9 5.25098L11.0556 1.50098H16.9856L19 5.25098H9Z"
-          strokeWidth="2.5"
-          strokeLinejoin="round"
-        />
-      </mask>
-      <g mask="url(#mask0_451_7547)">
-        <path d="M-1 -1H29V29H-1V-1Z" fill="#850006" />
-      </g>
+      <path d="M10.0427 28.3608C9.29994 28.3608 8.66431 28.0966 8.13581 27.5681C7.60731 27.0396 7.34261 26.4035 7.34171 25.6598V8.10327H5.99121V5.40226H12.7437V4.05176H20.8467V5.40226H27.5993V8.10327H26.2487V25.6598C26.2487 26.4026 25.9845 27.0387 25.456 27.5681C24.9275 28.0975 24.2914 28.3617 23.5477 28.3608H10.0427ZM12.7437 22.9588H15.4447V10.8043H12.7437V22.9588ZM18.1457 22.9588H20.8467V10.8043H18.1457V22.9588Z" />
     </svg>
   );
 };

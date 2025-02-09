@@ -10,7 +10,7 @@ import HandIcon from '../components/Icons/HandIcon';
 import PenIcon from '../components/Icons/PenIcon';
 import DeleteIcon from '../components/Icons/DeleteIcon';
 import { useDropzone } from 'react-dropzone';
-import CustomDialog from '../components/Dialog';
+import CustomDialog from '../components/predictor/Dialog';
 
 const columns = ['Columns A', 'Columns B', 'Columns C', 'Columns D'];
 
@@ -146,7 +146,7 @@ const Predictor: React.FC = () => {
           )}
         </div>
         <aside className="col-span-2">
-          <h3 className="text-md font-semibold text-[#414042] mb-2">
+          <h3 className="text-md font-semibold text-[#414042] mb-2 font-primary">
             File Formate
           </h3>
 
