@@ -34,7 +34,6 @@ const Predictor: React.FC = () => {
     console.log('Toggle State:', value);
   };
 
-  const handleOpen = (): void => setIsOpen(true);
   const handleClose = (): void => setIsOpen(false);
 
   return (
@@ -134,7 +133,7 @@ const Predictor: React.FC = () => {
                     {files?.map((file, index) => (
                       <div
                         key={index}
-                        className="flex items-center gap-2 text-[14px] text-[#414042] p-3 w-full border rounded-[10px]"
+                        className="flex items-center gap-2 text-sm text-[#414042] p-3 w-full border rounded-[10px]"
                       >
                         <p>{file}</p>
                       </div>
@@ -178,7 +177,7 @@ const Predictor: React.FC = () => {
               ].map((item, index) => (
                 <li
                   key={index}
-                  className="flex items-start gap-2 tex-[14px] text-[#414042]"
+                  className="flex items-start gap-2 tex-sm text-[#414042]"
                 >
                   <span className=" text-gray-500">+</span> {item}
                 </li>
@@ -200,7 +199,7 @@ const Predictor: React.FC = () => {
               ].map((item, index) => (
                 <li
                   key={index}
-                  className="flex items-start gap-2 tex-[14px] text-[#414042]"
+                  className="flex items-start gap-2 tex-sm text-[#414042]"
                 >
                   <span className="  text-[#414042]">+</span> {item}
                 </li>
@@ -217,7 +216,7 @@ const Predictor: React.FC = () => {
                 <p className="text-[12px] text-[#414042] font-primary mb-3">
                   Prediction Section:
                 </p>
-                <button className="p-2 border-[1px] border-predictor rounded-[10px] w-full text-[#414042] font-primary text-[14px]">
+                <button className="p-2 border-[1px] border-predictor rounded-[10px] w-full text-[#414042] font-primary text-sm">
                   Result Value
                 </button>
               </div>
@@ -225,7 +224,7 @@ const Predictor: React.FC = () => {
                 <p className="text-[12px] text-[#414042] font-primary mb-3">
                   Download Section:
                 </p>
-                <button className="p-2 border-[1px] bg-predictor border-predictor rounded-[10px] w-full text-[#414042] font-primary text-[14px]">
+                <button className="p-2 border-[1px] bg-predictor border-predictor rounded-[10px] w-full text-[#414042] font-primary text-sm">
                   Download
                 </button>
               </div>
@@ -234,12 +233,6 @@ const Predictor: React.FC = () => {
 
           {/** Result Section  */}
         </aside>
-        <button
-          className="bg-[#E55057] py-2 px-6 text-sm rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap"
-          onClick={handleOpen}
-        >
-          Open Modal
-        </button>
       </section>
 
       {/* Create Predictor Modal */}
@@ -250,7 +243,7 @@ const Predictor: React.FC = () => {
               <h2 className="text-[#414042] text-[26px] font-primary font-semibold">
                 Configure Your Predictor
               </h2>
-              <p className="text-[#414042] text-[14px] font-primary mt-2">
+              <p className="text-[#414042] text-sm font-primary mt-2">
                 Make sure the file format meets the requirement. It must be
                 .csv, .xlsv, .json
               </p>
@@ -260,44 +253,37 @@ const Predictor: React.FC = () => {
                 {' '}
                 Available Columns Configuration
               </h3>
-              <div className="overflow-hidden rounded-[30px] border-[1px]">
-                <table className="w-full">
-                  <thead>
-                    <tr className="">
-                      <th className="text-[#414042] font-medium font-primary text-[14px] border py-2 ">
-                        Available Columns
-                      </th>
-                      <th className="text-[#414042] font-medium font-primary text-[14px] border py-2 ">
-                        Feature Columns
-                      </th>
-                      <th className="text-[#414042] font-medium font-primary text-[14px] border py-2 ">
-                        Target Columns
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {columns.map((column, index) => (
-                      <tr key={index} className="">
-                        <td className="text-[#414042] font-primary text-[14px] border py-4 text-center">
-                          {column}
-                        </td>
-                        <td className="text-[#414042] font-primary text-[14px] border py-4">
-                          <div className="flex justify-center align-center">
-                            <HandIcon className="w-[22px] h-[22px] fill-predictor" />
-                          </div>
-                        </td>
-                        <td className="text-[#414042] font-primary text-[14px] border py-4 ">
-                          <div className="flex justify-center align-center">
-                            <HandIcon className="w-[22px] h-[22px] fill-predictor" />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              {/* table */}
+              <div className="grid grid-cols-3 border border-[#0000000D] rounded-[40px] overflow-hidden">
+                {/* Header Row */}
+                <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-r border-b">
+                  Available Columns
+                </div>
+                <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-r border-b">
+                  Feature Columns
+                </div>
+                <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-b">
+                  Target Columns
+                </div>
+
+                {/* Data Rows */}
+                {columns.map((column, index) => (
+                  <React.Fragment key={index}>
+                    <div className="text-[#414042] font-primary text-sm py-4 text-center border-r border-b">
+                      {column}
+                    </div>
+                    <div className="text-[#414042] font-primary text-sm py-4 border-r border-b flex justify-center items-center">
+                      <HandIcon className="w-[22px] h-[22px] fill-predictor" />
+                    </div>
+                    <div className="text-[#414042] font-primary text-sm py-4 border-b flex justify-center items-center">
+                      <HandIcon className="w-[22px] h-[22px] fill-predictor" />
+                    </div>
+                  </React.Fragment>
+                ))}
               </div>
+
               <div className="flex justify-center mt-4">
-                <button className="mt-4 bg-predictor text-white py-2 px-16 text-[14px] font-primary rounded-lg transition">
+                <button className="mt-4 bg-predictor text-white py-2 px-16 text-sm font-primary rounded-lg transition">
                   Generate
                 </button>{' '}
               </div>
@@ -305,7 +291,7 @@ const Predictor: React.FC = () => {
           </div>
 
           {/** Advance Settings */}
-          <div className="col-span-2 rounded-[40px] border-[2px]  w-full py-2">
+          <div className="col-span-2 rounded-[40px] border w-full py-2">
             <div className="flex flex-col items-center justify-center mt-2 p-4">
               <div className="flex items-center gap-1 py-2 px-3 my-auto bg-[#E55057]/50 w-full rounded-[30px] text-[10px] text-[#414042] font-primary">
                 <SettingsIcon className="w-[16px] h-[16px] stroke-[#414042]" />
@@ -314,7 +300,7 @@ const Predictor: React.FC = () => {
 
               {/**  Settings Settings */}
               <div className="flex flex-col w-full mt-4">
-                <h2 className="text-[14px] font-primary text-[#414042]">
+                <h2 className="text-sm font-primary text-[#414042]">
                   Search Parameter
                 </h2>
                 <div>
@@ -339,7 +325,7 @@ const Predictor: React.FC = () => {
 
               {/**  Settings Settings */}
               <div className="flex flex-col w-full">
-                <h2 className="text-[14px] font-primary text-[#414042]">
+                <h2 className="text-sm font-primary text-[#414042]">
                   Additional Configuration
                 </h2>
                 <div className="flex flex-col gap-3 my-2">
@@ -381,7 +367,7 @@ const Predictor: React.FC = () => {
 
               {/**  Settings Settings */}
               <div className="flex flex-col w-full">
-                <h2 className="text-[14px] font-primary text-[#414042] my-3">
+                <h2 className="text-sm font-primary text-[#414042] my-3">
                   Training Details
                 </h2>
                 <div className="flex flex-col gap-2">
