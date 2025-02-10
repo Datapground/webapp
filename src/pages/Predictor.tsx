@@ -4,8 +4,14 @@ import PredictorIcon from '../components/Icons/PredictorIcon';
 import FileIcon from '../components/Icons/FileIcon';
 import PredictorSelect from '../components/predictor/Select';
 import SettingsIcon from '../components/Icons/SettingsIcon';
-import ToggleButton from './../components/predictor/CustomSwitch';
-import { Slider, DialogContent, Dialog } from '@mui/material';
+import {
+  Slider,
+  DialogContent,
+  Dialog,
+  Stack,
+  Switch,
+  styled,
+} from '@mui/material';
 import HandIcon from '../components/Icons/HandIcon';
 import PenIcon from '../components/Icons/PenIcon';
 import DeleteIcon from '../components/Icons/DeleteIcon';
@@ -17,6 +23,43 @@ interface Predictor {
   open: boolean;
   onClose: () => void;
 }
+
+const CustomSwitch = styled(Switch)<{
+  trackcolor?: string;
+  switchcolor?: string;
+}>(({ trackcolor = '#E55057', switchcolor = '#fff' }) => ({
+  width: 26, // Updated width
+  height: 16, // Updated height
+  padding: 0,
+  display: 'flex',
+  alignItems: 'center',
+
+  '& .MuiSwitch-switchBase': {
+    padding: 2,
+    '&.Mui-checked': {
+      transform: 'translateX(10px)',
+      color: switchcolor,
+      '& + .MuiSwitch-track': {
+        backgroundColor: trackcolor,
+        opacity: 1,
+      },
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    width: 12,
+    height: 12,
+    borderRadius: '50%',
+    backgroundColor: '#fff',
+    transition: '0.3s',
+  },
+  '& .MuiSwitch-track': {
+    width: '100%',
+    height: '100%',
+    borderRadius: 16 / 2,
+    opacity: 1,
+    backgroundColor: trackcolor,
+  },
+}));
 
 const Predictor: React.FC = () => {
   const [search, setSearch] = useState(60);
@@ -34,8 +77,21 @@ const Predictor: React.FC = () => {
     setSearch(newValue as number);
   };
 
-  const handleToggle = (value: boolean) => {
-    console.log('Toggle State:', value);
+  const [entries, setEntries] = React.useState(false);
+  const [outliers, setOutliers] = React.useState(false);
+  const [others, setOthers] = React.useState(false);
+
+  const handleEntries = () => {
+    const newValue = !entries;
+    setEntries(newValue);
+  };
+  const handleOutliers = () => {
+    const newValue = !outliers;
+    setOutliers(newValue);
+  };
+  const handleOthers = () => {
+    const newValue = !others;
+    setOthers(newValue);
   };
 
   const handleClose = () => setOpen(false);
@@ -353,34 +409,34 @@ const Predictor: React.FC = () => {
                       <p className="text-[10px] text-[#414042] font-primary ">
                         Remove NaN Entries
                       </p>
-                      <ToggleButton
-                        defaultChecked={true}
-                        onChange={handleToggle}
-                        switchColor="#E55057"
-                        trackColor="#E55057"
-                      />
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <CustomSwitch
+                          checked={entries}
+                          onChange={handleEntries}
+                        />
+                      </Stack>
                     </div>
                     <div className="flex justify-between">
                       <p className="text-[10px] text-[#414042] font-primary ">
                         Remove Outliers
                       </p>
-                      <ToggleButton
-                        defaultChecked={true}
-                        onChange={handleToggle}
-                        switchColor="#E55057"
-                        trackColor="#E55057"
-                      />
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <CustomSwitch
+                          checked={outliers}
+                          onChange={handleOutliers}
+                        />
+                      </Stack>
                     </div>
                     <div className="flex justify-between">
                       <p className="text-[10px] text-[#414042] font-primary ">
                         Remove Others
                       </p>
-                      <ToggleButton
-                        defaultChecked={true}
-                        onChange={handleToggle}
-                        switchColor="#E55057"
-                        trackColor="#E55057"
-                      />
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <CustomSwitch
+                          checked={others}
+                          onChange={handleOthers}
+                        />
+                      </Stack>
                     </div>
                   </div>
                 </div>

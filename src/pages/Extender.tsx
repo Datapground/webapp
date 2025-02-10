@@ -3,18 +3,64 @@ import TopBar from '../components/TopBar';
 import ExtenderIcon from '../components/Icons/ExtenderIcon';
 import FileIcon from '../components/Icons/FileIcon';
 import SettingsIcon from '../components/Icons/SettingsIcon';
-import { Slider } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Slider,
+  Stack,
+  styled,
+  Switch,
+  Typography,
+} from '@mui/material';
 import ExtenderSelect from '../components/extender/Select';
-import ToggleButton from '../components/predictor/CustomSwitch';
 import ChevronDownIcon from '../components/Icons/ChevronDownIcon';
 import PenIcon from '../components/Icons/PenIcon';
 import JsonIcon from '../components/Icons/JsonIcon';
+
+const CustomSwitch = styled(Switch)<{
+  trackcolor?: string;
+  switchcolor?: string;
+}>(({ trackcolor = '#4CB448', switchcolor = '#fff' }) => ({
+  width: 26, // Updated width
+  height: 16, // Updated height
+  padding: 0,
+  display: 'flex',
+  alignItems: 'center',
+
+  '& .MuiSwitch-switchBase': {
+    padding: 2,
+    '&.Mui-checked': {
+      transform: 'translateX(10px)',
+      color: switchcolor,
+      '& + .MuiSwitch-track': {
+        backgroundColor: trackcolor,
+        opacity: 1,
+      },
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    width: 12,
+    height: 12,
+    borderRadius: '50%',
+    backgroundColor: '#fff',
+    transition: '0.3s',
+  },
+  '& .MuiSwitch-track': {
+    width: '100%',
+    height: '100%',
+    borderRadius: 16 / 2,
+    opacity: 1,
+    backgroundColor: trackcolor,
+  },
+}));
 
 const Extender: React.FC = () => {
   const [rows, setRows] = useState(7);
   const [columns, setColumns] = useState(10);
   const [inputFile, setInputFile] = useState('');
   const [selected, setSelected] = useState('tabular');
+  const [checked, setChecked] = React.useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -32,8 +78,9 @@ const Extender: React.FC = () => {
     setColumns(newValue as number);
   };
 
-  const handleToggle = (value: boolean) => {
-    console.log('Toggle State:', value);
+  const handleChange = () => {
+    const newValue = !checked;
+    setChecked(newValue);
   };
 
   return (
@@ -209,21 +256,51 @@ const Extender: React.FC = () => {
             <p className="text-sm text-[#414042] font-primary">
               Handle Duplicates
             </p>
-            <ToggleButton
-              defaultChecked={true}
-              onChange={handleToggle}
-              switchColor="#4CB448"
-              trackColor="#4CB448"
-            />
+            <Stack direction="row" spacing={1} alignItems="center">
+              <CustomSwitch checked={checked} onChange={handleChange} />
+            </Stack>
           </div>
 
           <hr />
 
-          <div className="flex justify-between items-center ">
-            <p className="text-sm text-[#414042] font-primary">
-              Show generated rows
-            </p>
-            <ChevronDownIcon className={`w-[18px] h-[18px] stroke-extender`} />
+          <div className="flex justify-between items-center -mt-2 -mx-4">
+            <Accordion
+              sx={{
+                color: '',
+                backgroundColor: 'transparent',
+                boxShadow: 'none',
+              }}
+            >
+              <AccordionSummary
+                expandIcon={
+                  <ChevronDownIcon
+                    className={`w-[18px] h-[18px] stroke-extender`}
+                  />
+                }
+                aria-controls="panel1-content"
+                id="panel1-header"
+                sx={{
+                  color: '',
+                  backgroundColor: 'transparent',
+                }}
+              >
+                <Typography
+                  component="span"
+                  sx={{
+                    fontFamily: 'BR Candor, sans-serif',
+                    color: '#414042',
+                    fontSize: '14px',
+                  }}
+                >
+                  Generated Rows Preview
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
+                eget.
+              </AccordionDetails>
+            </Accordion>
           </div>
         </div>
       </section>
