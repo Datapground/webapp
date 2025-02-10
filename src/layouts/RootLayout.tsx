@@ -4,7 +4,7 @@ import SideNavigation from '../components/SideNavigation';
 
 const RootLayout = () => {
   return (
-    <div className={`min-h-screen flex`}>
+    <div className={`min-h-screen flex max-w-[1650px] mx-auto`}>
       <SideNavigation />
       <div className={`flex-1 p-6`}>
         <Outlet />

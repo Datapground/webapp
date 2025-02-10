@@ -43,6 +43,7 @@ module.exports = {
           'linear-gradient(90deg, #E4464E -4.54%, rgba(228, 70, 78, 0.776) 43.82%, rgba(255, 255, 255, 0) 100%)',
         'extender-main':
           'linear-gradient(90deg, #4CB448 -4.54%, rgba(76, 180, 72, 0.776) 43.82%, rgba(255, 255, 255, 0) 100%)',
+        card: 'linear-gradient(176.74deg, #FFFFFF 5.33%, #E1EAFF 78.64%)',
       },
     },
   },
