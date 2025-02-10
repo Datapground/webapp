@@ -16,7 +16,7 @@ const columns = ['Columns A', 'Columns B', 'Columns C', 'Columns D'];
 
 const Predictor: React.FC = () => {
   const [search, setSearch] = useState(60);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 

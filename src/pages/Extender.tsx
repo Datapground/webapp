@@ -12,7 +12,7 @@ import JsonIcon from '../components/Icons/JsonIcon';
 
 const Extender: React.FC = () => {
   const [rows, setRows] = useState(7);
-  const [coloumns, setColoumns] = useState(10);
+  const [columns, setColumns] = useState(10);
   const [inputFile, setInputFile] = useState('');
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,8 +27,8 @@ const Extender: React.FC = () => {
     setRows(newValue as number);
   };
 
-  const handleColoumns = (_event: Event, newValue: number | number[]) => {
-    setColoumns(newValue as number);
+  const handleColumns = (_event: Event, newValue: number | number[]) => {
+    setColumns(newValue as number);
   };
 
   const handleToggle = (value: boolean) => {
@@ -47,12 +47,10 @@ const Extender: React.FC = () => {
       {/* Extender Heading */}
       {/** Tabular Data */}
       <aside className="flex items-center justify-end gap-3">
-        <button>
-          <p
-            className={`py-2 px-3 border border-extender text-extender text-md`}
-          >
-            Tabular Data
-          </p>
+        <button
+          className={`py-2 px-3 border border-extender text-extender text-md`}
+        >
+          Tabular Data
         </button>
         <input
           type="text"
@@ -128,7 +126,7 @@ const Extender: React.FC = () => {
         {/** Settings */}
 
         <div className=" flex flex-col gap-5 col-span-2">
-          <span className="flex items-center justify-start gap-2 text-[#414042] text-[16px] font-[400] rounded-[10px] p-2 text-center bg-[#4CB448]/60">
+          <span className="flex items-center justify-start gap-2 text-[#414042] text-[16px] rounded-[10px] p-2 text-center bg-[#4CB448]/60">
             <SettingsIcon className={`w-[14px] h-[14px] stroke-[#414042]`} />
             Settings
           </span>
@@ -157,16 +155,16 @@ const Extender: React.FC = () => {
 
             <div>
               <span className="flex items-center justify-between text-[14px] font-primary text-[#414042]">
-                Add to Coloumns
+                Add to columns
                 <label className="p-1 bg-slate-50 rounded-md border px-4  text-sm font-[200]">
                   {' '}
-                  {coloumns}
+                  {columns}
                 </label>
               </span>
 
               <Slider
-                value={coloumns}
-                onChange={handleColoumns}
+                value={columns}
+                onChange={handleColumns}
                 max={20}
                 min={0}
                 aria-label="Temperature"
