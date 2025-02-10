@@ -41,30 +41,6 @@ const data: ActivityData[] = [
     solution: 'Processed Text Data',
     date: '2025-01-17',
   },
-  {
-    name: 'Data_Cleanup_Report.xlsx',
-    tool: 'The Extender',
-    solution: 'Cleaned and Processed File',
-    date: '2025-01-17',
-  },
-  {
-    name: 'File_Extension.csv',
-    tool: 'The Extender',
-    solution: 'Extended rows to 1000',
-    date: '2025-01-17',
-  },
-  {
-    name: 'Text_Generation_Task_01',
-    tool: 'The Generator',
-    solution: 'Processed Text Data',
-    date: '2025-01-17',
-  },
-  {
-    name: 'Data_Cleanup_Report.xlsx',
-    tool: 'The Extender',
-    solution: 'Cleaned and Processed File',
-    date: '2025-01-17',
-  },
 ]; // Ensure TypeScript recognizes the structure
 
 const Activity: React.FC = () => {
@@ -77,63 +53,74 @@ const Activity: React.FC = () => {
         </aside>
       </TopBar>
 
-      <div className="pr-8 py-6">
-        <div className="border border-[#D6D6D6] rounded-[20px] p-4 min-h-[500px] relative">
-          {/** if data available */}
-          {data.length === 0 ? (
-            <div className="flex items-center justify-center h-full w-full min-h-[500px]">
-              <div className="flex flex-col items-center justify-center text-center">
-                <img
-                  src="/logo-icon.png"
-                  alt="logo"
-                  className="object-contain w-[100px] h-[100px] pointer-events-none"
-                />
-                <h2 className="text-[#414042] text-[18px] font-primary font-semibold">
-                  No Activity Found
-                </h2>
-              </div>
+      <div className="border border-[#D6D6D6] rounded-[30px] py-4 px-8 min-h-[500px] relative mt-4 overflow-hidden">
+        {data.length === 0 ? (
+          <div className="flex items-center justify-center h-full w-full min-h-[500px]">
+            <div className="flex flex-col items-center justify-center text-center">
+              <img
+                src="/logo-icon.png"
+                alt="logo"
+                className="object-contain w-[80px] h-[80px] pointer-events-none"
+              />
+              <h2 className="text-[#414042] sm:text-base text-sm font-primary font-semibold">
+                No Activity Found
+              </h2>
             </div>
-          ) : (
-            <div className="relative">
-              {/** data Table */}
-
-              <div className="overflow-x-auto max-h-[500px] no-scrollbar">
-                <table className="min-w-full text-center font-primary text-[12px] border-collapse">
-                  <thead className="bg-white sticky top-0 z-10">
-                    <tr className="border-b text-gray-700">
-                      <th className="p-4">Activity Name</th>
-                      <th className="p-4">Tool Used</th>
-                      <th className="p-4">Solution</th>
-                      <th className="p-4">Date</th>
-                      <th className="p-4">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.map((item, index) => (
-                      <tr key={index} className="border-b border-gray-200">
-                        <td className="p-4">{item.name}</td>
-                        <td className="p-4">{item.tool}</td>
-                        <td className="p-4">{item.solution}</td>
-                        <td className="p-4">{item.date}</td>
-                        <td className="p-4 flex items-center justify-center gap-2">
-                          <button className="bg-[#5F5FC9] text-white px-3 py-[3px] my-auto text-center rounded-[20px]">
-                            View
-                          </button>
-                          <button className="border border-[#5F5FC9] text-[#5F5FC9] px-3 py-[3px] my-auto text-center rounded-[20px]">
-                            Download
-                          </button>
-                          <button>
-                            <DeleteIcon className="w-[20px] h-[20px] fill-[#BF0400]" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="overflow-x-auto h-[500px] no-scrollbar">
+            <table className="w-full font-primary text-sm bg-white">
+              <thead className="sticky top-0 z-10 bg-white">
+                <tr className="border-b text-center">
+                  <th className="p-4 text-[#414042] font-semibold pb-6">
+                    Activity Name
+                  </th>
+                  <th className="p-4 text-[#414042] font-semibold pb-6">
+                    Tool Used
+                  </th>
+                  <th className="p-4 text-[#414042] font-semibold pb-6">
+                    Solution
+                  </th>
+                  <th className="p-4 text-[#414042] font-semibold pb-6">
+                    Date
+                  </th>
+                  <th className="p-4 text-[#414042] font-semibold pb-6">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
+                  <tr key={index} className="border-b border-gray-200">
+                    <td className="p-4 text-[#414042] font-light tracking-wide">
+                      {item.name}
+                    </td>
+                    <td className="p-4 text-[#414042] font-light tracking-wide">
+                      {item.tool}
+                    </td>
+                    <td className="p-4 text-[#414042] font-light tracking-wide">
+                      {item.solution}
+                    </td>
+                    <td className="p-4 text-[#414042] font-light tracking-wide">
+                      {item.date}
+                    </td>
+                    <td className="p-4 text-[#414042] font-light tracking-wide flex items-center justify-center gap-2">
+                      <button className="bg-[#5F5FC9] text-white px-3 py-[3px] my-auto text-center rounded-[20px]">
+                        View
+                      </button>
+                      <button className="border border-[#5F5FC9] text-[#5F5FC9] px-3 py-[3px] my-auto text-center rounded-[20px]">
+                        Download
+                      </button>
+                      <button>
+                        <DeleteIcon className="w-[20px] h-[20px] fill-[#BF0400]" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
