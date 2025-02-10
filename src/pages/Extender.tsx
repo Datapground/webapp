@@ -45,14 +45,12 @@ const Extender: React.FC = () => {
         </aside>
       </TopBar>
 
-      {/* Extender Heading */}
-      {/** Tabular Data */}
       <aside className="flex items-center justify-end gap-3">
         <button
           className={`py-2 px-3 border ${
             selected === 'tabular'
               ? 'border-extender text-extender'
-              : 'border-none'
+              : 'border-transparent'
           } text-[#414042] text-md`}
           onClick={() => setSelected('tabular')}
         >
@@ -60,7 +58,9 @@ const Extender: React.FC = () => {
         </button>
         <button
           className={`py-2 px-3 border ${
-            selected === 'nlp' ? 'border-extender text-extender' : 'border-none'
+            selected === 'nlp'
+              ? 'border-extender text-extender'
+              : 'border-transparent'
           } text-[#414042]  text-md`}
           onClick={() => setSelected('nlp')}
         >
@@ -68,10 +68,9 @@ const Extender: React.FC = () => {
         </button>
       </aside>
 
-      {/**Extender Content */}
-      <section className="grid grid-cols-8 gap-4 mt-4 w-full">
+      <section className="grid grid-cols-8 gap-2 mt-4 w-full">
         <div className="flex flex-col gap-3 w-full col-span-6">
-          <div className="border border-[#4CB448] rounded-[5px] relative p-4 min-h-[340px] flex flex-col justify-between">
+          <div className="border border-[#4CB448CC] rounded-[5px] relative p-4 min-h-[340px] flex flex-col justify-between">
             <div className="relative flex-grow">
               {inputFile.length === 0 && (
                 <div className="flex flex-col gap-3 items-center justify-center min-h-[300px]">
@@ -113,11 +112,11 @@ const Extender: React.FC = () => {
             )}
           </div>
 
-          {/**Extender Output */}
+          {/* Extender Output */}
           <h2 className="text-[#414042] text-[20px] font-primary font-semibold">
             Output
           </h2>
-          <div className=" flex flex-col items-center min-h-[200px] flex-grow border border-extender rounded-[5px] justify-center">
+          <div className=" flex flex-col items-center min-h-[200px] flex-grow border border-[#4CB448CC] rounded-[5px] justify-center">
             <img
               src="/logo-icon.png"
               alt="logo"
@@ -131,8 +130,6 @@ const Extender: React.FC = () => {
             </p>
           </div>
         </div>
-
-        {/** Settings */}
 
         <div className=" flex flex-col gap-5 col-span-2">
           <span className="flex items-center justify-start gap-2 text-[#414042] text-[16px] rounded-[10px] p-2 text-center bg-[#4CB448]/60">
@@ -220,7 +217,7 @@ const Extender: React.FC = () => {
             />
           </div>
 
-          <hr></hr>
+          <hr />
 
           <div className="flex justify-between items-center ">
             <p className="text-sm text-[#414042] font-primary">

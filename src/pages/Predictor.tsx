@@ -91,7 +91,7 @@ const Predictor: React.FC = () => {
         </div>
       </div>
 
-      <section className="grid grid-cols-8 gap-4 mt-4 w-full">
+      <section className="grid grid-cols-8 gap-2 mt-4 w-full">
         <div className="flex flex-col gap-3 w-full col-span-6">
           <div className="border border-[#E55057] border-dashed rounded-[5px] relative p-4">
             <div className="relative">
@@ -243,8 +243,6 @@ const Predictor: React.FC = () => {
               </div>
             </div>
           )}
-
-          {/** Result Section  */}
         </aside>
       </section>
 

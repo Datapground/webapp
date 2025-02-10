@@ -61,7 +61,7 @@ const Generator: React.FC = () => {
             className={`py-2 px-3 border ${
               selected === 'tabular'
                 ? 'border-generator text-generator'
-                : 'border-none'
+                : 'border-transparent'
             } text-[#414042] text-md`}
             onClick={() => setSelected('tabular')}
           >
@@ -71,7 +71,7 @@ const Generator: React.FC = () => {
             className={`py-2 px-3 border ${
               selected === 'nlp'
                 ? 'border-generator text-generator'
-                : 'border-none'
+                : 'border-transparent'
             } text-[#414042] text-md`}
             onClick={() => setSelected('nlp')}
           >
@@ -81,7 +81,7 @@ const Generator: React.FC = () => {
       </div>
 
       {/* Generator Content */}
-      <div className="grid grid-cols-8 gap-4 mt-4">
+      <div className="grid grid-cols-8 gap-2 mt-4">
         <div className="flex flex-col gap-3 w-full col-span-6">
           <div className="border border-generator rounded-[5px] relative p-4">
             <div className="relative">
