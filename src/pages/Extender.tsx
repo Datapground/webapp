@@ -14,6 +14,7 @@ const Extender: React.FC = () => {
   const [rows, setRows] = useState(7);
   const [columns, setColumns] = useState(10);
   const [inputFile, setInputFile] = useState('');
+  const [selected, setSelected] = useState('tabular');
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -39,7 +40,7 @@ const Extender: React.FC = () => {
     <Fragment>
       <TopBar containerClassName="justify-between">
         <aside className="flex justify-start items-center gap-3">
-          <ExtenderIcon className="fill-[#414042] w-[26px] h-[23.59px]" />
+          <ExtenderIcon className="fill-[#414042] w-[26px] h-[26px]" />
           <h2 className="text-[26px] font-primary font-medium">The Extender</h2>
         </aside>
       </TopBar>
@@ -48,22 +49,30 @@ const Extender: React.FC = () => {
       {/** Tabular Data */}
       <aside className="flex items-center justify-end gap-3">
         <button
-          className={`py-2 px-3 border border-extender text-extender text-md`}
+          className={`py-2 px-3 border ${
+            selected === 'tabular'
+              ? 'border-extender text-extender'
+              : 'border-none'
+          } text-[#414042] text-md`}
+          onClick={() => setSelected('tabular')}
         >
           Tabular Data
         </button>
-        <input
-          type="text"
-          placeholder="Natural Language Input"
-          className="bg-transparent outline-none border-none text-[#414042] px-2"
-        />
+        <button
+          className={`py-2 px-3 border ${
+            selected === 'nlp' ? 'border-extender text-extender' : 'border-none'
+          } text-[#414042]  text-md`}
+          onClick={() => setSelected('nlp')}
+        >
+          Natural Language Input
+        </button>
       </aside>
 
       {/**Extender Content */}
       <section className="grid grid-cols-8 gap-4 mt-4 w-full">
         <div className="flex flex-col gap-3 w-full col-span-6">
           <div className="border border-[#4CB448] rounded-[5px] relative p-4 min-h-[340px] flex flex-col justify-between">
-            <div className="m-4 relative flex-grow">
+            <div className="relative flex-grow">
               {inputFile.length === 0 && (
                 <div className="flex flex-col gap-3 items-center justify-center min-h-[300px]">
                   <h2 className="text-[#414042] text-base font-semibold">
@@ -145,7 +154,7 @@ const Extender: React.FC = () => {
                 onChange={handleRows}
                 aria-label="Temperature"
                 sx={{
-                  color: '#1E647F', // Custom Purple (Deep Purple)
+                  color: '#1E647F',
                   '& .MuiSlider-thumb': { backgroundColor: '#1E647F' }, // Thumb color
                   '& .MuiSlider-track': { backgroundColor: '#1E647F' }, // Track (filled part)
                   '& .MuiSlider-rail': { backgroundColor: '#1E647F66' }, // Rail (unfilled part)
@@ -169,7 +178,7 @@ const Extender: React.FC = () => {
                 min={0}
                 aria-label="Temperature"
                 sx={{
-                  color: '#A077A8', // Custom Purple (Deep Purple)
+                  color: '#A077A8',
                   '& .MuiSlider-thumb': { backgroundColor: '#A077A8' }, // Thumb color
                   '& .MuiSlider-track': { backgroundColor: '#A077A8' }, // Track (filled part)
                   '& .MuiSlider-rail': { backgroundColor: '#A077A866' }, // Rail (unfilled part)
@@ -182,7 +191,7 @@ const Extender: React.FC = () => {
             <p className="text-sm text-[#414042] mb-2 font-primary">
               Output Format
             </p>
-            <div className="flex w-[300px] ">
+            <div className="flex w-[280px] ">
               <ExtenderSelect
                 options={[
                   {

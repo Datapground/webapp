@@ -5,18 +5,22 @@ import FileIcon from '../components/Icons/FileIcon';
 import PredictorSelect from '../components/predictor/Select';
 import SettingsIcon from '../components/Icons/SettingsIcon';
 import ToggleButton from './../components/predictor/CustomSwitch';
-import { Slider } from '@mui/material';
+import { Slider, DialogContent, Dialog } from '@mui/material';
 import HandIcon from '../components/Icons/HandIcon';
 import PenIcon from '../components/Icons/PenIcon';
 import DeleteIcon from '../components/Icons/DeleteIcon';
 import { useDropzone } from 'react-dropzone';
-import CustomDialog from '../components/predictor/Dialog';
 
 const columns = ['Columns A', 'Columns B', 'Columns C', 'Columns D'];
 
+interface Predictor {
+  open: boolean;
+  onClose: () => void;
+}
+
 const Predictor: React.FC = () => {
   const [search, setSearch] = useState(60);
-  const [isOpen, setIsOpen] = useState(true);
+  const [open, setOpen] = useState(true);
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
@@ -34,8 +38,17 @@ const Predictor: React.FC = () => {
     console.log('Toggle State:', value);
   };
 
-  const handleClose = (): void => setIsOpen(false);
+  const handleClose = () => setOpen(false);
 
+  const boxStyles = {
+    '& .MuiPaper-root': {
+      width: '70vw',
+      maxWidth: '1400px',
+      height: '85vh',
+      borderRadius: '40px',
+      overflow: 'hidden',
+    },
+  };
   return (
     <Fragment>
       {/* Top bar */}
@@ -236,163 +249,173 @@ const Predictor: React.FC = () => {
       </section>
 
       {/* Create Predictor Modal */}
-      <CustomDialog open={isOpen} onClose={handleClose}>
-        <div className="grid grid-cols-7 bg-[#FFFFFF] rounded-[40px] relative  border-l-0 w-full h-full ">
-          <div className="col-span-5 m-10">
-            <div className="mb-8">
-              <h2 className="text-[#414042] text-[26px] font-primary font-semibold">
-                Configure Your Predictor
-              </h2>
-              <p className="text-[#414042] text-sm font-primary mt-2">
-                Make sure the file format meets the requirement. It must be
-                .csv, .xlsv, .json
-              </p>
-            </div>
-            <div>
-              <h3 className="text-[#414042] font-primary text-[12px] font-bold my-4">
-                {' '}
-                Available Columns Configuration
-              </h3>
-              {/* table */}
-              <div className="grid grid-cols-3 border border-[#0000000D] rounded-[40px] overflow-hidden">
-                {/* Header Row */}
-                <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-r border-b">
-                  Available Columns
-                </div>
-                <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-r border-b">
-                  Feature Columns
-                </div>
-                <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-b">
-                  Target Columns
-                </div>
-
-                {/* Data Rows */}
-                {columns.map((column, index) => (
-                  <React.Fragment key={index}>
-                    <div className="text-[#414042] font-primary text-sm py-4 text-center border-r border-b">
-                      {column}
-                    </div>
-                    <div className="text-[#414042] font-primary text-sm py-4 border-r border-b flex justify-center items-center">
-                      <HandIcon className="w-[22px] h-[22px] fill-predictor" />
-                    </div>
-                    <div className="text-[#414042] font-primary text-sm py-4 border-b flex justify-center items-center">
-                      <HandIcon className="w-[22px] h-[22px] fill-predictor" />
-                    </div>
-                  </React.Fragment>
-                ))}
+      <Dialog open={open} onClose={handleClose} fullWidth sx={boxStyles}>
+        <DialogContent
+          sx={{
+            width: '100%',
+            height: '100%',
+            padding: 0,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <div className="grid grid-cols-7 bg-[#FFFFFF] rounded-[40px] relative  border-l-0 w-full h-full ">
+            <div className="col-span-5 m-10">
+              <div className="mb-8">
+                <h2 className="text-[#414042] text-[26px] font-primary font-semibold">
+                  Configure Your Predictor
+                </h2>
+                <p className="text-[#414042] text-sm font-primary mt-2">
+                  Make sure the file format meets the requirement. It must be
+                  .csv, .xlsv, .json
+                </p>
               </div>
+              <div>
+                <h3 className="text-[#414042] font-primary text-[12px] font-bold my-4">
+                  {' '}
+                  Available Columns Configuration
+                </h3>
+                {/* table */}
+                <div className="grid grid-cols-3 border border-[#0000000D] rounded-[40px] overflow-hidden">
+                  {/* Header Row */}
+                  <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-r border-b">
+                    Available Columns
+                  </div>
+                  <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-r border-b">
+                    Feature Columns
+                  </div>
+                  <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-b">
+                    Target Columns
+                  </div>
 
-              <div className="flex justify-center mt-4">
-                <button className="mt-4 bg-predictor text-white py-2 px-16 text-sm font-primary rounded-lg transition">
-                  Generate
-                </button>{' '}
+                  {/* Data Rows */}
+                  {columns.map((column, index) => (
+                    <React.Fragment key={index}>
+                      <div className="text-[#414042] font-primary text-sm py-4 text-center border-r border-b">
+                        {column}
+                      </div>
+                      <div className="text-[#414042] font-primary text-sm py-4 border-r border-b flex justify-center items-center">
+                        <HandIcon className="w-[22px] h-[22px] fill-predictor" />
+                      </div>
+                      <div className="text-[#414042] font-primary text-sm py-4 border-b flex justify-center items-center">
+                        <HandIcon className="w-[22px] h-[22px] fill-predictor" />
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </div>
+
+                <div className="flex justify-center mt-4">
+                  <button className="mt-4 bg-predictor text-white py-2 px-16 text-sm font-primary rounded-lg transition">
+                    Generate
+                  </button>{' '}
+                </div>
+              </div>
+            </div>
+
+            {/** Advance Settings */}
+            <div className="col-span-2 rounded-[40px] border w-full py-2">
+              <div className="flex flex-col items-center justify-center mt-2 p-4">
+                <div className="flex items-center gap-1 py-2 px-3 my-auto bg-[#E55057]/50 w-full rounded-[30px] text-[10px] text-[#414042] font-primary">
+                  <SettingsIcon className="w-[16px] h-[16px] stroke-[#414042]" />
+                  Advance Settings
+                </div>
+
+                {/**  Settings Settings */}
+                <div className="flex flex-col w-full mt-4">
+                  <h2 className="text-sm font-primary text-[#414042]">
+                    Search Parameter
+                  </h2>
+                  <div>
+                    <label className="text-xs text-predictor font-primary flex justify-end -mb-3">
+                      {search}%
+                    </label>
+                    <Slider
+                      value={search}
+                      onChange={handleSearch}
+                      min={0}
+                      max={100}
+                      aria-label="Temperature"
+                      sx={{
+                        color: '#E55057', // Custom Purple (Deep Purple)
+                        '& .MuiSlider-thumb': { backgroundColor: '#E55057' }, // Thumb color
+                        '& .MuiSlider-track': { backgroundColor: '#E55057' }, // Track (filled part)
+                        '& .MuiSlider-rail': { backgroundColor: '#E5505733' }, // Rail (unfilled part)
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/**  Settings Settings */}
+                <div className="flex flex-col w-full">
+                  <h2 className="text-sm font-primary text-[#414042]">
+                    Additional Configuration
+                  </h2>
+                  <div className="flex flex-col gap-3 my-2">
+                    <div className="flex justify-between">
+                      <p className="text-[10px] text-[#414042] font-primary ">
+                        Remove NaN Entries
+                      </p>
+                      <ToggleButton
+                        defaultChecked={true}
+                        onChange={handleToggle}
+                        switchColor="#E55057"
+                        trackColor="#E55057"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <p className="text-[10px] text-[#414042] font-primary ">
+                        Remove Outliers
+                      </p>
+                      <ToggleButton
+                        defaultChecked={true}
+                        onChange={handleToggle}
+                        switchColor="#E55057"
+                        trackColor="#E55057"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <p className="text-[10px] text-[#414042] font-primary ">
+                        Remove Others
+                      </p>
+                      <ToggleButton
+                        defaultChecked={true}
+                        onChange={handleToggle}
+                        switchColor="#E55057"
+                        trackColor="#E55057"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/**  Settings Settings */}
+                <div className="flex flex-col w-full">
+                  <h2 className="text-sm font-primary text-[#414042] my-3">
+                    Training Details
+                  </h2>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex justify-between">
+                      <p className="text-[10px] text-[#414042] font-primary ">
+                        Estimated Time
+                      </p>
+                      <label className="text-[10px] text-predictor font-primary flex justify-end -mb-2">
+                        3 minutes
+                      </label>
+                    </div>
+                    <div className="flex justify-between">
+                      <p className="text-[10px] text-[#414042] font-primary ">
+                        Estimated Price
+                      </p>
+                      <label className="text-[10px] text-predictor font-primary flex justify-end -mb-2">
+                        10 credits
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-
-          {/** Advance Settings */}
-          <div className="col-span-2 rounded-[40px] border w-full py-2">
-            <div className="flex flex-col items-center justify-center mt-2 p-4">
-              <div className="flex items-center gap-1 py-2 px-3 my-auto bg-[#E55057]/50 w-full rounded-[30px] text-[10px] text-[#414042] font-primary">
-                <SettingsIcon className="w-[16px] h-[16px] stroke-[#414042]" />
-                Advance Settings
-              </div>
-
-              {/**  Settings Settings */}
-              <div className="flex flex-col w-full mt-4">
-                <h2 className="text-sm font-primary text-[#414042]">
-                  Search Parameter
-                </h2>
-                <div>
-                  <label className="text-xs text-predictor font-primary flex justify-end -mb-3">
-                    {search}%
-                  </label>
-                  <Slider
-                    value={search}
-                    onChange={handleSearch}
-                    min={0}
-                    max={100}
-                    aria-label="Temperature"
-                    sx={{
-                      color: '#E55057', // Custom Purple (Deep Purple)
-                      '& .MuiSlider-thumb': { backgroundColor: '#E55057' }, // Thumb color
-                      '& .MuiSlider-track': { backgroundColor: '#E55057' }, // Track (filled part)
-                      '& .MuiSlider-rail': { backgroundColor: '#E5505733' }, // Rail (unfilled part)
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/**  Settings Settings */}
-              <div className="flex flex-col w-full">
-                <h2 className="text-sm font-primary text-[#414042]">
-                  Additional Configuration
-                </h2>
-                <div className="flex flex-col gap-3 my-2">
-                  <div className="flex justify-between">
-                    <p className="text-[10px] text-[#414042] font-primary ">
-                      Remove NaN Entries
-                    </p>
-                    <ToggleButton
-                      defaultChecked={true}
-                      onChange={handleToggle}
-                      switchColor="#E55057"
-                      trackColor="#E55057"
-                    />
-                  </div>
-                  <div className="flex justify-between">
-                    <p className="text-[10px] text-[#414042] font-primary ">
-                      Remove Outliers
-                    </p>
-                    <ToggleButton
-                      defaultChecked={true}
-                      onChange={handleToggle}
-                      switchColor="#E55057"
-                      trackColor="#E55057"
-                    />
-                  </div>
-                  <div className="flex justify-between">
-                    <p className="text-[10px] text-[#414042] font-primary ">
-                      Remove Others
-                    </p>
-                    <ToggleButton
-                      defaultChecked={true}
-                      onChange={handleToggle}
-                      switchColor="#E55057"
-                      trackColor="#E55057"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/**  Settings Settings */}
-              <div className="flex flex-col w-full">
-                <h2 className="text-sm font-primary text-[#414042] my-3">
-                  Training Details
-                </h2>
-                <div className="flex flex-col gap-2">
-                  <div className="flex justify-between">
-                    <p className="text-[10px] text-[#414042] font-primary ">
-                      Estimated Time
-                    </p>
-                    <label className="text-[10px] text-predictor font-primary flex justify-end -mb-2">
-                      3 minutes
-                    </label>
-                  </div>
-                  <div className="flex justify-between">
-                    <p className="text-[10px] text-[#414042] font-primary ">
-                      Estimated Price
-                    </p>
-                    <label className="text-[10px] text-predictor font-primary flex justify-end -mb-2">
-                      10 credits
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </CustomDialog>
+        </DialogContent>
+      </Dialog>
     </Fragment>
   );
 };

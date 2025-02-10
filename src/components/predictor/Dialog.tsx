@@ -35,7 +35,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
         sx={{
           width: '100%',
           height: '100%',
-          padding: 0, // Removes extra padding
+          padding: 0,
           display: 'flex',
           flexDirection: 'column',
         }}

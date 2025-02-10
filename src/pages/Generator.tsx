@@ -15,6 +15,7 @@ const Generator: React.FC = () => {
   const [rows, setRows] = useState(70);
   const [accuracy, setAccuracy] = useState(30);
   const [text, setText] = useState('');
+  const [selected, setSelected] = useState('tabular');
 
   const handleSpeed = (_event: Event, newValue: number | number[]) => {
     setSpeed(newValue as number);
@@ -56,18 +57,26 @@ const Generator: React.FC = () => {
 
         {/** Tabular Data */}
         <div className="flex items-center gap-3">
-          <button>
-            <p
-              className={`py-2 px-3 border border-generator text-generator text-md`}
-            >
-              Tabular Data
-            </p>
+          <button
+            className={`py-2 px-3 border ${
+              selected === 'tabular'
+                ? 'border-generator text-generator'
+                : 'border-none'
+            } text-[#414042] text-md`}
+            onClick={() => setSelected('tabular')}
+          >
+            Tabular Data
           </button>
-          <input
-            type="text"
-            placeholder="Natural Language Input"
-            className="bg-transparent outline-none border-none text-[#414042] px-2"
-          />
+          <button
+            className={`py-2 px-3 border ${
+              selected === 'nlp'
+                ? 'border-generator text-generator'
+                : 'border-none'
+            } text-[#414042] text-md`}
+            onClick={() => setSelected('nlp')}
+          >
+            Natural Language Input
+          </button>
         </div>
       </div>
 
