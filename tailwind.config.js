@@ -32,6 +32,7 @@ module.exports = {
       },
       boxShadow: {
         'nav-icon': '3.33px 3.33px 26.67px 0px #00000014',
+        playground: '4px 4px 32px 0px #5183F014',
       },
       backgroundImage: {
         btn: 'linear-gradient(90deg, #2EE1E2 -3.75%, #49CDFE 27.32%, #6A59C1 73.65%, #9541A3 109.25%)',
@@ -43,6 +44,7 @@ module.exports = {
           'linear-gradient(90deg, #E4464E -4.54%, rgba(228, 70, 78, 0.776) 43.82%, rgba(255, 255, 255, 0) 100%)',
         'extender-main':
           'linear-gradient(90deg, #4CB448 -4.54%, rgba(76, 180, 72, 0.776) 43.82%, rgba(255, 255, 255, 0) 100%)',
+        card: 'linear-gradient(176.74deg, #FFFFFF 5.33%, #E1EAFF 78.64%)',
       },
     },
   },
