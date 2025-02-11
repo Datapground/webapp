@@ -17,7 +17,7 @@ const formatGroupLabel = (data: GroupBase<OptionType>) => (
 
 // Custom Single Value Component
 const customSingleValue = ({ data }: { data: OptionType }) => (
-  <div className="flex items-center -mt-5 gap-2 text-extender">
+  <div className="flex items-center  md:-mt-6 -mt-4 gap-2 text-extender">
     {data.Icon && <data.Icon className="w-[16px] h-[16px] fill-extender" />}
     {data.label}
   </div>
@@ -30,7 +30,7 @@ const customOption = (props: OptionProps<OptionType, false>) => {
     <div
       ref={innerRef}
       {...innerProps}
-      className={`flex items-center gap-2 pl-4 p-2 cursor-pointer ${
+      className={`flex items-center gap-1 pl-4 p-2 cursor-pointer ${
         isSelected ? 'bg-extender text-white' : 'hover:bg-gray-100'
       }`}
     >
@@ -72,7 +72,7 @@ const ExtenderSelect: React.FC<Props> = ({
       formatGroupLabel={formatGroupLabel}
       placeholder={placeholder}
       className={cn(
-        'min-w-[270px] text-sm rounded-[16px] !font-primary',
+        'w-full  md:text-sm text-xs rounded-[16px] font-primary',
         className
       )}
       isSearchable={false}
@@ -85,7 +85,7 @@ const ExtenderSelect: React.FC<Props> = ({
           borderRadius: '16px',
           cursor: 'pointer',
           backgroundColor: 'white',
-          padding: '5px',
+          padding: 'lg:5px 1px',
           color: '#414042',
           ':hover': {
             border: '1px solid #4CB448',

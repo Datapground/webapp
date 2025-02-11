@@ -54,7 +54,7 @@ const PlayGround: React.FC = () => {
         </div>
       </div>
 
-      <section className="grid xl:grid-cols-3 grid-cols-2 gap-4">
+      <section className="grid xl:grid-cols-3 md:grid-cols-2 gap-4 md:mt-8 mt-4">
         <PlayGroundCard
           primaryColor="#c32782"
           secondaryColor="#5183F0"
@@ -126,7 +126,7 @@ const PlayGround: React.FC = () => {
         <PlayGroundCard
           primaryColor="#4CB448"
           secondaryColor="#5183F0"
-          model={''}
+          model={'The Extender'}
           title={'The Extender'}
           description={
             'Extends files, documents and entries, simply provide the documents you want to extend and wait for our tools to do their magic'
@@ -144,7 +144,7 @@ const PlayGround: React.FC = () => {
         <PlayGroundCard
           primaryColor="#E55057"
           secondaryColor="#5183F0"
-          model={''}
+          model={'The Predictor'}
           title={'The Predictor'}
           description={`Predicts data and information from files and previous documentation, choose what you want to obtain and what variables you want to use, don't wait any longer and start predicting`}
           modelIcon={

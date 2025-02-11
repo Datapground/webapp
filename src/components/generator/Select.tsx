@@ -60,7 +60,7 @@ const customOption = (props: OptionProps<OptionType, false>) => {
     <div
       ref={innerRef}
       {...innerProps}
-      className={`flex items-center gap-2 p-2 pl-4 cursor-pointer rounded-md transition-all`}
+      className={`flex items-center lg:gap-2 gap-1 lg:p-2 p-1.5 lg:pl-4 pl-3 cursor-pointer rounded-md transition-all`}
       style={{
         background: isSelected
           ? 'var(--generator-color)'
@@ -117,7 +117,7 @@ const GeneratorSelect = () => {
       options={groupedOptions}
       formatGroupLabel={formatGroupLabel}
       placeholder="Select a model"
-      className="w-[270px] text-sm rounded-[10px]"
+      className="lg:w-[270px] md:w-[200px] w-[170px] lg:text-sm text-xs rounded-[10px]"
       isSearchable={false}
       value={selectedOption} // Set default selected value
       onChange={(e) => {
@@ -132,7 +132,7 @@ const GeneratorSelect = () => {
           borderRadius: '16px',
           cursor: 'pointer',
           backgroundColor: 'transparent',
-          padding: '5px',
+          padding: 'lg:5px md:3px',
           color: 'white',
           ':hover': {
             border: '1px solid var(--generator-color)',
