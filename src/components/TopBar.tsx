@@ -14,7 +14,10 @@ type Props = {
 const TopBar: React.FC<Props> = ({ children, containerClassName }) => {
   return (
     <nav
-      className={cn('flex justify-end items-center mb-4', containerClassName)}
+      className={cn(
+        'flex justify-end items-center mb-4 pt-6',
+        containerClassName
+      )}
     >
       {children}
 

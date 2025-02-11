@@ -6,6 +6,8 @@ import { Menu, MenuItem } from '@mui/material';
 import ExtenderIcon from '../components/Icons/ExtenderIcon';
 import ProjectCard from '../components/project/Card';
 import GeneratorIcon from '../components/Icons/GeneratorIcon';
+import GoldIcon from '../components/Icons/GoldIcon';
+import PredictorIcon from '../components/Icons/PredictorIcon';
 
 const Projects: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -60,13 +62,13 @@ const Projects: React.FC = () => {
           >
             <MenuItem
               onClick={handleClose}
-              className="!font-primary !text-sm !text-[#414042]"
+              className="font-primary !text-sm text-[#414042]"
             >
               Active Model
             </MenuItem>
             <MenuItem
               onClick={handleClose}
-              className="!font-primary !text-sm !text-[#414042]"
+              className="font-primary !text-sm text-[#414042]"
             >
               Draft Model
             </MenuItem>
@@ -96,6 +98,7 @@ const Projects: React.FC = () => {
             // Delete Model Logic
           }}
         />
+
         <ProjectCard
           primaryColor="#1E647F"
           secondaryColor="#5183F0"
@@ -103,6 +106,27 @@ const Projects: React.FC = () => {
           title={'Inventory Forecast Model'}
           description={
             ' Predicts future inventory needs based on sales trends and seasonality.'
+          }
+          modelIcon={
+            <GoldIcon
+              className={'w-[32px] h-[32px] fill-white relative mr-8'}
+            />
+          }
+          onUseModel={() => {
+            // Use model Logic
+          }}
+          onDeleteModel={() => {
+            // Delete Model Logic
+          }}
+        />
+
+        <ProjectCard
+          primaryColor="#c32782"
+          secondaryColor="#c32782"
+          model={'The Generator'}
+          title={'Marketing Campaign Optimizer'}
+          description={
+            'Recommends the best marketing strategies based on past campaign data.'
           }
           modelIcon={
             <GeneratorIcon
@@ -116,6 +140,47 @@ const Projects: React.FC = () => {
             // Delete Model Logic
           }}
         />
+
+        <ProjectCard
+          primaryColor="#E55057"
+          secondaryColor="#E55057"
+          model={'The Generator'}
+          title={'Sales Predictor'}
+          description={`Predicts data and information from files and previous documentation, choose what you want to obtain and what variables you want to use, don't wait any longer and start predicting`}
+          modelIcon={
+            <PredictorIcon
+              className={'w-[32px] h-[32px] fill-white relative mr-8'}
+            />
+          }
+          onUseModel={() => {
+            // Use model Logic
+          }}
+          onDeleteModel={() => {
+            // Delete Model Logic
+          }}
+        />
+
+        <ProjectCard
+          primaryColor="#4CB448"
+          secondaryColor="#4CB448"
+          model={'The Extender'}
+          title={'Customer Churn'}
+          description={
+            'Extends files, documents, and entries. Simply provide the documents you want to extend and wait for our tools to do their magic.'
+          }
+          modelIcon={
+            <ExtenderIcon
+              className={'w-[32px] h-[32px] fill-white relative mr-8'}
+            />
+          }
+          onUseModel={() => {
+            // Use model Logic
+          }}
+          onDeleteModel={() => {
+            // Delete Model Logic
+          }}
+        />
+
         <ProjectCard
           primaryColor="#1E647F"
           secondaryColor="#5183F0"
@@ -125,7 +190,7 @@ const Projects: React.FC = () => {
             ' Predicts future inventory needs based on sales trends and seasonality.'
           }
           modelIcon={
-            <GeneratorIcon
+            <GoldIcon
               className={'w-[32px] h-[32px] fill-white relative mr-8'}
             />
           }
