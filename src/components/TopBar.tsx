@@ -7,7 +7,6 @@ import ChevronDownIcon from './Icons/ChevronDownIcon';
 import { cn } from '../utils/tailwindClassesMerge';
 import { Link } from 'react-router-dom';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
@@ -29,7 +28,6 @@ import UsageIcon from './Icons/UsageIcon';
 import BillingIcon from './Icons/BillingIcon';
 import { IconButton } from '@mui/material';
 import SettingsIcon from './Icons/SettingsIcon';
-import MenuIcon from './Icons/MenuIcon';
 import PlaygroundIcon from './Icons/PlaygroundIcon';
 
 const navItems = [
@@ -42,6 +40,11 @@ const navItems = [
 ];
 
 const tools = [
+  {
+    path: '/generator?model=merlin',
+    label: 'The Generator',
+    Icon: GeneratorIcon,
+  },
   { path: '/predictor', label: 'The Predictor', Icon: PredictorIcon },
   { path: '/extender', label: 'The Extender', Icon: ExtenderIcon },
 ];
