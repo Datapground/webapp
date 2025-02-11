@@ -30,7 +30,7 @@ const PlayGroundCard: React.FC<Props> = ({
       />
 
       {/* Content */}
-      <div className="w-full flex justify-between items-center mb-3">
+      <div className="w-full flex justify-between items-center">
         <img
           src="/logo-icon-transparent.png"
           alt="logo"
@@ -38,17 +38,18 @@ const PlayGroundCard: React.FC<Props> = ({
         />
         {modelIcon}
       </div>
-      {model && (
-        <button
-          disabled
-          className="border-b-2 border-[#5183F0] bg-card capitalize font-primary px-3 py-1.5 rounded-lg text-black text-xs "
-        >
-          {model}
-        </button>
-      )}
-
-      <h2 className="font-primary mt-4">{title}</h2>
-      <p className="font-primary text-sm font-light mt-1">{description}</p>
+      <button
+        disabled
+        className="border-b-2 border-[#5183F0] bg-card capitalize font-primary sm:px-3 px-2 sm:py-1.5 py-1 rounded-lg text-black text-xs mt-3"
+      >
+        {model}
+      </button>
+      <h2 className="font-primary mt-4 sm:text-base text-sm">{title}</h2>
+      <p className="font-primary sm:text-sm text-xs font-light mt-1">
+        {description?.length > 130
+          ? `${description?.slice(0, 127)}...`
+          : description}
+      </p>
       <div className="w-full">
         <aside className="flex justify-end">
           <button

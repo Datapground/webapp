@@ -14,10 +14,7 @@ import PredictorIcon from '../components/Icons/PredictorIcon';
 const PlayGround: React.FC = () => {
   return (
     <div className="">
-      <TopBar
-        containerClassName="flex items-center gap-3 justify-between rounded-bl-[30px] rounded-br-[30px]  border border-[#E5E5E5] px-4 py-6 shadow-[4px_4px_32px_0px_#5183F014]
-"
-      >
+      <TopBar containerClassName="flex items-center gap-3 justify-between rounded-bl-[30px] rounded-br-[30px]  border-none px-4 py-6 shadow-playground">
         <div>
           <h2 className="text-[26px] font-primary font-medium">
             Welcome Wood!
@@ -27,9 +24,15 @@ const PlayGround: React.FC = () => {
             <p>{0} projects</p>
           </div>
         </div>
-        <div className="flex items-center gap-3 border border-[#E5E5E5] rounded-[30px] p-2 w-[300px] text-[#414042] text-sm font-primary font-medium ">
-          <SearchIcon className="stroke-[#BCBEC0] w-[16px] h-[16px]" />
-          <input type="text" placeholder="Search" className="outline-none" />
+        <div className="relative">
+          <button className="absolute top-[11.5px] left-[9px]">
+            <SearchIcon className="stroke-[#BCBEC0] w-[16px] h-[16px]" />
+          </button>
+          <input
+            type="text"
+            placeholder="Search"
+            className="outline-none border border-[#BCBEC0] rounded-[40px] w-[300px] pl-8 pr-4 py-2 text-[#BCBEC0] text-sm placeholder:text-[#BCBEC0]"
+          />
         </div>
       </TopBar>
 
@@ -45,7 +48,7 @@ const PlayGround: React.FC = () => {
           <button className="text-default underline text-sm font-medium font-primary">
             See all blueprints
           </button>
-          <button className="p-3 bg-default rounded-full flex items-center gap-2">
+          <button className="p-2.5 bg-default rounded-full flex items-center gap-2">
             <RightArrowIcon className="stroke-white w-[16px] h-[16px]" />
           </button>
         </div>

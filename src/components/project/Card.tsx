@@ -42,16 +42,20 @@ const ProjectCard: React.FC<Props> = ({
       </div>
       <button
         disabled
-        className="border-b-2 border-[#5183F0] bg-card capitalize font-primary px-3 py-1.5 rounded-lg text-black text-xs mt-3"
+        className="border-b-2 border-[#5183F0] bg-card capitalize font-primary sm:px-3 px-2 sm:py-1.5 py-1 rounded-lg text-black text-xs mt-3"
       >
         {model}
       </button>
-      <h2 className="font-primary mt-4">{title}</h2>
-      <p className="font-primary text-sm font-light mt-1">{description}</p>
+      <h2 className="font-primary mt-4 sm:text-base text-sm">{title}</h2>
+      <p className="font-primary sm:text-sm text-xs font-light mt-1">
+        {description?.length > 130
+          ? `${description?.slice(0, 127)}...`
+          : description}
+      </p>
       <div className="w-full flex justify-between items-center gap-4 mt-3">
         <button
           onClick={onUseModel}
-          className={`capitalize font-primary rounded-lg py-1 px-3 w-full text-sm`}
+          className={`capitalize font-primary rounded-lg py-1 px-3 w-full sm:text-sm text-xs`}
           style={{
             border: `1px solid ${primaryColor}`,
             color: primaryColor,
@@ -61,7 +65,7 @@ const ProjectCard: React.FC<Props> = ({
         </button>
         <button
           onClick={onDeleteModel}
-          className={`rounded-full p-2`}
+          className={`rounded-full sm:p-2 p-1.5`}
           style={{
             backgroundColor: secondaryColor,
           }}

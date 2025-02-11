@@ -53,7 +53,7 @@ const Activity: React.FC = () => {
         </aside>
       </TopBar>
 
-      <div className="border border-[#D6D6D6] rounded-[30px] py-4 px-8 min-h-[500px] relative mt-4 overflow-hidden">
+      <div className="border border-[#D6D6D6] rounded-[30px] md:py-4 md:px-8 min-h-[500px] relative mt-4 overflow-hidden">
         {data.length === 0 ? (
           <div className="flex items-center justify-center h-full w-full min-h-[500px]">
             <div className="flex flex-col items-center justify-center text-center">

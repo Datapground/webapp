@@ -54,7 +54,9 @@ const Projects: React.FC = () => {
               width: '220px', // Customize width here
               '& .MuiPaper-root': {
                 width: '250px',
-                marginLeft: '-30px',
+                marginLeft: {
+                  md: '-30px',
+                },
                 borderRadius: '10px',
                 padding: '0',
               },
@@ -77,7 +79,7 @@ const Projects: React.FC = () => {
       </div>
 
       {/* Models */}
-      <section className="grid xl:grid-cols-3 grid-cols-2 gap-4 mt-8">
+      <section className="grid xl:grid-cols-3 md:grid-cols-2 gap-4 md:mt-8 mt-4">
         <ProjectCard
           primaryColor="#4CB448"
           secondaryColor="#4CB448"
