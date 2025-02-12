@@ -7,7 +7,6 @@ import ChevronDownIcon from './Icons/ChevronDownIcon';
 import { cn } from '../utils/tailwindClassesMerge';
 import { Link } from 'react-router-dom';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
