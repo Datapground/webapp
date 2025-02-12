@@ -60,31 +60,31 @@ const Activity: React.FC = () => {
               <img
                 src="/logo-icon.png"
                 alt="logo"
-                className="object-contain w-[80px] h-[80px] pointer-events-none"
+                className="object-contain lg:w-[80px] md:w-[70px] w-[60px] lg:h-[80px] md:h-[70px] h-[60px] pointer-events-none"
               />
-              <h2 className="text-[#414042] sm:text-base text-sm font-primary font-semibold">
+              <h2 className="text-[#414042] lg:text-base md:text-sm text-xs font-primary font-semibold">
                 No Activity Found
               </h2>
             </div>
           </div>
         ) : (
-          <div className="overflow-x-auto h-[500px] no-scrollbar">
-            <table className="w-full font-primary text-sm bg-white">
+          <div className="overflow-x-auto h-[500px] no-scrollbar max-w-full">
+            <table className="min-w-[600px] w-full font-primary text-xs md:text-sm bg-white">
               <thead className="sticky top-0 z-10 bg-white">
                 <tr className="border-b text-center">
-                  <th className="p-4 text-[#414042] font-semibold pb-6">
+                  <th className="p-3 md:p-4 text-[#414042] font-semibold">
                     Activity Name
                   </th>
-                  <th className="p-4 text-[#414042] font-semibold pb-6">
+                  <th className="p-3 md:p-4 text-[#414042] font-semibold">
                     Tool Used
                   </th>
-                  <th className="p-4 text-[#414042] font-semibold pb-6">
+                  <th className="p-3 md:p-4 text-[#414042] font-semibold">
                     Solution
                   </th>
-                  <th className="p-4 text-[#414042] font-semibold pb-6">
+                  <th className="p-3 md:p-4 text-[#414042] font-semibold">
                     Date
                   </th>
-                  <th className="p-4 text-[#414042] font-semibold pb-6">
+                  <th className="p-3 md:p-4 text-[#414042] font-semibold">
                     Action
                   </th>
                 </tr>
@@ -92,27 +92,27 @@ const Activity: React.FC = () => {
               <tbody>
                 {data.map((item, index) => (
                   <tr key={index} className="border-b border-gray-200">
-                    <td className="p-4 text-[#414042] font-light tracking-wide">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
                       {item.name}
                     </td>
-                    <td className="p-4 text-[#414042] font-light tracking-wide">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
                       {item.tool}
                     </td>
-                    <td className="p-4 text-[#414042] font-light tracking-wide">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
                       {item.solution}
                     </td>
-                    <td className="p-4 text-[#414042] font-light tracking-wide">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
                       {item.date}
                     </td>
-                    <td className="p-4 text-[#414042] font-light tracking-wide flex items-center justify-center gap-2">
-                      <button className="bg-[#5F5FC9] text-white px-3 py-[3px] my-auto text-center rounded-[20px]">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide flex items-center justify-center gap-1 md:gap-2">
+                      <button className="bg-[#5F5FC9] text-white px-2 py-1 md:px-3 md:py-[3px] rounded-[20px] lg:text-sm text-xs">
                         View
                       </button>
-                      <button className="border border-[#5F5FC9] text-[#5F5FC9] px-3 py-[3px] my-auto text-center rounded-[20px]">
+                      <button className="border border-[#5F5FC9] text-[#5F5FC9] px-2 py-1 md:px-3 md:py-[3px] rounded-[20px] lg:text-sm text-xs">
                         Download
                       </button>
-                      <button>
-                        <DeleteIcon className="w-[20px] h-[20px] fill-[#BF0400]" />
+                      <button className="p-1 md:p-2">
+                        <DeleteIcon className="w-[16px] h-[16px] md:w-[20px] md:h-[20px] fill-[#BF0400]" />
                       </button>
                     </td>
                   </tr>

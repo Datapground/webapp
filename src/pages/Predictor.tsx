@@ -27,9 +27,9 @@ interface Predictor {
 const CustomSwitch = styled(Switch)<{
   trackcolor?: string;
   switchcolor?: string;
-}>(({ trackcolor = '#E55057', switchcolor = '#fff' }) => ({
-  width: 26, // Updated width
-  height: 16, // Updated height
+}>(({ trackcolor = '#E55057', switchcolor = '#fff', theme }) => ({
+  width: 22, // Large screens
+  height: 14,
   padding: 0,
   display: 'flex',
   alignItems: 'center',
@@ -37,7 +37,7 @@ const CustomSwitch = styled(Switch)<{
   '& .MuiSwitch-switchBase': {
     padding: 2,
     '&.Mui-checked': {
-      transform: 'translateX(10px)',
+      transform: 'translateX(12px)', // Adjusted for smaller size
       color: switchcolor,
       '& + .MuiSwitch-track': {
         backgroundColor: trackcolor,
@@ -46,8 +46,8 @@ const CustomSwitch = styled(Switch)<{
     },
   },
   '& .MuiSwitch-thumb': {
-    width: 12,
-    height: 12,
+    width: 10,
+    height: 10,
     borderRadius: '50%',
     backgroundColor: '#fff',
     transition: '0.3s',
@@ -58,6 +58,30 @@ const CustomSwitch = styled(Switch)<{
     borderRadius: 16 / 2,
     opacity: 1,
     backgroundColor: trackcolor,
+  },
+
+  // Responsive Design
+  [theme.breakpoints.up('md')]: {
+    width: 26, // Medium screens
+    height: 16,
+    '& .MuiSwitch-thumb': {
+      width: 12,
+      height: 12,
+    },
+    '& .MuiSwitch-switchBase.Mui-checked': {
+      transform: 'translateX(10px)', // Adjust for smaller track
+    },
+  },
+  [theme.breakpoints.up('lg')]: {
+    width: 30, // Default width
+    height: 18,
+    '& .MuiSwitch-thumb': {
+      width: 14, // Default size
+      height: 14,
+    },
+    '& .MuiSwitch-switchBase.Mui-checked': {
+      transform: 'translateX(8px)',
+    },
   },
 }));
 
@@ -98,9 +122,9 @@ const Predictor: React.FC = () => {
 
   const boxStyles = {
     '& .MuiPaper-root': {
-      width: '70vw',
+      width: { md: '90vw', lg: '70vw' },
       maxWidth: '1400px',
-      height: '85vh',
+      height: '80vh',
       borderRadius: '40px',
       overflow: 'hidden',
     },
@@ -118,10 +142,12 @@ const Predictor: React.FC = () => {
       </TopBar>
 
       {/* Predictor */}
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 ">
         <div className="flex items-center gap-2">
-          <p className="text-sm text-[#414042] font-medium">Select Predictor</p>
-          <div className="flex w-[300px] ">
+          <p className="lg:text-sm font-medium text-xs text-[#414042] ">
+            Select Predictor
+          </p>
+          <div className="flex lg:w-[300px] md:w-[240px] w-[190px]">
             <PredictorSelect
               options={[
                 {
@@ -139,7 +165,7 @@ const Predictor: React.FC = () => {
         </div>
         {/* Status */}
         <div className="flex items-center gap-3">
-          <label className="text-sm text-[#414042] font-primary ">
+          <label className="lg:text-base md:text-sm text-xs text-[#414042] font-primary ">
             Status:{' '}
             <span className="text-green-700 font-semibold ">Active</span>
           </label>
@@ -148,21 +174,22 @@ const Predictor: React.FC = () => {
       </div>
 
       <section className="grid grid-cols-8 gap-2 mt-4 w-full">
-        <div className="flex flex-col gap-3 w-full col-span-6">
-          <div className="border border-[#E55057] border-dashed rounded-[5px] relative p-4">
+        <div className="flex flex-col gap-3 w-full xl:col-span-6 col-span-8">
+          <div className="border border-[#E55057] border-dashed rounded-[5px] relative p-4 h-[300px] lg:min-h-[360px]">
             <div className="relative">
               <div
-                className={` flex flex-col gap-3 items-center justify-center
-                  ${files.length > 0 ? 'min-h-[260px]' : 'min-h-[360px]'}
-                  `}
+                className={` flex flex-col gap-3 items-center justify-center h-[280px] lg:min-h-[340px]
+                `}
               >
-                <h2 className="text-[#414042] text-base font-semibold">
+                <h2 className="text-[#414042] lg:text-base md:text-sm text-xs font-semibold">
                   Create Predictor
                 </h2>
-                <div className="flex items-center px-4 py-1.5 gap-2 border  border-[#E55057] rounded-[5px]">
-                  <FileIcon className={`w-[18px] h-[18px] fill-predictor`} />
+                <div className="flex items-center lg:px-4 px-3 lg:py-1.5 py-1  lg:gap-2 gap-1.5 border  border-[#E55057] rounded-[5px]">
+                  <FileIcon
+                    className={`md:w-[18px] w-[16px] md:h-[18px] h-[16px] fill-predictor`}
+                  />
                   <label htmlFor="input" className="">
-                    <p className="text-predictor text-xs font-primary font-semibold">
+                    <p className="text-predictor lg:text-base md:text-sm text-xs font-primary font-semibold">
                       Choose File
                     </p>
                     <div {...getRootProps({ className: 'dropzone' })}>
@@ -175,15 +202,17 @@ const Predictor: React.FC = () => {
                     </div>
                   </label>
                 </div>
-                <p className="text-[#414042] font-primary text-sm font-light">
+                <p className="text-[#414042] font-primary lg:text-sm text-xs font-light">
                   or drag and drop a .csv, .xlsv, .json file here to upload
                 </p>
               </div>
 
               {files.length > 0 && (
-                <aside className="absolute bottom-0 right-0">
-                  <button className="bg-[#E55057] py-2 px-6 text-sm rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap">
-                    <PenIcon className={`w-[22px] h-[22px] fill-white`} />
+                <aside className="absolute bottom-2 -right-1">
+                  <button className="bg-predictor lg:py-2 py-1.5 lg:px-6 px-5 md:text-sm text-xs rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap">
+                    <PenIcon
+                      className={`md:w-[22px] w-[20px] md:h-[22px] h-[20px] fill-white`}
+                    />
                     Generate
                   </button>
                 </aside>
@@ -193,16 +222,16 @@ const Predictor: React.FC = () => {
 
           {files.length > 0 && (
             <Fragment>
-              <h2 className="text-[#414042] text-[20px] font-primary font-semibold">
+              <h2 className="text-[#414042] lg:text-[20px] text-[18px] font-primary font-semibold">
                 Input
               </h2>
               <div className="border border-[#E55057] border-dashed rounded-[5px] relative">
-                <div className="flex items-center gap-3 overflow-hidden w-full">
-                  <div className="flex flex-col gap-3 overflow-y-auto w-full h-[300px] p-2 custom-scrollbar">
+                <div className="flex items-center gap-3 overflow-hidden w-full  h-[220px] lg:min-h-[300px]">
+                  <div className="flex flex-col gap-3 overflow-y-auto w-full h-[210px] lg:h-[280px] p-2 custom-scrollbar">
                     {files?.map((file, index) => (
                       <div
                         key={index}
-                        className="flex items-center gap-2 text-sm text-[#414042] p-3 w-full border rounded-[10px]"
+                        className="flex items-center gap-2 md:text-sm text-xs text-[#414042] lg:p-3 p-2 w-full border rounded-[10px]"
                       >
                         <p>{file}</p>
                       </div>
@@ -213,28 +242,30 @@ const Predictor: React.FC = () => {
             </Fragment>
           )}
         </div>
-        <aside className="col-span-2">
-          <h3 className="text-md font-semibold text-[#414042] mb-2 font-primary">
+        <aside className="xl:col-span-2 col-span-8">
+          <h3 className="lg:text-base md:text-sm text-xs font-semibold text-[#414042] mb-2 font-primary">
             File Formate
           </h3>
 
-          <PredictorSelect
-            options={[
-              {
-                label: 'formats',
-                options: [
-                  { value: '.csv', label: '.csv' },
-                  { value: '.xlsm', label: '.xlsm' },
-                  { value: '.json', label: '.json' },
-                ],
-              },
-            ]}
-            placeholder="No file selected"
-          />
+          <div className="flex w-full">
+            <PredictorSelect
+              options={[
+                {
+                  label: 'formats',
+                  options: [
+                    { value: '.csv', label: '.csv' },
+                    { value: '.xlsm', label: '.xlsm' },
+                    { value: '.json', label: '.json' },
+                  ],
+                },
+              ]}
+              placeholder="No file selected"
+            />
+          </div>
 
           {/** File Guidelines */}
           <div className="my-5">
-            <h3 className="text-md font-semibold text-[#414042]">
+            <h3 className="lg:text-base md:text-sm text-xs font-semibold text-[#414042]">
               File Guidelines
             </h3>
 
@@ -246,7 +277,7 @@ const Predictor: React.FC = () => {
               ].map((item, index) => (
                 <li
                   key={index}
-                  className="flex items-start gap-2 tex-sm text-[#414042]"
+                  className="flex items-start gap-2 md:text-sm text-xs  text-[#414042]"
                 >
                   <span className=" text-gray-500">+</span> {item}
                 </li>
@@ -256,7 +287,7 @@ const Predictor: React.FC = () => {
 
           {/** File Preparation Tips */}
           <div className="my-5">
-            <h3 className="text-md font-medium text-[#414042] ">
+            <h3 className="lg:text-base md:text-sm text-xs  font-medium text-[#414042] ">
               File Preparation Tips
             </h3>
 
@@ -268,7 +299,7 @@ const Predictor: React.FC = () => {
               ].map((item, index) => (
                 <li
                   key={index}
-                  className="flex items-start gap-2 tex-sm text-[#414042]"
+                  className="flex items-start gap-2 md:text-sm text-xs text-[#414042]"
                 >
                   <span className="  text-[#414042]">+</span> {item}
                 </li>
@@ -278,22 +309,22 @@ const Predictor: React.FC = () => {
 
           {files.length > 0 && (
             <div className="flex flex-col space-y-6">
-              <h3 className="text-md font-medium text-[#414042] ">
+              <h3 className="lg:text-base md:text-sm text-xs  font-medium text-[#414042] ">
                 File Preparation Tips
               </h3>
               <div>
-                <p className="text-[12px] text-[#414042] font-primary mb-3">
+                <p className="md:text-sm text-xs text-[#414042] font-primary mb-3">
                   Prediction Section:
                 </p>
-                <button className="p-2 border-[1px] border-predictor rounded-[10px] w-full text-[#414042] font-primary text-sm">
+                <button className="p-2 border-[1px] border-predictor rounded-[10px] w-full text-[#414042] font-primary md:text-sm text-xs">
                   Result Value
                 </button>
               </div>
               <div>
-                <p className="text-[12px] text-[#414042] font-primary mb-3">
+                <p className="md:text-sm text-xs text-[#414042] font-primary mb-3">
                   Download Section:
                 </p>
-                <button className="p-2 border-[1px] bg-predictor border-predictor rounded-[10px] w-full text-[#414042] font-primary text-sm">
+                <button className="p-2 border-[1px] bg-predictor border-predictor rounded-[10px] w-full text-[#414042] font-primary md:text-sm text-xs">
                   Download
                 </button>
               </div>
@@ -306,60 +337,60 @@ const Predictor: React.FC = () => {
       <Dialog open={open} onClose={handleClose} fullWidth sx={boxStyles}>
         <DialogContent
           sx={{
-            width: '100%',
+            width: { md: '100%' },
             height: '100%',
             padding: 0,
             display: 'flex',
             flexDirection: 'column',
           }}
         >
-          <div className="grid grid-cols-7 bg-[#FFFFFF] rounded-[40px] relative  border-l-0 w-full h-full ">
-            <div className="col-span-5 m-10">
+          <div className="grid grid-cols-7 bg-[#FFFFFF] rounded-[40px] relative border-l-0 w-full h-full ">
+            <div className="col-span-5 lg:m-10 m-8 ">
               <div className="mb-8">
-                <h2 className="text-[#414042] text-[26px] font-primary font-semibold">
+                <h2 className="text-[#414042] xl:text-[26px] lg:text-[22px] md:text-[20px] text-base font-primary font-semibold">
                   Configure Your Predictor
                 </h2>
-                <p className="text-[#414042] text-sm font-primary mt-2">
+                <p className="text-[#414042] lg:text-sm text-xs font-light md:font-medium font-primary mt-2">
                   Make sure the file format meets the requirement. It must be
                   .csv, .xlsv, .json
                 </p>
               </div>
               <div>
-                <h3 className="text-[#414042] font-primary text-[12px] font-bold my-4">
+                <h3 className="text-[#414042] font-primary text-xs font-bold my-4">
                   {' '}
                   Available Columns Configuration
                 </h3>
                 {/* table */}
                 <div className="grid grid-cols-3 border border-[#0000000D] rounded-[40px] overflow-hidden">
                   {/* Header Row */}
-                  <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-r border-b">
+                  <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-r border-b">
                     Available Columns
                   </div>
-                  <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-r border-b">
+                  <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-r border-b">
                     Feature Columns
                   </div>
-                  <div className="text-[#414042] font-medium font-primary text-sm py-3 text-center border-b">
+                  <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-b">
                     Target Columns
                   </div>
 
                   {/* Data Rows */}
                   {columns.map((column, index) => (
                     <React.Fragment key={index}>
-                      <div className="text-[#414042] font-primary text-sm py-4 text-center border-r border-b">
+                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 text-center border-r border-b">
                         {column}
                       </div>
-                      <div className="text-[#414042] font-primary text-sm py-4 border-r border-b flex justify-center items-center">
-                        <HandIcon className="w-[22px] h-[22px] fill-predictor" />
+                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-r border-b flex justify-center items-center">
+                        <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
                       </div>
-                      <div className="text-[#414042] font-primary text-sm py-4 border-b flex justify-center items-center">
-                        <HandIcon className="w-[22px] h-[22px] fill-predictor" />
+                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-b flex justify-center items-center">
+                        <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
                       </div>
                     </React.Fragment>
                   ))}
                 </div>
 
                 <div className="flex justify-center mt-4">
-                  <button className="mt-4 bg-predictor text-white py-2 px-16 text-sm font-primary rounded-lg transition">
+                  <button className="mt-4 bg-predictor text-white lg:py-2 py-1.5 lg:px-16 md:px-14 px-12 lg:text-sm text-xs font-primary rounded-lg transition">
                     Generate
                   </button>{' '}
                 </div>
@@ -369,18 +400,18 @@ const Predictor: React.FC = () => {
             {/** Advance Settings */}
             <div className="col-span-2 rounded-[40px] border w-full py-2">
               <div className="flex flex-col items-center justify-center mt-2 p-4">
-                <div className="flex items-center gap-1 py-2 px-3 my-auto bg-[#E55057]/50 w-full rounded-[30px] text-[10px] text-[#414042] font-primary">
-                  <SettingsIcon className="w-[16px] h-[16px] stroke-[#414042]" />
+                <div className="flex items-center gap-1 py-2 px-3 my-auto bg-[#E55057]/50 w-full rounded-[30px] lg:text-sm text-xs  text-[#414042] font-primary">
+                  <SettingsIcon className="md:w-[16px] w-[14px] md:h-[16px] h-[14px] stroke-[#414042]" />
                   Advance Settings
                 </div>
 
                 {/**  Settings Settings */}
                 <div className="flex flex-col w-full mt-4">
-                  <h2 className="text-sm font-primary text-[#414042]">
+                  <h2 className="lg:text-sm text-xs font-primary text-[#414042]">
                     Search Parameter
                   </h2>
                   <div>
-                    <label className="text-xs text-predictor font-primary flex justify-end -mb-3">
+                    <label className="md:text-xs text-[10px] text-predictor font-primary flex justify-end -mb-3">
                       {search}%
                     </label>
                     <Slider
@@ -391,7 +422,11 @@ const Predictor: React.FC = () => {
                       aria-label="Temperature"
                       sx={{
                         color: '#E55057', // Custom Purple (Deep Purple)
-                        '& .MuiSlider-thumb': { backgroundColor: '#E55057' }, // Thumb color
+                        '& .MuiSlider-thumb': {
+                          backgroundColor: '#E55057',
+                          width: { xs: 14, md: 16 },
+                          height: { xs: 14, md: 16 },
+                        }, // Thumb color
                         '& .MuiSlider-track': { backgroundColor: '#E55057' }, // Track (filled part)
                         '& .MuiSlider-rail': { backgroundColor: '#E5505733' }, // Rail (unfilled part)
                       }}
@@ -401,7 +436,7 @@ const Predictor: React.FC = () => {
 
                 {/**  Settings Settings */}
                 <div className="flex flex-col w-full">
-                  <h2 className="text-sm font-primary text-[#414042]">
+                  <h2 className="lg:text-sm text-xs font-primary text-[#414042]">
                     Additional Configuration
                   </h2>
                   <div className="flex flex-col gap-3 my-2">
@@ -443,7 +478,7 @@ const Predictor: React.FC = () => {
 
                 {/**  Settings Settings */}
                 <div className="flex flex-col w-full">
-                  <h2 className="text-sm font-primary text-[#414042] my-3">
+                  <h2 className="lg:text-sm text-xs font-primary text-[#414042] my-3">
                     Training Details
                   </h2>
                   <div className="flex flex-col gap-2">

@@ -94,11 +94,11 @@ const Extender: React.FC = () => {
 
       <aside className="flex items-center justify-end gap-3">
         <button
-          className={`py-2 px-3 border ${
+          className={`md:py-2 p-1.5 md:px-3 px-2 border ${
             selected === 'tabular'
               ? 'border-extender text-extender'
               : 'border-transparent'
-          } text-[#414042] text-md`}
+          } text-[#414042] lg:text-base md:text-sm text-xs`}
           onClick={() => setSelected('tabular')}
         >
           Tabular Data
@@ -108,7 +108,7 @@ const Extender: React.FC = () => {
             selected === 'nlp'
               ? 'border-extender text-extender'
               : 'border-transparent'
-          } text-[#414042]  text-md`}
+          } lg:text-base md:text-sm text-xs`}
           onClick={() => setSelected('nlp')}
         >
           Natural Language Input
@@ -116,20 +116,20 @@ const Extender: React.FC = () => {
       </aside>
 
       <section className="grid grid-cols-8 gap-2 mt-4 w-full">
-        <div className="flex flex-col gap-3 w-full col-span-6">
-          <div className="border border-[#4CB448CC] rounded-[5px] relative p-4 min-h-[340px] flex flex-col justify-between">
+        <div className="flex flex-col gap-3 w-full xl:col-span-6 col-span-8">
+          <div className="border border-[#4CB448CC] rounded-[5px] relative p-4 h-[300px] lg:min-h-[360px] flex flex-col justify-between">
             <div className="relative flex-grow">
               {inputFile.length === 0 && (
-                <div className="flex flex-col gap-3 items-center justify-center min-h-[300px]">
-                  <h2 className="text-[#414042] text-base font-semibold">
+                <div className="flex flex-col gap-3 items-center justify-center h-[280px] lg:min-h-[340px]">
+                  <h2 className="text-[#414042] lg:text-base md:text-sm text-xs font-semibold">
                     Upload a File
                   </h2>
-                  <div className="flex items-center px-4 py-1.5 gap-2 border border-[#4CB448] bg-extender rounded-[5px] cursor-pointer">
-                    <FileIcon className="w-[18px] h-[18px] fill-white" />
+                  <div className="flex items-center gap-2 lg:py-2 py-1.5 lg:px-6 px-5 md:text-sm text-xs border border-[#4CB448] bg-extender rounded-[5px] cursor-pointer">
+                    <FileIcon className="md:w-[18px] w-[16px] md:h-[18px] h-[16px] fill-white" />
                     <label htmlFor="input">
-                      <p className="text-xs text-white font-primary">
-                        Choose File
-                      </p>
+                      <p className="text-white lg:text-base md:text-sm text-xs font-primary font-semibold">
+                        Choose a File
+                      </p>{' '}
                       <input
                         id="input"
                         type="file"
@@ -138,7 +138,7 @@ const Extender: React.FC = () => {
                       />
                     </label>
                   </div>
-                  <p className="text-[#414042] font-primary text-sm font-light">
+                  <p className="text-[#414042] font-primary lg:text-sm text-xs font-light">
                     or drag and drop a .csv, .xlsv, .json file here to upload
                   </p>
                 </div>
@@ -148,11 +148,11 @@ const Extender: React.FC = () => {
             {inputFile.length > 0 && (
               <div className="flex justify-between items-center w-full ">
                 <p className="flex items-center text-[#414042] font-primary text-sm font-light">
-                  <JsonIcon className="w-[30px] h-[30px] fill-extender" />
+                  <JsonIcon className="md:w-[30px] w-[26px] md:h-[30px] h-[26px] fill-extender" />
                   The .{inputFile} file has been uploaded to generate result
                 </p>
-                <button className="bg-[#4CB448] py-2 px-6 text-sm rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap">
-                  <PenIcon className="w-[22px] h-[22px] fill-white" />
+                <button className="bg-extender lg:py-2 py-1.5 lg:px-6 px-5 md:text-sm text-xs rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap">
+                  <PenIcon className="md:w-[22px] w-[20px] md:h-[22px] h-[20px] fill-white" />
                   Generate
                 </button>
               </div>
@@ -160,34 +160,34 @@ const Extender: React.FC = () => {
           </div>
 
           {/* Extender Output */}
-          <h2 className="text-[#414042] text-[20px] font-primary font-semibold">
+          <h2 className="text-[#414042] lg:text-[20px] text-[18px] font-primary font-semibold">
             Output
           </h2>
-          <div className=" flex flex-col items-center min-h-[200px] flex-grow border border-[#4CB448CC] rounded-[5px] justify-center">
+          <div className=" flex flex-col items-center flex-grow border border-[#4CB448CC] rounded-[5px] justify-center lg:min-h-[200px] min-h-[150px]">
             <img
               src="/logo-icon.png"
               alt="logo"
-              className="object-contain w-[70px] h-[70px] pointer-events-none"
+              className="object-contain lg:w-[70px] w-[60px] lg:h-[70px] h-[60px] pointer-events-none"
             />
-            <h3 className="text-[#414042] text-base font-semibold">
+            <h3 className="text-[#414042] lg:text-base text-sm font-semibold">
               Not Result Yet
             </h3>
-            <p className="text-[#414042] text-sm font-primary">
+            <p className="text-[#414042] lg:text-sm text-xs font-primary">
               The Generation is being performed
             </p>
           </div>
         </div>
 
-        <div className=" flex flex-col gap-5 col-span-2">
-          <span className="flex items-center justify-start gap-2 text-[#414042] text-[16px] rounded-[10px] p-2 text-center bg-[#4CB448]/60">
+        <div className="flex flex-col gap-5 col-span-8 xl:col-span-2 mt-4 xl:mt-0">
+          <span className="flex items-center justify-start gap-2 text-[#414042]  md:text-[16px] text-sm rounded-[10px] p-2 text-center bg-[#4CB448]/60">
             <SettingsIcon className={`w-[14px] h-[14px] stroke-[#414042]`} />
             Settings
           </span>
           <div className="space-y-2">
             <div>
-              <span className="flex items-center justify-between text-[14px] font-primary text-[#414042]">
+              <span className="flex items-center justify-between text-sm font-primary text-[#414042]">
                 Add to rows
-                <label className="p-1 bg-slate-50 rounded-md border px-4 text-sm font-[200]">
+                <label className="p-1 bg-slate-50 rounded-md border lg:px-4 px-3 lg:py-1 py-0.8  lg:text-sm text-xs font-light">
                   {rows}
                 </label>
               </span>{' '}
@@ -199,7 +199,11 @@ const Extender: React.FC = () => {
                 aria-label="Temperature"
                 sx={{
                   color: '#1E647F',
-                  '& .MuiSlider-thumb': { backgroundColor: '#1E647F' }, // Thumb color
+                  '& .MuiSlider-thumb': {
+                    backgroundColor: '#1E647F',
+                    width: { xs: 14, md: 16 },
+                    height: { xs: 14, md: 16 },
+                  }, // Thumb color
                   '& .MuiSlider-track': { backgroundColor: '#1E647F' }, // Track (filled part)
                   '& .MuiSlider-rail': { backgroundColor: '#1E647F66' }, // Rail (unfilled part)
                 }}
@@ -207,9 +211,9 @@ const Extender: React.FC = () => {
             </div>
 
             <div>
-              <span className="flex items-center justify-between text-[14px] font-primary text-[#414042]">
+              <span className="flex items-center justify-between  text-sm font-primary text-[#414042]">
                 Add to columns
-                <label className="p-1 bg-slate-50 rounded-md border px-4  text-sm font-[200]">
+                <label className="p-1 bg-slate-50 rounded-md border lg:px-4 px-3 lg:py-1 py-0.8  lg:text-sm text-xs font-light">
                   {' '}
                   {columns}
                 </label>
@@ -223,7 +227,11 @@ const Extender: React.FC = () => {
                 aria-label="Temperature"
                 sx={{
                   color: '#A077A8',
-                  '& .MuiSlider-thumb': { backgroundColor: '#A077A8' }, // Thumb color
+                  '& .MuiSlider-thumb': {
+                    backgroundColor: '#A077A8',
+                    width: { xs: 14, md: 16 },
+                    height: { xs: 14, md: 16 },
+                  }, // Thumb color
                   '& .MuiSlider-track': { backgroundColor: '#A077A8' }, // Track (filled part)
                   '& .MuiSlider-rail': { backgroundColor: '#A077A866' }, // Rail (unfilled part)
                 }}
@@ -235,7 +243,7 @@ const Extender: React.FC = () => {
             <p className="text-sm text-[#414042] mb-2 font-primary">
               Output Format
             </p>
-            <div className="flex w-[280px] ">
+            <div className="flex xl:w-full w-[300px]">
               <ExtenderSelect
                 options={[
                   {

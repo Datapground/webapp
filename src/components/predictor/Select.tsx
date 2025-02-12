@@ -17,7 +17,7 @@ const formatGroupLabel = (data: GroupBase<OptionType>) => (
 
 // Custom Single Value Component
 const customSingleValue = ({ data }: { data: OptionType }) => (
-  <div className="flex items-center -mt-5 gap-2 text-predictor">
+  <div className="flex items-center md:-mt-6 -mt-4 gap-2 text-predictor">
     {data.Icon && <data.Icon className="w-[16px] h-[16px] fill-predictor" />}
     {data.label}
   </div>
@@ -30,9 +30,8 @@ const customOption = (props: OptionProps<OptionType, false>) => {
     <div
       ref={innerRef}
       {...innerProps}
-      className={`flex items-center gap-2 pl-4 p-2 cursor-pointer ${
-        isSelected ? 'bg-predictor text-white' : 'hover:bg-gray-100'
-      }`}
+      className={`flex items-center gap-1 p-2 pl-4 cursor-pointer rounded-md transition-all
+        ${isSelected ? 'bg-predictor text-white' : 'hover:bg-gray-100'}`}
     >
       {data.Icon && (
         <data.Icon
@@ -72,7 +71,7 @@ const PredictorSelect: React.FC<Props> = ({
       formatGroupLabel={formatGroupLabel}
       placeholder={placeholder}
       className={cn(
-        'min-w-[270px] text-sm rounded-[16px] !font-primary',
+        (className = 'w-full lg:text-base md:text-sm text-xs rounded-[10px]'),
         className
       )}
       isSearchable={false}
@@ -85,7 +84,7 @@ const PredictorSelect: React.FC<Props> = ({
           borderRadius: '16px',
           cursor: 'pointer',
           backgroundColor: 'white',
-          padding: '5px',
+          padding: 'lg:5px 1px',
           color: '#414042',
           ':hover': {
             border: '1px solid #E55057',
