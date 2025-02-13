@@ -21,7 +21,7 @@ const APIKeys: React.FC = () => {
             Use your API key to authenticate with Datapground API.
           </p>
           <div className="mt-6">
-            <button className="lg:px-4 px-3 lg:py-1.5 py-1 lg:text-md text-sm text-white bg-[#59B1FE] font-semibold rounded-[5px] flex items-center gap-2">
+            <button className="lg:px-4 px-3 lg:py-1.5 py-1 lg:text-md text-sm text-white bg-default font-semibold rounded-[5px] flex items-center gap-2">
               <APIKeyIcon className="stroke-[#fff] w-[16px] h-[14px]" />
               Generate API Key
             </button>

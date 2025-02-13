@@ -17,6 +17,7 @@ import ExtenderSelect from '../components/extender/Select';
 import ChevronDownIcon from '../components/Icons/ChevronDownIcon';
 import PenIcon from '../components/Icons/PenIcon';
 import JsonIcon from '../components/Icons/JsonIcon';
+import { useDropzone } from 'react-dropzone';
 
 const CustomSwitch = styled(Switch)<{
   trackcolor?: string;
@@ -58,17 +59,10 @@ const CustomSwitch = styled(Switch)<{
 const Extender: React.FC = () => {
   const [rows, setRows] = useState(7);
   const [columns, setColumns] = useState(10);
-  const [inputFile, setInputFile] = useState('');
   const [selected, setSelected] = useState('tabular');
   const [checked, setChecked] = React.useState(false);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      const fileExtension = file.name.split('.').pop()?.toLowerCase() || '';
-      setInputFile(fileExtension);
-    }
-  };
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState('');
 
   const handleRows = (_event: Event, newValue: number | number[]) => {
     setRows(newValue as number);
@@ -82,6 +76,38 @@ const Extender: React.FC = () => {
     const newValue = !checked;
     setChecked(newValue);
   };
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: {
+      'text/csv': ['.csv'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
+        '.xlsx',
+      ],
+      'application/json': ['.json'],
+    },
+    maxFiles: 1,
+    maxSize: MAX_FILE_SIZE,
+    onDrop: (files, rejectedFiles) => {
+      setFileError(''); // Reset error state
+
+      if (rejectedFiles.length > 0) {
+        setFileError('Invalid file type or size exceeded (Max 5MB).');
+        return;
+      }
+
+      if (files.length > 0) {
+        const file = files[0];
+
+        if (file.size > MAX_FILE_SIZE) {
+          setFileError('File exceeds the 5MB limit.');
+          return;
+        }
+
+        setUploadedFile(file); // Store only the latest uploaded file
+      }
+    },
+  });
 
   return (
     <Fragment>
@@ -99,27 +125,30 @@ const Extender: React.FC = () => {
               ? 'border-extender text-extender'
               : 'border-transparent'
           } text-[#414042] lg:text-base md:text-sm text-xs`}
-          onClick={() => setSelected('tabular')}
+          onClick={() =>
+            setSelected((prev) => (prev === 'tabular' ? '' : 'tabular'))
+          }
         >
           Tabular Data
         </button>
-        <button
-          className={`py-2 px-3 border ${
-            selected === 'nlp'
-              ? 'border-extender text-extender'
-              : 'border-transparent'
-          } lg:text-base md:text-sm text-xs`}
-          onClick={() => setSelected('nlp')}
-        >
-          Natural Language Input
-        </button>
       </aside>
 
-      <section className="grid grid-cols-8 gap-2 mt-4 w-full">
+      <section className="grid grid-cols-8 gap-6 mt-4 w-full">
         <div className="flex flex-col gap-3 w-full xl:col-span-6 col-span-8">
-          <div className="border border-[#4CB448CC] rounded-[5px] relative p-4 h-[300px] lg:min-h-[360px] flex flex-col justify-between">
+          <div
+            {...getRootProps({
+              className:
+                'border border-[#4CB448CC] rounded-[5px] relative p-4 h-[300px] lg:min-h-[360px] flex flex-col justify-between',
+            })}
+          >
+            <input
+              id="input"
+              type="file"
+              className="hidden"
+              {...getInputProps()}
+            />
             <div className="relative flex-grow">
-              {inputFile.length === 0 && (
+              {!uploadedFile && (
                 <div className="flex flex-col gap-3 items-center justify-center h-[280px] lg:min-h-[340px]">
                   <h2 className="text-[#414042] lg:text-base md:text-sm text-xs font-semibold">
                     Upload a File
@@ -130,26 +159,24 @@ const Extender: React.FC = () => {
                       <p className="text-white lg:text-base md:text-sm text-xs font-primary font-semibold">
                         Choose a File
                       </p>{' '}
-                      <input
-                        id="input"
-                        type="file"
-                        onChange={handleFileChange}
-                        className="hidden"
-                      />
                     </label>
                   </div>
                   <p className="text-[#414042] font-primary lg:text-sm text-xs font-light">
                     or drag and drop a .csv, .xlsv, .json file here to upload
                   </p>
+                  {fileError && (
+                    <p className="text-red-500 text-sm mt-2">{fileError}</p>
+                  )}
                 </div>
               )}
             </div>
 
-            {inputFile.length > 0 && (
+            {uploadedFile && (
               <div className="flex justify-between items-center w-full ">
                 <p className="flex items-center text-[#414042] font-primary text-sm font-light">
                   <JsonIcon className="md:w-[30px] w-[26px] md:h-[30px] h-[26px] fill-extender" />
-                  The .{inputFile} file has been uploaded to generate result
+                  The .{uploadedFile.name.split('.').pop()} file has been
+                  uploaded to generate result
                 </p>
                 <button className="bg-extender lg:py-2 py-1.5 lg:px-6 px-5 md:text-sm text-xs rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap">
                   <PenIcon className="md:w-[22px] w-[20px] md:h-[22px] h-[20px] fill-white" />

@@ -16,7 +16,7 @@ import SettingsIcon from './Icons/SettingsIcon';
 import PlaygroundIcon from './Icons/PlaygroundIcon';
 
 const navItems = [
-  { path: '/playground', label: 'Playground', Icon: PlaygroundIcon },
+  { path: '/', label: 'Playground', Icon: PlaygroundIcon },
   { path: '/activity', label: 'Activity', Icon: ActivityIcon },
   { path: '/projects', label: 'Projects', Icon: ProjectsIcon },
   { path: '/blueprints', label: 'Blueprints', Icon: BluePrintIcon },
@@ -238,7 +238,7 @@ const SideNavigation = () => {
           })}
 
           {/* Divider */}
-          <div className="line h-[1px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-3"></div>
+          <div className="line h-[0.5px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-3"></div>
           {/* Accounts Items */}
           <p className="text-xs text-[#414042] pb-3 -ml-4">Accounts</p>
           {accounts.map(({ path, label, Icon }, index) => {

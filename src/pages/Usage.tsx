@@ -5,8 +5,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import UserSelect from '../components/usage/Select';
 import { IoPrintOutline } from 'react-icons/io5';
-import { GrFormNext } from 'react-icons/gr';
-import { GrFormPrevious } from 'react-icons/gr';
+
+import PrevIcon from '../components/Icons/PrevIcon';
+import NextIcon from '../components/Icons/NextIcon';
 
 interface ActivityData {
   date: string;
@@ -94,7 +95,7 @@ const Usage: React.FC = () => {
 
   // Calculate the start and end index for slicing data
   const startIndex = currentPage * entriesPerPage;
-  const endIndex = startIndex + entriesPerPage;
+  const endIndex = Math.min(startIndex + entriesPerPage, data.length);
   const filteredData = data.slice(startIndex, endIndex);
 
   // Handle Next & Previous buttons
@@ -150,26 +151,30 @@ const Usage: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="mt-8 border border-[#E5E5E5] rounded-[5px]">
-          <div className="max-h-[180px] no-scrollbar max-w-full">
+        <div className="border border-[#D6D6D6] rounded-[30px] md:py-4 md:px-8 min-h-[420px] relative mt-4 overflow-hidden flex flex-col justify-between">
+          <div className="min-h-[180px] no-scrollbar max-w-full p-4">
             <table className="min-w-[600px] w-full font-primary text-xs md:text-sm bg-white">
               <thead className="top-0 z-10 bg-white">
-                <tr className="border-b text-center bg-gray-100  ">
-                  <th className="p-1  text-[#414042] font-semibold">Date</th>
-                  <th className="p-1  text-[#414042] font-semibold">
+                <tr className="border-b text-center">
+                  <th className="p-3 md:p-4  text-[#414042] font-semibold">
+                    Date
+                  </th>
+                  <th className="p-3 md:p-4  text-[#414042] font-semibold">
                     User Email
                   </th>
-                  <th className="p-1  text-[#414042] font-semibold">Model</th>
-                  <th className="p-1  text-[#414042] font-semibold">
+                  <th className="p-3 md:p-4  text-[#414042] font-semibold">
+                    Model
+                  </th>
+                  <th className="p-3 md:p-4  text-[#414042] font-semibold">
                     Runner Mode
                   </th>
-                  <th className="p-1  text-[#414042] font-semibold">
+                  <th className="p-3 md:p-4  text-[#414042] font-semibold">
                     Credit cons..
                   </th>
-                  <th className="p-1  text-[#414042] font-semibold">
+                  <th className="p-3 md:p-4  text-[#414042] font-semibold">
                     Billed Minutes
                   </th>
-                  <th className="p-1  text-[#414042] font-semibold">
+                  <th className="p-3 md:p-4  text-[#414042] font-semibold">
                     Billed Characters
                   </th>
                 </tr>
@@ -180,25 +185,25 @@ const Usage: React.FC = () => {
                     key={index}
                     className="border-b text-center border-gray-200"
                   >
-                    <td className="p-1 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
                       {item.date}
                     </td>
-                    <td className="p-1 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
                       {item.user}
                     </td>
-                    <td className="p-1 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
                       {item.model}
                     </td>
-                    <td className="p-1 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
                       {item.runnerMode}
                     </td>
-                    <td className="p-1 text-[#414042] lg:text-sm text-xs font-light tracking-wide flex items-center justify-center gap-1 md:gap-2">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide flex items-center justify-center gap-1 md:gap-2">
                       {item.creditConsumed}
                     </td>
-                    <td className="p-1 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
                       {item.billedMinutes}
                     </td>
-                    <td className="p-1 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
+                    <td className="p-3 md:p-4 text-[#414042] lg:text-sm text-xs font-light tracking-wide">
                       {item.billedCharacters}
                     </td>
                   </tr>
@@ -206,21 +211,18 @@ const Usage: React.FC = () => {
               </tbody>
             </table>
           </div>
-          <div className="border-t p-2 flex justify-end">
-            <div className="flex items-center gap-6">
-              <p className="lg:text-sm text-xs text-gray-500 font-primary">
-                0-0 of 0
-              </p>
-              <div className="flex items-center gap-2">
-                <GrFormPrevious
-                  onClick={prevPage}
-                  className="w-[16px] h-[16px] text-gray-500 cursor-pointer"
-                />
-                <GrFormNext
-                  onClick={nextPage}
-                  className="w-[16px] h-[16px] text-gray-500 cursor-pointer"
-                />
-              </div>
+          <div className="flex justify-end gap-6 m-2">
+            <p className="lg:text-sm text-xs text-gray-500 font-primary">
+              {startIndex + 1}-{endIndex} of {data.length}
+            </p>
+            <div className="flex items-center gap-2">
+              <button onClick={prevPage} disabled={currentPage === 0}>
+                <PrevIcon className="w-[16px] h-[16px] text-gray-500 cursor-pointer" />
+              </button>
+
+              <button onClick={nextPage} disabled={endIndex >= data.length}>
+                <NextIcon className="w-[16px] h-[16px] text-gray-500 cursor-pointer" />
+              </button>
             </div>
           </div>
         </div>

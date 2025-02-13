@@ -81,7 +81,7 @@ const Generator: React.FC = () => {
       </div>
 
       {/* Generator Content */}
-      <div className="grid grid-cols-8 gap-2 mt-4">
+      <div className="grid grid-cols-8 gap-6 mt-4">
         <div className="flex flex-col gap-3 w-full xl:col-span-6 col-span-8">
           <div className="border border-generator rounded-[5px] relative p-4">
             <div className="relative">
