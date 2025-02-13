@@ -61,16 +61,33 @@ const CustomSwitch = styled(Switch)<{
 }));
 
 const Predictor: React.FC = () => {
+  const [entries, setEntries] = React.useState(false);
+  const [outliers, setOutliers] = React.useState(false);
+  const [others, setOthers] = React.useState(false);
   const [search, setSearch] = useState(60);
   const [open, setOpen] = useState(true);
   const [uploadedFiles, setUploadedFiles] = useState<FileWithPath[]>([]);
   const [prevFiles, setPrevFiles] = useState<FileWithPath[]>([]);
   const [hasRun, setHasRun] = useState(false);
   const [fileError, setFileError] = useState('');
-
   const [selectedPredictor, setSelectedPredictor] = useState<OptionType | null>(
     null
   );
+
+  // handle buttons in Predictor Dialog Box
+
+  const handleEntries = () => {
+    const newValue = !entries;
+    setEntries(newValue);
+  };
+  const handleOutliers = () => {
+    const newValue = !outliers;
+    setOutliers(newValue);
+  };
+  const handleOthers = () => {
+    const newValue = !others;
+    setOthers(newValue);
+  };
 
   const handlePredictorChange = (selected: OptionType | null) => {
     setSelectedPredictor(selected);
@@ -88,7 +105,7 @@ const Predictor: React.FC = () => {
     maxSize: MAX_FILE_SIZE,
     noKeyboard: true, // Prevent "Enter" from reopening
 
-    onDrop: (files, rejectedFiles) => {
+    onDrop: (files) => {
       setFileError(''); // Reset error state
 
       if (files.length === 0) {
@@ -107,51 +124,13 @@ const Predictor: React.FC = () => {
         setPrevFiles([...uploadedFiles, ...newFiles]); // Backup previous files
         setHasRun(true);
       }
+
+      setOpen(true);
     },
   });
 
-  useEffect(() => {
-    if (acceptedFiles.length > 0) {
-      const newFiles = acceptedFiles.filter(
-        (file) => !uploadedFiles.some((prevFile) => prevFile.name === file.name)
-      );
-
-      if (newFiles.length > 0) {
-        setUploadedFiles((prev) => [...prev, ...newFiles]);
-        setPrevFiles([...uploadedFiles, ...newFiles]); // Backup previous selection
-        setHasRun(true);
-      }
-    } else if (uploadedFiles.length === 0 && prevFiles.length > 0) {
-      // If file manager is opened and canceled, restore previous files
-      setUploadedFiles(prevFiles);
-    }
-  }, [acceptedFiles, prevFiles, uploadedFiles]);
-
-  const files = acceptedFiles.map((file) => (
-    <li key={file.path} className="list-none">
-      {file.name}
-    </li>
-  ));
-
   const handleSearch = (_event: Event, newValue: number | number[]) => {
     setSearch(newValue as number);
-  };
-
-  const [entries, setEntries] = React.useState(false);
-  const [outliers, setOutliers] = React.useState(false);
-  const [others, setOthers] = React.useState(false);
-
-  const handleEntries = () => {
-    const newValue = !entries;
-    setEntries(newValue);
-  };
-  const handleOutliers = () => {
-    const newValue = !outliers;
-    setOutliers(newValue);
-  };
-  const handleOthers = () => {
-    const newValue = !others;
-    setOthers(newValue);
   };
 
   const handleClose = () => setOpen(false);
@@ -272,7 +251,7 @@ const Predictor: React.FC = () => {
               <div className="border border-[#E55057] border-dashed rounded-[5px] relative">
                 <div className="flex items-center gap-3 overflow-hidden w-full  h-[220px] lg:min-h-[300px]">
                   <div className="flex flex-col gap-3 overflow-y-auto w-full h-[210px] lg:h-[280px] p-2 custom-scrollbar">
-                    {files?.map((file, index) => (
+                    {Array.from({ length: 10 }).map((_, index) => (
                       <div
                         key={index}
                         className="flex items-center gap-2 md:text-sm text-xs text-[#414042] lg:p-2 p-1 w-full border rounded-[10px]"
@@ -363,7 +342,7 @@ const Predictor: React.FC = () => {
             </ul>
           </div>
 
-          {files.length > 0 && (
+          {uploadedFiles.length > 0 && (
             <div className="flex flex-col space-y-6">
               <h3 className="lg:text-base md:text-sm text-xs  font-medium text-[#414042] ">
                 File Preparation Tips
@@ -391,7 +370,7 @@ const Predictor: React.FC = () => {
 
       {/* Create Predictor Modal */}
 
-      {files.length > 0 && (
+      {uploadedFiles.length > 0 && (
         <Dialog open={open} onClose={handleClose} fullWidth sx={boxStyles}>
           <DialogContent
             sx={{

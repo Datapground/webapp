@@ -153,14 +153,14 @@ const Extender: React.FC = () => {
                   <h2 className="text-[#414042] lg:text-base md:text-sm text-xs font-semibold">
                     Upload a File
                   </h2>
-                  <div className="flex items-center gap-2 lg:py-2 py-1.5 lg:px-6 px-5 md:text-sm text-xs border border-[#4CB448] bg-extender rounded-[5px] cursor-pointer">
+                  <button className="flex items-center lg:px-4 px-3 lg:py-1.5 py-1  lg:gap-2 gap-1.5 bg-extender border border-extender rounded-[5px] cursor-pointer">
                     <FileIcon className="md:w-[18px] w-[16px] md:h-[18px] h-[16px] fill-white" />
                     <label htmlFor="input">
                       <p className="text-white lg:text-base md:text-sm text-xs font-primary font-semibold">
                         Choose a File
                       </p>{' '}
                     </label>
-                  </div>
+                  </button>
                   <p className="text-[#414042] font-primary lg:text-sm text-xs font-light">
                     or drag and drop a .csv, .xlsv, .json file here to upload
                   </p>
