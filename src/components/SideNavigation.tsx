@@ -197,7 +197,7 @@ const SideNavigation = () => {
           })}
 
           {/* Divider */}
-          <div className="line h-[1px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-4"></div>
+          <div className="line min-h-[1px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-4"></div>
           <div
             className={`relative ${location.pathname === '/generator' ? 'ml-[-4px] my-[-24px] vertical-rounded-tab -z-50' : 'z-30'}`}
           >
@@ -238,7 +238,7 @@ const SideNavigation = () => {
           })}
 
           {/* Divider */}
-          <div className="line h-[0.5px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-3"></div>
+          <div className="line min-h-[0.5px] w-[80%] bg-gradient-to-r from-blue-600 to-transparent my-3"></div>
           {/* Accounts Items */}
           <p className="text-xs text-[#414042] pb-3 -ml-4">Accounts</p>
           {accounts.map(({ path, label, Icon }, index) => {

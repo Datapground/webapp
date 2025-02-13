@@ -41,6 +41,7 @@ const navItems = [
 ];
 
 const tools = [
+  { path: '/generator', label: 'The Generator', Icon: GeneratorIcon },
   { path: '/predictor', label: 'The Predictor', Icon: PredictorIcon },
   { path: '/extender', label: 'The Extender', Icon: ExtenderIcon },
 ];

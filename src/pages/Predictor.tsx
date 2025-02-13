@@ -18,7 +18,7 @@ import {
 import HandIcon from '../components/Icons/HandIcon';
 import PenIcon from '../components/Icons/PenIcon';
 import DeleteIcon from '../components/Icons/DeleteIcon';
-import { useDropzone } from 'react-dropzone';
+import { FileWithPath, useDropzone } from 'react-dropzone';
 import QuestionIcon from '../components/Icons/QuestionIcon';
 
 const columns = ['Columns A', 'Columns B', 'Columns C', 'Columns D'];
@@ -26,9 +26,9 @@ const columns = ['Columns A', 'Columns B', 'Columns C', 'Columns D'];
 const CustomSwitch = styled(Switch)<{
   trackcolor?: string;
   switchcolor?: string;
-}>(({ trackcolor = '#E55057', switchcolor = '#fff', theme }) => ({
-  width: 22, // Large screens
-  height: 14,
+}>(({ trackcolor = '#E55057', switchcolor = '#fff' }) => ({
+  width: 26, // Average size for all screens
+  height: 16,
   padding: 0,
   display: 'flex',
   alignItems: 'center',
@@ -36,7 +36,7 @@ const CustomSwitch = styled(Switch)<{
   '& .MuiSwitch-switchBase': {
     padding: 2,
     '&.Mui-checked': {
-      transform: 'translateX(12px)', // Adjusted for smaller size
+      transform: 'translateX(10px)',
       color: switchcolor,
       '& + .MuiSwitch-track': {
         backgroundColor: trackcolor,
@@ -45,8 +45,8 @@ const CustomSwitch = styled(Switch)<{
     },
   },
   '& .MuiSwitch-thumb': {
-    width: 10,
-    height: 10,
+    width: 12,
+    height: 12,
     borderRadius: '50%',
     backgroundColor: '#fff',
     transition: '0.3s',
@@ -58,73 +58,74 @@ const CustomSwitch = styled(Switch)<{
     opacity: 1,
     backgroundColor: trackcolor,
   },
-
-  // Responsive Design
-  [theme.breakpoints.up('md')]: {
-    width: 26, // Medium screens
-    height: 16,
-    '& .MuiSwitch-thumb': {
-      width: 12,
-      height: 12,
-    },
-    '& .MuiSwitch-switchBase.Mui-checked': {
-      transform: 'translateX(10px)', // Adjust for smaller track
-    },
-  },
-  [theme.breakpoints.up('lg')]: {
-    width: 30, // Default width
-    height: 18,
-    '& .MuiSwitch-thumb': {
-      width: 14, // Default size
-      height: 14,
-    },
-    '& .MuiSwitch-switchBase.Mui-checked': {
-      transform: 'translateX(8px)',
-    },
-  },
 }));
 
 const Predictor: React.FC = () => {
   const [search, setSearch] = useState(60);
   const [open, setOpen] = useState(true);
-  const [fileError, setFileError] = useState<string>('');
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<FileWithPath[]>([]);
+  const [prevFiles, setPrevFiles] = useState<FileWithPath[]>([]);
+  const [hasRun, setHasRun] = useState(false);
+  const [fileError, setFileError] = useState('');
 
-  const MAX_FILE_SIZE = 50 * 1024 * 1024; // 5MB limit
+  const [selectedPredictor, setSelectedPredictor] = useState<OptionType | null>(
+    null
+  );
+
+  const handlePredictorChange = (selected: OptionType | null) => {
+    setSelectedPredictor(selected);
+  };
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB Limit
 
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
     accept: {
       'text/csv': ['.csv'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
+        '.xlsx',
+      ],
     },
     maxSize: MAX_FILE_SIZE,
-    onDrop: (files, rejectedFiles) => {
-      setFileError(''); // Reset errors
+    noKeyboard: true, // Prevent "Enter" from reopening
 
-      if (rejectedFiles.length > 0) {
-        setFileError('File is too large! Max size is 5MB.');
+    onDrop: (files, rejectedFiles) => {
+      setFileError(''); // Reset error state
+
+      if (files.length === 0) {
+        // Restore previous files if no new file is selected (file manager canceled)
+        setUploadedFiles(prevFiles);
         return;
       }
 
-      if (files.length > 0) {
-        const file = files[0];
+      // Filter out duplicates before updating
+      const newFiles = files.filter(
+        (file) => !uploadedFiles.some((prevFile) => prevFile.name === file.name)
+      );
 
-        if (file.size > MAX_FILE_SIZE) {
-          setFileError('File exceeds 5MB limit.');
-          return;
-        }
-
-        setUploadedFile(file); // Store uploaded file
-        setOpen(true); // Automatically open modal when file is uploaded
+      if (newFiles.length > 0) {
+        setUploadedFiles((prev) => [...prev, ...newFiles]); // Append new files
+        setPrevFiles([...uploadedFiles, ...newFiles]); // Backup previous files
+        setHasRun(true);
       }
     },
   });
-  // When acceptedFiles changes, setOpen to true
+
   useEffect(() => {
     if (acceptedFiles.length > 0) {
-      setOpen(true);
+      const newFiles = acceptedFiles.filter(
+        (file) => !uploadedFiles.some((prevFile) => prevFile.name === file.name)
+      );
+
+      if (newFiles.length > 0) {
+        setUploadedFiles((prev) => [...prev, ...newFiles]);
+        setPrevFiles([...uploadedFiles, ...newFiles]); // Backup previous selection
+        setHasRun(true);
+      }
+    } else if (uploadedFiles.length === 0 && prevFiles.length > 0) {
+      // If file manager is opened and canceled, restore previous files
+      setUploadedFiles(prevFiles);
     }
-    // eslint-disable-next-line
-  }, [acceptedFiles]);
+  }, [acceptedFiles, prevFiles, uploadedFiles]);
 
   const files = acceptedFiles.map((file) => (
     <li key={file.path} className="list-none">
@@ -195,6 +196,8 @@ const Predictor: React.FC = () => {
                 },
               ]}
               placeholder="No predictor selected"
+              value={selectedPredictor}
+              onChange={handlePredictorChange}
             />
           </div>
         </div>
@@ -230,16 +233,16 @@ const Predictor: React.FC = () => {
                 <h2 className="text-[#414042] lg:text-base md:text-sm text-xs font-semibold">
                   Create Predictor
                 </h2>
-                <div className="flex items-center lg:px-4 px-3 lg:py-1.5 py-1  lg:gap-2 gap-1.5 border  border-[#E55057] rounded-[5px]">
-                  <FileIcon
-                    className={`md:w-[18px] w-[16px] md:h-[18px] h-[16px] fill-predictor`}
-                  />
-                  <label htmlFor="input" className="">
+                <label htmlFor="input" className="">
+                  <button className="flex items-center lg:px-4 px-3 lg:py-1.5 py-1  lg:gap-2 gap-1.5 border  border-[#E55057] rounded-[5px] cursor-pointer">
+                    <FileIcon
+                      className={`md:w-[18px] w-[16px] md:h-[18px] h-[16px] fill-predictor`}
+                    />
                     <p className="text-predictor lg:text-base md:text-sm text-xs font-primary font-semibold">
                       Choose File
                     </p>
-                  </label>
-                </div>
+                  </button>
+                </label>
                 <p className="text-[#414042] font-primary lg:text-sm text-xs font-light">
                   or drag and drop a .csv, .xlsv, .json file here to upload
                 </p>
@@ -261,7 +264,7 @@ const Predictor: React.FC = () => {
             </div>
           </div>
 
-          {files.length > 0 && (
+          {selectedPredictor && (
             <Fragment>
               <h2 className="text-[#414042] lg:text-[20px] text-[18px] font-primary font-semibold">
                 Input
@@ -420,7 +423,7 @@ const Predictor: React.FC = () => {
                     {/* Header Row */}
                     <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-r border-b">
                       Available Columns
-                      <Tooltip title="Tooltip Text">
+                      <Tooltip title="Tooltip Text" placement="top">
                         <IconButton>
                           <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
                         </IconButton>
@@ -428,7 +431,7 @@ const Predictor: React.FC = () => {
                     </div>
                     <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-r border-b">
                       Feature Columns{' '}
-                      <Tooltip title="Tooltip Text">
+                      <Tooltip title="Tooltip Text" placement="top">
                         <IconButton>
                           <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
                         </IconButton>
@@ -436,7 +439,7 @@ const Predictor: React.FC = () => {
                     </div>
                     <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-b">
                       Target Columns{' '}
-                      <Tooltip title="Tooltip Text">
+                      <Tooltip title="Tooltip Text" placement="top">
                         <IconButton>
                           <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
                         </IconButton>
@@ -492,7 +495,7 @@ const Predictor: React.FC = () => {
                   <div className="flex flex-col mt-4 w-[90%]">
                     <h2 className="lg:text-base text-sm  font-primary text-[#414042]">
                       Search Parameter{' '}
-                      <Tooltip title="Tooltip Text">
+                      <Tooltip title="Tooltip Text" placement="top">
                         <IconButton>
                           <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
                         </IconButton>
@@ -528,7 +531,7 @@ const Predictor: React.FC = () => {
                   <div className="flex flex-col w-[90%]">
                     <h2 className="lg:text-base text-sm  font-primary text-[#414042]">
                       Additional Configuration{' '}
-                      <Tooltip title="Tooltip Text">
+                      <Tooltip title="Tooltip Text" placement="top">
                         <IconButton>
                           <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
                         </IconButton>
@@ -577,7 +580,7 @@ const Predictor: React.FC = () => {
                   <div className="flex flex-col w-[90%]">
                     <h2 className="lg:text-lg text-sm font-primary text-[#414042] mb-2">
                       Training Details{' '}
-                      <Tooltip title="Tooltip Text">
+                      <Tooltip title="Tooltip Text" placement="top">
                         <IconButton>
                           <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
                         </IconButton>
