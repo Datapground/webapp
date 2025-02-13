@@ -84,8 +84,11 @@ const data: ActivityData[] = [
   },
 ];
 const Usage: React.FC = () => {
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const [startDate, endDate] = dateRange;
   const [currentPage, setCurrentPage] = useState(0);
   const entriesPerPage = 5;
 
@@ -115,74 +118,32 @@ const Usage: React.FC = () => {
         </aside>
       </TopBar>
 
-      <div className="md:p-6 p-4">
-        <h2 className="lg:text-[22px] md:text-[20px] text-[16px] text-xs font-semibold text-[#414042] font-primary">
-          Usage Report
-        </h2>
-        <div className="flex flex-col mt-6">
+      <div className="mt-4">
+        <div className="flex flex-col">
           <div className="flex items-center justify-between gap-2 ">
-            <div className="flex items-center gap-2 ">
-              <label className="lg:text-base md:text-sm text-xs text-gray-500 font-medium font-primary">
-                From
-              </label>
-
+            <div className="flex items-center justify-center gap-2 ">
               <DatePicker
                 selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                selectsStart
+                onChange={(update) => setDateRange(update)}
                 startDate={startDate}
                 endDate={endDate}
-                placeholderText="Start Date"
-                className="lg:p-2 p-1.5 lg:max-w-[150px] md:max-w-[120px] max-w-[100px] border border-gray-300 rounded-md focus:outline-none focus:border-gray-400 focus:ring-0 lg:text-base md:text-sm text-xs text-gray-500"
+                selectsRange
+                placeholderText="Select a date range"
+                className="rounded-[20px] border border-[#E5E5E5] px-4 h-[40px] text-sm font-light outline-none min-w-[200px]"
               />
-              <label className="lg:text-base md:text-sm text-xs text-gray-500 font-medium font-primary">
-                To
-              </label>
-
-              <DatePicker
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                selectsEnd
-                startDate={startDate}
-                endDate={endDate}
-                minDate={startDate || undefined}
-                placeholderText="End Date"
-                className="lg:p-2 p-1.5 lg:max-w-[150px] md:max-w-[120px] max-w-[100px] border border-gray-300 rounded-md focus:outline-none focus:border-gray-400 focus:ring-0 lg:text-base md:text-sm text-xs text-gray-500"
+              <UserSelect
+                options={[
+                  { value: 'Model 1', label: 'Model 1' },
+                  { value: 'Model 2', label: 'Model 2' },
+                  { value: 'Model 3', label: 'Model 3' },
+                ]}
+                placeholder="Select model type"
+                className="w-[200px]"
               />
-              <div className="flex lg:w-[150px] md:w-[150px] w-[120px]">
-                <UserSelect
-                  options={[
-                    {
-                      label: 'Model Type',
-                      options: [
-                        { value: 'Model 1', label: 'Model 1' },
-                        { value: 'Model 2', label: 'Model 2' },
-                        { value: 'Model 3', label: 'Model 3' },
-                      ],
-                    },
-                  ]}
-                  placeholder="Model Type"
-                />
-              </div>
-              <div className="flex lg:w-[160px] md:w-[150px] w-[120px] h-[40px]">
-                <UserSelect
-                  options={[
-                    {
-                      label: 'Runner Model',
-                      options: [
-                        { value: 'Model 1', label: 'Model 1' },
-                        { value: 'Model 2', label: 'Model 2' },
-                        { value: 'Model 3', label: 'Model 3' },
-                      ],
-                    },
-                  ]}
-                  placeholder="Runner Model"
-                />
-              </div>
             </div>
 
             <div>
-              <button className="lg:p-2.5 p-1.5 lg:text-md md:text-sm text-xs bg-transparent border-transparent text-gray-500 hover:text-white hover:bg-black hover:border-black transition-all duration-300 font-semibold rounded-[8px] flex items-center gap-1">
+              <button className="md:text-sm text-xs bg-transparent border-transparent text-gray-500 flex items-center gap-1">
                 <IoPrintOutline className="w-[16px] h-[16px] text-gray-500 hover:bg-white cursor-pointer" />
                 Export CSV
               </button>

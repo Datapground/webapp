@@ -14,7 +14,7 @@ import PredictorIcon from '../components/Icons/PredictorIcon';
 const PlayGround: React.FC = () => {
   return (
     <div className="">
-      <TopBar containerClassName="flex items-center gap-3 justify-between rounded-bl-[30px] rounded-br-[30px]  border-none px-4 py-6 shadow-playground">
+      <TopBar containerClassName="lg:flex hidden items-center gap-3 justify-between rounded-bl-[30px] rounded-br-[30px]  border-none px-4 py-6 shadow-playground">
         <div>
           <h2 className="text-[26px] font-primary font-medium">
             Welcome Wood!

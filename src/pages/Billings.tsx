@@ -13,7 +13,7 @@ const Billings: React.FC = () => {
         </aside>
       </TopBar>
 
-      <div className="lg:p-14 md:p-6 p-4">
+      <div className="mt-4">
         <h2 className="lg:text-[22px] md:text-[20px] text-[16px] text-xs font-semibold text-[#414042] font-primary">
           Usage
         </h2>
@@ -124,10 +124,10 @@ const Billings: React.FC = () => {
         <div className="mt-6 border border-[#E5E5E5] rounded-[5px]">
           <div className="lg:px-6 md:px-4 px-3 lg:py-3 md:py-2 py-1.5 lg:space-y-3 space-y-2">
             <p className="text-gray-500 font-primary font-semibold lg:text-sm text-xs">
-              You havent added payment method. Adding a credit card will allow
-              you to purchase more credits.
+              You haven&apos;t added payment method. Adding a credit card will
+              allow you to purchase more credits.
             </p>
-            <button className="lg:px-4 px-3 lg:py-1.5 py-1 lg:text-md text-sm text-white bg-black font-semibold rounded-[5px] ">
+            <button className="lg:px-4 px-3 lg:py-1.5 py-1 lg:text-md text-sm text-white bg-default font-semibold rounded-[5px] ">
               Add payment method
             </button>
           </div>

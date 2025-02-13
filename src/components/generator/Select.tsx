@@ -117,7 +117,7 @@ const GeneratorSelect = () => {
       options={groupedOptions}
       formatGroupLabel={formatGroupLabel}
       placeholder="Select a model"
-      className="lg:w-[270px] md:w-[200px] w-[170px] lg:text-sm text-xs rounded-[10px]"
+      className="lg:w-[270px] md:w-[200px] w-[170px] lg:text-sm text-xs"
       isSearchable={false}
       value={selectedOption} // Set default selected value
       onChange={(e) => {
@@ -132,7 +132,6 @@ const GeneratorSelect = () => {
           borderRadius: '16px',
           cursor: 'pointer',
           backgroundColor: 'transparent',
-          padding: 'lg:5px md:3px',
           color: 'white',
           ':hover': {
             border: '1px solid var(--generator-color)',
