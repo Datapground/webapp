@@ -8,10 +8,6 @@ import Select, {
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import ChevronDownIcon from '../Icons/ChevronDownIcon';
-import GeneratorIcon from '../Icons/GeneratorIcon';
-import ElixirIcon from '../Icons/ElixirIcon';
-import GoldIcon from '../Icons/GoldIcon';
-import OracleIcon from '../Icons/OracleIcon';
 
 // Format group labels
 const formatGroupLabel = (data: GroupBase<OptionType>) => (
@@ -19,19 +15,6 @@ const formatGroupLabel = (data: GroupBase<OptionType>) => (
     <span>{data.label}</span>
   </div>
 );
-
-// Predefined grouped options
-const groupedOptions: GroupBase<OptionType>[] = [
-  {
-    label: 'Models',
-    options: [
-      { value: 'merlin', label: 'Merlin Generator', Icon: GeneratorIcon },
-      { value: 'elixir', label: 'Elixir Generator', Icon: ElixirIcon },
-      { value: 'gold', label: 'Gold Generator', Icon: GoldIcon },
-      { value: 'oracle', label: 'Oracle Generator', Icon: OracleIcon },
-    ],
-  },
-];
 
 // Custom Single Value Component
 const customSingleValue = ({ data }: { data: OptionType }) => (
@@ -95,7 +78,11 @@ const customDropdownIndicator = (
   </components.DropdownIndicator>
 );
 
-const GeneratorSelect = () => {
+type Props = {
+  options: GroupBase<OptionType>[];
+};
+
+const GeneratorSelect: React.FC<Props> = ({ options }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
@@ -107,14 +94,15 @@ const GeneratorSelect = () => {
 
     // Find the matching option
     const foundOption =
-      groupedOptions[0].options.find((opt) => opt.value === model) || null;
+      options[0].options.find((opt) => opt.value === model) || null;
 
     setSelectedOption(foundOption);
+    // eslint-disable-next-line
   }, [location.search]);
 
   return (
     <Select
-      options={groupedOptions}
+      options={options}
       formatGroupLabel={formatGroupLabel}
       placeholder="Select a model"
       className="lg:w-[270px] md:w-[200px] w-[170px] lg:text-sm text-xs"

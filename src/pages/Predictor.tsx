@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { Fragment, useEffect, useState } from 'react';
 import TopBar from '../components/TopBar';
 import PredictorIcon from '../components/Icons/PredictorIcon';
@@ -89,17 +90,12 @@ const Predictor: React.FC = () => {
   const [fileError, setFileError] = useState<string>('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
-  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB limit
+  const MAX_FILE_SIZE = 50 * 1024 * 1024; // 5MB limit
 
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
     accept: {
       'text/csv': ['.csv'],
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
-        '.xlsx',
-      ],
-      'application/json': ['.json'],
     },
-
     maxSize: MAX_FILE_SIZE,
     onDrop: (files, rejectedFiles) => {
       setFileError(''); // Reset errors
@@ -127,6 +123,7 @@ const Predictor: React.FC = () => {
     if (acceptedFiles.length > 0) {
       setOpen(true);
     }
+    // eslint-disable-next-line
   }, [acceptedFiles]);
 
   const files = acceptedFiles.map((file) => (
@@ -488,7 +485,7 @@ const Predictor: React.FC = () => {
                 <div className="flex flex-col items-center justify-center mt-2 p-4 ">
                   <div className="flex items-center gap-1 py-2 px-3 my-auto bg-[#E55057]/50 w-[90%] rounded-[30px] lg:text-sm text-xs  text-[#414042] font-primary">
                     <SettingsIcon className="md:w-[16px] w-[14px] md:h-[16px] h-[14px] stroke-[#414042]" />
-                    Advance Settings
+                    Advanced Settings
                   </div>
 
                   {/**  Settings Settings */}

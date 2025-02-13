@@ -151,7 +151,7 @@ const Usage: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="border border-[#D6D6D6] rounded-[30px] md:py-4 md:px-8 min-h-[420px] relative mt-4 overflow-hidden flex flex-col justify-between">
+        <div className="border border-[#D6D6D6] rounded-[30px] md:py-4 min-h-[420px] relative mt-4 overflow-hidden flex flex-col justify-between">
           <div className="min-h-[180px] no-scrollbar max-w-full p-4">
             <table className="min-w-[600px] w-full font-primary text-xs md:text-sm bg-white">
               <thead className="top-0 z-10 bg-white">

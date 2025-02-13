@@ -8,14 +8,21 @@ import SettingsIcon from '../components/Icons/SettingsIcon';
 import TopBar from '../components/TopBar';
 import GeneratorIcon from '../components/Icons/GeneratorIcon';
 import GeneratorSelect from '../components/generator/Select';
+import ElixirIcon from '../components/Icons/ElixirIcon';
+import GoldIcon from '../components/Icons/GoldIcon';
+import OracleIcon from '../components/Icons/OracleIcon';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const Generator: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const model = searchParams.get('model');
+  const navigate = useNavigate();
   const [speed, setSpeed] = useState(50);
   const [temperature, setTemperature] = useState(40);
   const [rows, setRows] = useState(70);
   const [accuracy, setAccuracy] = useState(30);
   const [text, setText] = useState('');
-  const [selected, setSelected] = useState('tabular');
 
   const handleSpeed = (_event: Event, newValue: number | number[]) => {
     setSpeed(newValue as number);
@@ -32,6 +39,9 @@ const Generator: React.FC = () => {
   const handleAccuracy = (_event: Event, newValue: number | number[]) => {
     setAccuracy(newValue as number);
   };
+
+  const models = ['merlin', 'elixir', 'gold', 'oracle'];
+  const llm = ['o1-mini', 'o3-mini', 'deepSeek-r1', 'gpt-4o', 'gpt-4o-mini'];
 
   return (
     <Fragment>
@@ -51,7 +61,70 @@ const Generator: React.FC = () => {
           <p className="sm:text-sm text-xs text-[#414042]">Model</p>
 
           <div className="flex ">
-            <GeneratorSelect />
+            <GeneratorSelect
+              options={
+                models.includes(model as string)
+                  ? [
+                      {
+                        label: 'Models',
+                        options: [
+                          {
+                            value: 'merlin',
+                            label: 'Merlin Generator',
+                            Icon: GeneratorIcon,
+                          },
+                          {
+                            value: 'elixir',
+                            label: 'Elixir Generator',
+                            Icon: ElixirIcon,
+                          },
+                          {
+                            value: 'gold',
+                            label: 'Gold Generator',
+                            Icon: GoldIcon,
+                          },
+                          {
+                            value: 'oracle',
+                            label: 'Oracle Generator',
+                            Icon: OracleIcon,
+                          },
+                        ],
+                      },
+                    ]
+                  : [
+                      {
+                        label: 'LLM',
+                        options: [
+                          {
+                            value: 'o1-mini',
+                            label: 'o1-mini',
+                            Icon: GeneratorIcon,
+                          },
+                          {
+                            value: 'o3-mini',
+                            label: 'o3-mini',
+                            Icon: ElixirIcon,
+                          },
+                          {
+                            value: 'deepSeek-r1',
+                            label: 'DeepSeek R1',
+                            Icon: GoldIcon,
+                          },
+                          {
+                            value: 'gpt-4o',
+                            label: 'gpt-4o',
+                            Icon: OracleIcon,
+                          },
+                          {
+                            value: 'gpt-4o-mini',
+                            label: 'gpt-4o-mini',
+                            Icon: OracleIcon,
+                          },
+                        ],
+                      },
+                    ]
+              }
+            />
           </div>
         </div>
 
@@ -59,21 +132,21 @@ const Generator: React.FC = () => {
         <div className="flex items-center gap-3">
           <button
             className={`md:py-2 p-1.5 md:px-3 px-2 border ${
-              selected === 'tabular'
+              models.includes(model as string)
                 ? 'border-generator text-generator'
                 : 'border-transparent'
             } text-[#414042] lg:text-base md:text-sm text-xs`}
-            onClick={() => setSelected('tabular')}
+            onClick={() => navigate('?model=merlin')}
           >
             Tabular Data
           </button>
           <button
             className={`py-2 px-3 border ${
-              selected === 'nlp'
+              llm.includes(model as string)
                 ? 'border-generator text-generator'
                 : 'border-transparent'
             } lg:text-base md:text-sm text-xs`}
-            onClick={() => setSelected('nlp')}
+            onClick={() => navigate('?model=o1-mini')}
           >
             Natural Language Input
           </button>

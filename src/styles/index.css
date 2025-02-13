@@ -65,3 +65,13 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.react-datepicker__day--selected {
+  background-color: #5183f0 !important; /* Change to your preferred color */
+  color: white !important;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #5183f0 !important; /* Keeps selection consistent */
+  color: white !important;
+}

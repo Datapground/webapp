@@ -16,7 +16,7 @@ import SettingsIcon from './Icons/SettingsIcon';
 import PlaygroundIcon from './Icons/PlaygroundIcon';
 
 const navItems = [
-  { path: '/', label: 'Playground', Icon: PlaygroundIcon },
+  { path: '/playground', label: 'Playground', Icon: PlaygroundIcon },
   { path: '/activity', label: 'Activity', Icon: ActivityIcon },
   { path: '/projects', label: 'Projects', Icon: ProjectsIcon },
   { path: '/blueprints', label: 'Blueprints', Icon: BluePrintIcon },
@@ -58,19 +58,19 @@ const SideNavigation = () => {
     const backgroundColors: Record<string, { body: string; tab: string }> = {
       '/generator': {
         body:
-          model === 'elixir'
+          model === 'elixir' || model === 'o1-mini'
             ? '#A077A80D'
-            : model === 'gold'
+            : model === 'gold' || model === 'o3-mini'
               ? '#1E647F0D'
-              : model === 'oracle'
+              : model === 'oracle' || model === 'deepSeek-r1'
                 ? '#59B1FE0D'
                 : '#C3278208', // Default merlin color
         tab:
-          model === 'elixir'
+          model === 'elixir' || model === 'o1-mini'
             ? '#FAFAFD'
-            : model === 'gold'
+            : model === 'gold' || model === 'o3-mini'
               ? '#F9FAFC'
-              : model === 'oracle'
+              : model === 'oracle' || model === 'deepSeek-r1'
                 ? '#FAFAFF'
                 : '#FDF8FB', // Default merlin color
       },
@@ -94,22 +94,22 @@ const SideNavigation = () => {
 
     // Dynamically set the CSS variable for --generator-color
     const modelColor =
-      model === 'elixir'
+      model === 'elixir' || model === 'o1-mini'
         ? '#A077A8'
-        : model === 'gold'
+        : model === 'gold' || model === 'o3-mini'
           ? '#1E647F'
-          : model === 'oracle'
+          : model === 'oracle' || model === 'deepSeek-r1'
             ? '#59B1FE'
             : '#C32782';
 
     document.documentElement.style.setProperty('--generator-color', modelColor);
 
     const navBgColor =
-      model === 'elixir'
+      model === 'elixir' || model === 'o1-mini'
         ? 'linear-gradient(90deg, #A077A8 -4.54%, rgba(160, 119, 168, 0.776) 51.38%, rgba(255, 255, 255, 0) 100%)'
-        : model === 'gold'
+        : model === 'gold' || model === 'o3-mini'
           ? 'linear-gradient(90deg, #1E647F -4.54%, rgba(30, 100, 127, 0.776) 51.38%, rgba(255, 255, 255, 0) 100%)'
-          : model === 'oracle'
+          : model === 'oracle' || model === 'deepSeek-r1'
             ? 'linear-gradient(90deg, #59B1FE -4.54%, rgba(89, 177, 254, 0.776) 51.38%, rgba(255, 255, 255, 0) 100%)'
             : 'linear-gradient(90deg, #C32782 -4.54%, rgba(195, 39, 130, 0.776) 43.82%, rgba(255, 255, 255, 0) 100%)';
 
@@ -120,11 +120,11 @@ const SideNavigation = () => {
 
     // Dynamically set the CSS variable for --generator-color
     const generatorLight =
-      model === 'elixir'
+      model === 'elixir' || model === 'o1-mini'
         ? '#A077A866'
-        : model === 'gold'
+        : model === 'gold' || model === 'o3-mini'
           ? '#1E647F66'
-          : model === 'oracle'
+          : model === 'oracle' || model === 'deepSeek-r1'
             ? '#59B1FE66'
             : '#C3278233';
 
