@@ -79,7 +79,7 @@ const Projects: React.FC = () => {
       </div>
 
       {/* Models */}
-      <section className="grid xl:grid-cols-3 md:grid-cols-2 gap-4 md:mt-8 mt-4">
+      <section className="grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 gap-4 md:mt-8 mt-4">
         <ProjectCard
           primaryColor="#4CB448"
           secondaryColor="#4CB448"

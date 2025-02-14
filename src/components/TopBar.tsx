@@ -31,7 +31,7 @@ import SettingsIcon from './Icons/SettingsIcon';
 import PlaygroundIcon from './Icons/PlaygroundIcon';
 
 const navItems = [
-  { path: '/playground', label: 'Playground', Icon: PlaygroundIcon },
+  { path: '/', label: 'Playground', Icon: PlaygroundIcon },
   { path: '/activity', label: 'Activity', Icon: ActivityIcon },
   { path: '/projects', label: 'Projects', Icon: ProjectsIcon },
   { path: '/blueprints', label: 'Blueprints', Icon: BluePrintIcon },
@@ -40,11 +40,7 @@ const navItems = [
 ];
 
 const tools = [
-  {
-    path: '/generator?model=merlin',
-    label: 'The Generator',
-    Icon: GeneratorIcon,
-  },
+  { path: '/generator', label: 'The Generator', Icon: GeneratorIcon },
   { path: '/predictor', label: 'The Predictor', Icon: PredictorIcon },
   { path: '/extender', label: 'The Extender', Icon: ExtenderIcon },
 ];

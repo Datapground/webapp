@@ -58,15 +58,21 @@ type Props = {
   className?: string;
   placeholder?: string | '';
   options: GroupBase<OptionType>[];
+  value: OptionType | null; // Track selected value
+  onChange: (selected: OptionType | null) => void;
 };
 
 const PredictorSelect: React.FC<Props> = ({
   className,
   placeholder,
   options,
+  value,
+  onChange,
 }) => {
   return (
     <Select<OptionType, false, GroupBase<OptionType>>
+      value={value}
+      onChange={onChange}
       options={options}
       formatGroupLabel={formatGroupLabel}
       placeholder={placeholder}
