@@ -28,11 +28,10 @@ import UsageIcon from './Icons/UsageIcon';
 import BillingIcon from './Icons/BillingIcon';
 import { IconButton } from '@mui/material';
 import SettingsIcon from './Icons/SettingsIcon';
-import MenuIcon from './Icons/MenuIcon';
 import PlaygroundIcon from './Icons/PlaygroundIcon';
 
 const navItems = [
-  { path: '/playground', label: 'Playground', Icon: PlaygroundIcon },
+  { path: '/', label: 'Playground', Icon: PlaygroundIcon },
   { path: '/activity', label: 'Activity', Icon: ActivityIcon },
   { path: '/projects', label: 'Projects', Icon: ProjectsIcon },
   { path: '/blueprints', label: 'Blueprints', Icon: BluePrintIcon },

@@ -16,7 +16,7 @@ import SettingsIcon from './Icons/SettingsIcon';
 import PlaygroundIcon from './Icons/PlaygroundIcon';
 
 const navItems = [
-  { path: '/playground', label: 'Playground', Icon: PlaygroundIcon },
+  { path: '/', label: 'Playground', Icon: PlaygroundIcon },
   { path: '/activity', label: 'Activity', Icon: ActivityIcon },
   { path: '/projects', label: 'Projects', Icon: ProjectsIcon },
   { path: '/blueprints', label: 'Blueprints', Icon: BluePrintIcon },
@@ -67,11 +67,11 @@ const SideNavigation = () => {
                 : '#C3278208', // Default merlin color
         tab:
           model === 'elixir' || model === 'o1-mini'
-            ? '#FAFAFD'
+            ? '#FAF8FA'
             : model === 'gold' || model === 'o3-mini'
-              ? '#F9FAFC'
+              ? '#F3F7F8'
               : model === 'oracle' || model === 'deepSeek-r1'
-                ? '#FAFAFF'
+                ? '#F6FBFE'
                 : '#FDF8FB', // Default merlin color
       },
       '/predictor': { body: '#E6555D0D', tab: '#FDF6F6' },

@@ -33,7 +33,7 @@ const App = () => {
 
       {/* Protected Routes (With Sidebar) */}
       <Route path="/" element={<RootLayout />}>
-        <Route path="/playground" index element={<PlayGround />} />
+        <Route path="/" index element={<PlayGround />} />
         <Route path="/apikeys" element={<APIKeys />} />{' '}
         <Route path="/billings" element={<Billings />} />{' '}
         <Route path="/generator" element={<Generator />} />{' '}
