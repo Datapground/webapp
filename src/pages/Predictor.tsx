@@ -381,8 +381,8 @@ const Predictor: React.FC = () => {
               flexDirection: 'column',
             }}
           >
-            <div className="grid grid-cols-7 bg-white rounded-[40px] relative border-l-0 w-full h-full">
-              <div className="col-span-5 lg:m-10 m-8 overflow-y-auto no-scrollbar max-h-[80vh]">
+            <div className="grid grid-cols-7 bg-white rounded-[40px] relative border-l-0 w-full h-full  lg:p-4 p-3">
+              <div className="col-span-5 lg:mx-10 mx-8 lg:py-6 py-4 overflow-y-auto no-scrollbar max-h-[80vh]">
                 <div className="mb-8">
                   <h2 className="text-[#414042] xl:text-[26px] lg:text-[22px] md:text-[20px] text-base font-primary font-semibold">
                     Configure Your Predictor
@@ -453,19 +453,13 @@ const Predictor: React.FC = () => {
                       </React.Fragment>
                     ))}
                   </div>
-
-                  <div className="flex justify-center mt-4">
-                    <button className="mt-4 bg-predictor text-white lg:py-2 py-1.5 lg:px-16 md:px-14 px-12 lg:text-sm text-xs font-primary rounded-lg transition">
-                      Generate
-                    </button>{' '}
-                  </div>
                 </div>
               </div>
 
               {/** Advance Settings */}
               <div className="col-span-2 rounded-[40px] border w-full py-2">
                 <div className="flex flex-col items-center justify-center mt-2 p-4 ">
-                  <div className="flex items-center gap-1 py-2 px-3 my-auto bg-[#E55057]/50 w-[90%] rounded-[30px] lg:text-sm text-xs  text-[#414042] font-primary">
+                  <div className="flex items-center gap-1 py-2 px-3 my-auto bg-[#E55057]/50 w-full rounded-[30px] lg:text-sm text-xs  text-[#414042] font-primary">
                     <SettingsIcon className="md:w-[16px] w-[14px] md:h-[16px] h-[14px] stroke-[#414042]" />
                     Advanced Settings
                   </div>
@@ -504,7 +498,7 @@ const Predictor: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="line h-[0.5px] w-[90%] bg-gradient-to-r from-predictor to-transparent my-4"></div>
+                  <div className="line h-[0.5px] w-full bg-gradient-to-r from-predictor to-transparent my-4"></div>
 
                   {/**  Settings Settings */}
                   <div className="flex flex-col w-[90%]">
@@ -553,7 +547,7 @@ const Predictor: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="line h-[0.5px] w-[90%] bg-gradient-to-r from-predictor to-transparent my-4"></div>
+                  <div className="line h-[0.5px] w-full bg-gradient-to-r from-predictor to-transparent my-4"></div>
 
                   {/**  Settings Settings */}
                   <div className="flex flex-col w-[90%]">
@@ -583,6 +577,12 @@ const Predictor: React.FC = () => {
                         </label>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="flex justify-center mt-4 w-full">
+                    <button className="mt-4 bg-predictor text-white lg:py-2 py-1.5 lg:px-16 md:px-14 px-12 lg:text-sm text-xs font-primary rounded-[30px] transition w-full">
+                      Generate
+                    </button>{' '}
                   </div>
                 </div>
               </div>

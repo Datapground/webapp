@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BluPrints: React.FC = () => {
+const BluPrints = () => {
   return <div>BluPrints</div>;
 };
 
