@@ -5,17 +5,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import UserSelect from '../components/usage/Select';
 import { IoPrintOutline } from 'react-icons/io5';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
-
 import PrevIcon from '../components/Icons/PrevIcon';
 import NextIcon from '../components/Icons/NextIcon';
+import ChartWithDateFilter from '../components/usage/chart';
 
 interface ActivityData {
   date: string;
@@ -100,72 +92,6 @@ const Usage: React.FC = () => {
   ]);
   const [startDate, endDate] = dateRange;
   const [currentPage, setCurrentPage] = useState(0);
-  const [filter, setFilter] = useState('weekly'); // Default filter is daily
-
-  const chartData = [
-    {
-      date: '2025-02-01',
-      model_usage: 100,
-      api_calls: 50,
-      transcriptions: 30,
-    },
-    {
-      date: '2025-02-02',
-      model_usage: 120,
-      api_calls: 60,
-      transcriptions: 40,
-    },
-    {
-      date: '2025-02-03',
-      model_usage: 110,
-      api_calls: 55,
-      transcriptions: 35,
-    },
-    {
-      date: '2025-02-04',
-      model_usage: 130,
-      api_calls: 65,
-      transcriptions: 45,
-    },
-    {
-      date: '2025-02-05',
-      model_usage: 140,
-      api_calls: 70,
-      transcriptions: 50,
-    },
-  ];
-
-  const filterChartData =
-    filter === 'weekly'
-      ? chartData.slice(0, 7) // For example, last 7 days for weekly
-      : chartData.slice(0, 1);
-
-  const modelUsageCostPerUnit = 1; // Example cost per unit for model_usage
-  const apiCallsCostPerUnit = 0.5; // Example cost per unit for api_calls
-  const transcriptionsCostPerUnit = 0.2; // Example cost per unit for transcriptions
-
-  // Calculate daily costs for each day
-  const calculateDailyCost = (data) => {
-    // Calculate the total daily cost for each item
-    const updatedData = data.map((item) => {
-      const dailyCost =
-        item.model_usage * modelUsageCostPerUnit +
-        item.api_calls * apiCallsCostPerUnit +
-        item.transcriptions * transcriptionsCostPerUnit;
-      return { ...item, dailyCost };
-    });
-
-    // Calculate the average daily cost
-    const totalDailyCost = updatedData.reduce(
-      (acc, item) => acc + item.dailyCost,
-      0
-    );
-    const averageDailyCost = totalDailyCost / updatedData.length;
-
-    return { updatedData, averageDailyCost };
-  };
-
-  const filteredDataWithCost = calculateDailyCost(filterChartData);
 
   const entriesPerPage = 5;
 
@@ -304,58 +230,7 @@ const Usage: React.FC = () => {
         </div>
       </div>
 
-      <div className="border border-[#D6D6D6] rounded-[30px] md:py-4 min-h-[420px] relative mt-4 overflow-hidden flex flex-col justify-between p-4">
-        <h2 className="text-[24px] font-primary font-medium mb-2 text-[#414042]">
-          Usage Analytics
-        </h2>
-
-        <div className="mt-4">
-          <div className="flex items-start justify-between gap-2 mb-4 px-2">
-            <div className="">
-              <h2 className="text-xl font-primary font-medium text-[#414042]">
-                Daily Usage (USD)
-              </h2>
-              <h2 className="text-lg font-primary font-medium mb-2 text-[#414042]">
-                $ {filteredDataWithCost.averageDailyCost}
-              </h2>
-            </div>
-
-            <div className="flex items-center rounded-[30px] border border-[#E5E5E5] bg-gray-100">
-              <button
-                className={`rounded-[30px]  px-6 py-2 md:text-md text-sm font-primary align-center font-light
-                ${filter === 'daily' && 'bg-white border border-[#E5E5E5]'}
-                `}
-                onClick={() => setFilter('daily')}
-              >
-                Daily
-              </button>
-              <button
-                className={`rounded-[30px]  px-6 py-2 md:text-md text-sm font-primary align-center font-light
-                ${filter === 'weekly' && 'bg-white  border border-[#E5E5E5]'}
-                `}
-                onClick={() => setFilter('weekly')}
-              >
-                Weekly
-              </button>
-            </div>
-          </div>
-
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart
-              data={filterChartData}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-            >
-              {/* <CartesianGrid strokeDasharray="3 3" /> */}
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="model_usage" stackId="a" fill="#E55057" />
-              <Bar dataKey="api_calls" stackId="a" fill="#4CB448" />
-              <Bar dataKey="transcriptions" stackId="a" fill="#5183F0" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      <ChartWithDateFilter />
     </div>
   );
 };
