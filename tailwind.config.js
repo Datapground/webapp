@@ -33,6 +33,7 @@ module.exports = {
       boxShadow: {
         'nav-icon': '3.33px 3.33px 26.67px 0px #00000014',
         playground: '4px 4px 32px 0px #5183F014',
+        footer: '0px -4px 16px 0px #5183F014',
       },
       backgroundImage: {
         btn: 'linear-gradient(90deg, #2EE1E2 -3.75%, #49CDFE 27.32%, #6A59C1 73.65%, #9541A3 109.25%)',

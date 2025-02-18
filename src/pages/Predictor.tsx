@@ -65,9 +65,11 @@ const Predictor: React.FC = () => {
   const [outliers, setOutliers] = React.useState(false);
   const [others, setOthers] = React.useState(false);
   const [search, setSearch] = useState(60);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [uploadedFiles, setUploadedFiles] = useState<FileWithPath[]>([]);
+  const [prevFiles, setPrevFiles] = useState<FileWithPath[]>([]);
   const [hasRun, setHasRun] = useState(false);
+  const [fileError, setFileError] = useState('');
   const [selectedPredictor, setSelectedPredictor] = useState<OptionType | null>(
     null
   );
@@ -101,10 +103,28 @@ const Predictor: React.FC = () => {
       ],
     },
     maxSize: MAX_FILE_SIZE,
-    multiple: false, // Ensures only one file can be selected
+    noKeyboard: true, // Prevent "Enter" from reopening
+
     onDrop: (files) => {
-      setUploadedFiles([files[0]]);
-      setHasRun(true);
+      setFileError(''); // Reset error state
+
+      if (files.length === 0) {
+        // Restore previous files if no new file is selected (file manager canceled)
+        setUploadedFiles(prevFiles);
+        return;
+      }
+
+      // Filter out duplicates before updating
+      const newFiles = files.filter(
+        (file) => !uploadedFiles.some((prevFile) => prevFile.name === file.name)
+      );
+
+      if (newFiles.length > 0) {
+        setUploadedFiles((prev) => [...prev, ...newFiles]); // Append new files
+        setPrevFiles([...uploadedFiles, ...newFiles]); // Backup previous files
+        setHasRun(true);
+      }
+
       setOpen(true);
     },
   });
@@ -114,6 +134,16 @@ const Predictor: React.FC = () => {
   };
 
   const handleClose = () => setOpen(false);
+
+  const boxStyles = {
+    '& .MuiPaper-root': {
+      width: { md: '90vw', lg: '70vw' },
+      maxWidth: '1400px',
+      height: '80vh',
+      borderRadius: '40px',
+      overflow: 'hidden',
+    },
+  };
   return (
     <Fragment>
       {/* Top bar */}
@@ -195,6 +225,9 @@ const Predictor: React.FC = () => {
                 <p className="text-[#414042] font-primary lg:text-sm text-xs font-light">
                   or drag and drop a .csv, .xlsv, .json file here to upload
                 </p>
+                {fileError && (
+                  <p className="text-red-500 text-sm mt-2">{fileError}</p>
+                )}
               </div>
 
               {/* {files.length > 0 && (
@@ -337,237 +370,226 @@ const Predictor: React.FC = () => {
 
       {/* Create Predictor Modal */}
 
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        fullWidth
-        sx={{
-          '& .MuiPaper-root': {
-            width: { md: '90vw', lg: '70vw' },
-            maxWidth: '1400px',
-            height: '80vh',
-            borderRadius: '40px',
-            overflow: 'hidden',
-          },
-        }}
-      >
-        <DialogContent
-          sx={{
-            width: { md: '100%' },
-            height: '100%',
-            padding: 0,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <div className="grid grid-cols-7 bg-white rounded-[40px] relative border-l-0 w-full h-full">
-            <div className="col-span-5 lg:m-10 m-8 overflow-y-auto no-scrollbar max-h-[80vh]">
-              <div className="mb-8">
-                <h2 className="text-[#414042] xl:text-[26px] lg:text-[22px] md:text-[20px] text-base font-primary font-semibold">
-                  Configure Your Predictor
-                </h2>
-                <p className="text-[#414042] lg:text-sm text-xs font-light md:font-medium font-primary mt-2">
-                  Make sure the file format meets the requirement. It must be
-                  .csv, .xlsv, .json
-                </p>
-              </div>
-              <div>
-                <h3 className="text-[#414042] font-primary text-xs font-bold my-4">
-                  {' '}
-                  Available Columns Configuration
-                </h3>
-                {/* table */}
-                <div className="grid grid-cols-3 border border-[#0000000D] rounded-[40px] overflow-hidden">
-                  {/* Header Row */}
-                  <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-r border-b">
-                    Available Columns
-                    <Tooltip title="Tooltip Text" arrow placement="top">
-                      <IconButton>
-                        <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                  <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-r border-b">
-                    Feature Columns{' '}
-                    <Tooltip title="Tooltip Text" arrow placement="top">
-                      <IconButton>
-                        <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                  <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-b">
-                    Target Columns{' '}
-                    <Tooltip title="Tooltip Text" arrow placement="top">
-                      <IconButton>
-                        <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-
-                  {/* Data Rows */}
-                  {columns.map((column, index) => (
-                    <React.Fragment key={index}>
-                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 text-center border-r border-b">
-                        {column}
-                      </div>
-                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-r border-b flex justify-center items-center">
-                        <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
-                      </div>
-                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-b flex justify-center items-center">
-                        <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
-                      </div>
-                    </React.Fragment>
-                  ))}
-                  {columns.map((column, index) => (
-                    <React.Fragment key={index}>
-                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 text-center border-r border-b">
-                        {column}
-                      </div>
-                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-r border-b flex justify-center items-center">
-                        <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
-                      </div>
-                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-b flex justify-center items-center">
-                        <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
-                      </div>
-                    </React.Fragment>
-                  ))}
+      {uploadedFiles.length > 0 && (
+        <Dialog open={open} onClose={handleClose} fullWidth sx={boxStyles}>
+          <DialogContent
+            sx={{
+              width: { md: '100%' },
+              height: '100%',
+              padding: 0,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <div className="grid grid-cols-7 bg-white rounded-[40px] relative border-l-0 w-full h-full  lg:p-4 p-3">
+              <div className="col-span-5 lg:mx-10 mx-8 lg:py-6 py-4 overflow-y-auto no-scrollbar max-h-[80vh]">
+                <div className="mb-8">
+                  <h2 className="text-[#414042] xl:text-[26px] lg:text-[22px] md:text-[20px] text-base font-primary font-semibold">
+                    Configure Your Predictor
+                  </h2>
+                  <p className="text-[#414042] lg:text-sm text-xs font-light md:font-medium font-primary mt-2">
+                    Make sure the file format meets the requirement. It must be
+                    .csv, .xlsv, .json
+                  </p>
                 </div>
+                <div>
+                  <h3 className="text-[#414042] font-primary text-xs font-bold my-4">
+                    {' '}
+                    Available Columns Configuration
+                  </h3>
+                  {/* table */}
+                  <div className="grid grid-cols-3 border border-[#0000000D] rounded-[40px] overflow-hidden">
+                    {/* Header Row */}
+                    <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-r border-b">
+                      Available Columns
+                      <Tooltip title="Tooltip Text" placement="top">
+                        <IconButton>
+                          <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                    <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-r border-b">
+                      Feature Columns{' '}
+                      <Tooltip title="Tooltip Text" placement="top">
+                        <IconButton>
+                          <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                    <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-b">
+                      Target Columns{' '}
+                      <Tooltip title="Tooltip Text" placement="top">
+                        <IconButton>
+                          <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
 
-                <div className="flex justify-center mt-4">
-                  <button className="mt-4 bg-predictor text-white lg:py-2 py-1.5 lg:px-16 md:px-14 px-12 lg:text-sm text-xs font-primary rounded-lg transition">
-                    Generate
-                  </button>{' '}
+                    {/* Data Rows */}
+                    {columns.map((column, index) => (
+                      <React.Fragment key={index}>
+                        <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 text-center border-r border-b">
+                          {column}
+                        </div>
+                        <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-r border-b flex justify-center items-center">
+                          <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
+                        </div>
+                        <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-b flex justify-center items-center">
+                          <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
+                        </div>
+                      </React.Fragment>
+                    ))}
+                    {columns.map((column, index) => (
+                      <React.Fragment key={index}>
+                        <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 text-center border-r border-b">
+                          {column}
+                        </div>
+                        <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-r border-b flex justify-center items-center">
+                          <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
+                        </div>
+                        <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-b flex justify-center items-center">
+                          <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
+                        </div>
+                      </React.Fragment>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/** Advance Settings */}
-            <div className="col-span-2 rounded-[40px] border w-full py-2">
-              <div className="flex flex-col items-center justify-center mt-2 p-4 ">
-                <div className="flex items-center gap-1 py-2 px-3 my-auto bg-[#E55057]/50 w-[90%] rounded-[30px] lg:text-sm text-xs  text-[#414042] font-primary">
-                  <SettingsIcon className="md:w-[16px] w-[14px] md:h-[16px] h-[14px] stroke-[#414042]" />
-                  Advanced Settings
-                </div>
-
-                {/**  Settings Settings */}
-                <div className="flex flex-col mt-4 w-[90%]">
-                  <h2 className="lg:text-base text-sm  font-primary text-[#414042]">
-                    Search Parameter{' '}
-                    <Tooltip title="Tooltip Text" arrow placement="top">
-                      <IconButton>
-                        <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
-                      </IconButton>
-                    </Tooltip>
-                  </h2>
-                  <div>
-                    <label className="md:text-xs text-[10px] text-predictor font-primary flex justify-end -mb-3">
-                      {search}%
-                    </label>
-                    <Slider
-                      value={search}
-                      onChange={handleSearch}
-                      min={0}
-                      max={100}
-                      aria-label="Temperature"
-                      sx={{
-                        color: '#E55057', // Custom Purple (Deep Purple)
-                        '& .MuiSlider-thumb': {
-                          backgroundColor: '#E55057',
-                          width: { xs: 14, md: 16 },
-                          height: { xs: 14, md: 16 },
-                        }, // Thumb color
-                        '& .MuiSlider-track': { backgroundColor: '#E55057' }, // Track (filled part)
-                        '& .MuiSlider-rail': { backgroundColor: '#E5505733' }, // Rail (unfilled part)
-                      }}
-                    />
+              {/** Advance Settings */}
+              <div className="col-span-2 rounded-[40px] border w-full py-2">
+                <div className="flex flex-col items-center justify-center mt-2 p-4 ">
+                  <div className="flex items-center gap-1 py-2 px-3 my-auto bg-[#E55057]/50 w-full rounded-[30px] lg:text-sm text-xs  text-[#414042] font-primary">
+                    <SettingsIcon className="md:w-[16px] w-[14px] md:h-[16px] h-[14px] stroke-[#414042]" />
+                    Advanced Settings
                   </div>
-                </div>
 
-                <div className="line h-[0.5px] w-[90%] bg-gradient-to-r from-predictor to-transparent my-4"></div>
-
-                {/**  Settings Settings */}
-                <div className="flex flex-col w-[90%]">
-                  <h2 className="lg:text-base text-sm  font-primary text-[#414042]">
-                    Additional Configuration{' '}
-                    <Tooltip title="Tooltip Text" arrow placement="top">
-                      <IconButton>
-                        <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
-                      </IconButton>
-                    </Tooltip>
-                  </h2>
-                  <div className="flex flex-col gap-3 my-2">
-                    <div className="flex justify-between">
-                      <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
-                        Remove NaN Entries
-                      </p>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <CustomSwitch
-                          checked={entries}
-                          onChange={handleEntries}
-                        />
-                      </Stack>
-                    </div>
-                    <div className="flex justify-between">
-                      <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
-                        Remove Outliers
-                      </p>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <CustomSwitch
-                          checked={outliers}
-                          onChange={handleOutliers}
-                        />
-                      </Stack>
-                    </div>
-                    <div className="flex justify-between">
-                      <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
-                        Remove Others
-                      </p>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <CustomSwitch
-                          checked={others}
-                          onChange={handleOthers}
-                        />
-                      </Stack>
+                  {/**  Settings Settings */}
+                  <div className="flex flex-col mt-4 w-[90%]">
+                    <h2 className="lg:text-base text-sm  font-primary text-[#414042]">
+                      Search Parameter{' '}
+                      <Tooltip title="Tooltip Text" placement="top">
+                        <IconButton>
+                          <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
+                        </IconButton>
+                      </Tooltip>
+                    </h2>
+                    <div>
+                      <label className="md:text-xs text-[10px] text-predictor font-primary flex justify-end -mb-3">
+                        {search}%
+                      </label>
+                      <Slider
+                        value={search}
+                        onChange={handleSearch}
+                        min={0}
+                        max={100}
+                        aria-label="Temperature"
+                        sx={{
+                          color: '#E55057', // Custom Purple (Deep Purple)
+                          '& .MuiSlider-thumb': {
+                            backgroundColor: '#E55057',
+                            width: { xs: 14, md: 16 },
+                            height: { xs: 14, md: 16 },
+                          }, // Thumb color
+                          '& .MuiSlider-track': { backgroundColor: '#E55057' }, // Track (filled part)
+                          '& .MuiSlider-rail': { backgroundColor: '#E5505733' }, // Rail (unfilled part)
+                        }}
+                      />
                     </div>
                   </div>
-                </div>
 
-                <div className="line h-[0.5px] w-[90%] bg-gradient-to-r from-predictor to-transparent my-4"></div>
+                  <div className="line h-[0.5px] w-full bg-gradient-to-r from-predictor to-transparent my-4"></div>
 
-                {/**  Settings Settings */}
-                <div className="flex flex-col w-[90%]">
-                  <h2 className="lg:text-lg text-sm font-primary text-[#414042] mb-2">
-                    Training Details{' '}
-                    <Tooltip title="Tooltip Text" arrow placement="top">
-                      <IconButton>
-                        <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
-                      </IconButton>
-                    </Tooltip>
-                  </h2>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex justify-between">
-                      <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
-                        Estimated Time
-                      </p>
-                      <label className="lg:text-sm text-xs font-light text-predictor font-primary flex justify-end -mb-2">
-                        3 minutes
-                      </label>
+                  {/**  Settings Settings */}
+                  <div className="flex flex-col w-[90%]">
+                    <h2 className="lg:text-base text-sm  font-primary text-[#414042]">
+                      Additional Configuration{' '}
+                      <Tooltip title="Tooltip Text" placement="top">
+                        <IconButton>
+                          <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
+                        </IconButton>
+                      </Tooltip>
+                    </h2>
+                    <div className="flex flex-col gap-3 my-2">
+                      <div className="flex justify-between">
+                        <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
+                          Remove NaN Entries
+                        </p>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <CustomSwitch
+                            checked={entries}
+                            onChange={handleEntries}
+                          />
+                        </Stack>
+                      </div>
+                      <div className="flex justify-between">
+                        <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
+                          Remove Outliers
+                        </p>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <CustomSwitch
+                            checked={outliers}
+                            onChange={handleOutliers}
+                          />
+                        </Stack>
+                      </div>
+                      <div className="flex justify-between">
+                        <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
+                          Remove Others
+                        </p>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <CustomSwitch
+                            checked={others}
+                            onChange={handleOthers}
+                          />
+                        </Stack>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
-                        Estimated Price
-                      </p>
-                      <label className="lg:text-sm text-xs font-light text-predictor font-primary flex justify-end -mb-2">
-                        10 credits
-                      </label>
+                  </div>
+
+                  <div className="line h-[0.5px] w-full bg-gradient-to-r from-predictor to-transparent my-4"></div>
+
+                  {/**  Settings Settings */}
+                  <div className="flex flex-col w-[90%]">
+                    <h2 className="lg:text-lg text-sm font-primary text-[#414042] mb-2">
+                      Training Details{' '}
+                      <Tooltip title="Tooltip Text" placement="top">
+                        <IconButton>
+                          <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
+                        </IconButton>
+                      </Tooltip>
+                    </h2>
+                    <div className="flex flex-col gap-2">
+                      <div className="flex justify-between">
+                        <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
+                          Estimated Time
+                        </p>
+                        <label className="lg:text-sm text-xs font-light text-predictor font-primary flex justify-end -mb-2">
+                          3 minutes
+                        </label>
+                      </div>
+                      <div className="flex justify-between">
+                        <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
+                          Estimated Price
+                        </p>
+                        <label className="lg:text-sm text-xs font-light text-predictor font-primary flex justify-end -mb-2">
+                          10 credits
+                        </label>
+                      </div>
                     </div>
+                  </div>
+
+                  <div className="flex justify-center mt-4 w-full">
+                    <button className="mt-4 bg-predictor text-white lg:py-2 py-1.5 lg:px-16 md:px-14 px-12 lg:text-sm text-xs font-primary rounded-[30px] transition w-full">
+                      Generate
+                    </button>{' '}
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      )}
     </Fragment>
   );
 };

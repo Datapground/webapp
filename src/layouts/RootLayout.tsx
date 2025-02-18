@@ -7,8 +7,8 @@ const RootLayout = () => {
   return (
     <div className={`min-h-screen lg:flex`}>
       <SideNavigation />
-      <div className={`lg:flex-1 md:px-6 px-4 mb-4`}>
-        <div className={`min-h-[calc(100vh-76px)]`}>
+      <div className={`lg:flex-1 md:px-6 px-4 `}>
+        <div className={`min-h-[calc(100vh-76px)] mb-8`}>
           <Outlet />
         </div>
         <Footer />
