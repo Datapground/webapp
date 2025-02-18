@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import RootLayout from './layouts/RootLayout';
@@ -19,6 +19,7 @@ import Connections from './pages/Connections';
 import Projects from './pages/Projects';
 import Activity from './pages/Activity';
 import Usage from './pages/Usage';
+import NotFound from './pages/NotFound';
 
 const App = () => {
   return (
@@ -47,6 +48,11 @@ const App = () => {
         <Route path="/activity" element={<Activity />} />
         <Route path="/usage" element={<Usage />} />
       </Route>
+
+      {/* 404 Page route */}
+      <Route path="/404" element={<NotFound />} />
+      {/* Fallback route when no tenant is provided */}
+      <Route path="*" element={<Navigate to="/404" replace />} />
     </Routes>
   );
 };
