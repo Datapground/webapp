@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TopBar from '../components/TopBar';
 import UsageIcon from '../components/Icons/UsageIcon';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import { IoPrintOutline } from 'react-icons/io5';
 import ChartWithDateFilter from '../components/usage/chart';
+import Pagination from '@mui/material/Pagination';
 
 interface ActivityData {
   date: string;
@@ -290,11 +291,16 @@ const data: ActivityData[] = [
 ];
 
 const Usage: React.FC = () => {
+  const itemsPerPage = 5; // Number of records per page
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
     null,
   ]);
   const [startDate, endDate] = dateRange;
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
 
   const filterData = (
     data: ActivityData[],
@@ -311,6 +317,15 @@ const Usage: React.FC = () => {
   };
 
   const filteredData = filterData(data, startDate, endDate);
+  // Slice data for pagination
+  const paginatedData = filteredData.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
+
+  useEffect(() => {
+    setPage(1);
+  }, [startDate, endDate]);
 
   return (
     <div>
@@ -376,7 +391,7 @@ const Usage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredData?.map((item, index) => (
+                {paginatedData?.map((item, index) => (
                   <tr
                     key={index}
                     className="border-b text-center border-gray-200"
@@ -406,6 +421,25 @@ const Usage: React.FC = () => {
                 ))}
               </tbody>
             </table>
+            <div className="mt-6 flex justify-end">
+              <Pagination
+                size="small"
+                sx={{
+                  fontFamily: 'var(--font-primary) !important',
+                  color: '#414042',
+                  '& .MuiPaginationItem-root': {
+                    color: '#414042', // Default text color
+                  },
+                  '& .Mui-selected': {
+                    backgroundColor: '#5183F0 !important', // Set your active item background color
+                    color: '#ffffff', // Optional: Change text color for contrast
+                  },
+                }}
+                count={Math.ceil(filteredData.length / itemsPerPage)}
+                page={page}
+                onChange={handleChange}
+              />
+            </div>
           </div>
         </div>
       </div>
