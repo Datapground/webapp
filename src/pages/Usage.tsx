@@ -3,10 +3,7 @@ import TopBar from '../components/TopBar';
 import UsageIcon from '../components/Icons/UsageIcon';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
-import UserSelect from '../components/usage/Select';
 import { IoPrintOutline } from 'react-icons/io5';
-import PrevIcon from '../components/Icons/PrevIcon';
-import NextIcon from '../components/Icons/NextIcon';
 import ChartWithDateFilter from '../components/usage/chart';
 
 interface ActivityData {
@@ -298,9 +295,6 @@ const Usage: React.FC = () => {
     null,
   ]);
   const [startDate, endDate] = dateRange;
-  const [currentPage, setCurrentPage] = useState(0);
-
-  const entriesPerPage = 5;
 
   const filterData = (
     data: ActivityData[],
@@ -317,25 +311,6 @@ const Usage: React.FC = () => {
   };
 
   const filteredData = filterData(data, startDate, endDate);
-  const startIndex = currentPage * entriesPerPage;
-  const endIndex = Math.min(startIndex + entriesPerPage, filteredData.length);
-  const filteredDataPagination = filterData(data, startDate, endDate).slice(
-    startIndex,
-    endIndex
-  );
-
-  // Handle Next & Previous buttons
-  const nextPage = () => {
-    if (endIndex < data.length) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
 
   return (
     <div>
@@ -349,7 +324,7 @@ const Usage: React.FC = () => {
       <div className="mt-4">
         <div className="flex flex-col">
           <div className="flex items-center justify-between gap-2 ">
-            <div className="flex items-center justify-center gap-2 ">
+            <div className="relative">
               <DatePicker
                 selected={startDate}
                 isClearable
@@ -357,19 +332,10 @@ const Usage: React.FC = () => {
                 startDate={startDate}
                 endDate={endDate}
                 selectsRange
-                placeholderText="Select a date range"
-                className="rounded-[20px] border border-[#E5E5E5] px-4 h-[40px] text-sm font-light outline-none min-w-[200px]"
+                placeholderText="Filter By Date"
+                className="rounded-[20px] border min-w-[250px] border-[#E5E5E5] px-4 h-[40px] text-sm font-light outline-none"
                 dateFormat="yyyy-MM-dd"
                 portalId="root"
-              />
-              <UserSelect
-                options={[
-                  { value: 'Model 1', label: 'Model 1' },
-                  { value: 'Model 2', label: 'Model 2' },
-                  { value: 'Model 3', label: 'Model 3' },
-                ]}
-                placeholder="Select model type"
-                className="w-[200px]"
               />
             </div>
 
@@ -410,7 +376,7 @@ const Usage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredDataPagination?.map((item, index) => (
+                {filteredData?.map((item, index) => (
                   <tr
                     key={index}
                     className="border-b text-center border-gray-200"
@@ -440,21 +406,6 @@ const Usage: React.FC = () => {
                 ))}
               </tbody>
             </table>
-          </div>
-          <div className="flex justify-end gap-6 m-2">
-            <p className="lg:text-sm text-xs text-gray-500 font-primary">
-              {startIndex + 1}-{endIndex} of{' '}
-              {filteredData.length || data.length}
-            </p>
-            <div className="flex items-center gap-2">
-              <button onClick={prevPage} disabled={currentPage === 0}>
-                <PrevIcon className="w-[16px] h-[16px] text-gray-500 cursor-pointer" />
-              </button>
-
-              <button onClick={nextPage} disabled={endIndex >= data.length}>
-                <NextIcon className="w-[16px] h-[16px] text-gray-500 cursor-pointer" />
-              </button>
-            </div>
           </div>
         </div>
       </div>
