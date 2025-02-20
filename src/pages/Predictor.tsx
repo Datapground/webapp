@@ -20,8 +20,9 @@ import PenIcon from '../components/Icons/PenIcon';
 import DeleteIcon from '../components/Icons/DeleteIcon';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import QuestionIcon from '../components/Icons/QuestionIcon';
+import * as XLSX from 'xlsx';
 
-const columns = ['Columns A', 'Columns B', 'Columns C', 'Columns D'];
+// custom switch
 
 const CustomSwitch = styled(Switch)<{
   trackcolor?: string;
@@ -60,42 +61,68 @@ const CustomSwitch = styled(Switch)<{
   },
 }));
 
+// box mui
+const boxStyles = {
+  '& .MuiPaper-root': {
+    width: { md: '90vw', lg: '70vw' },
+    maxWidth: '1400px',
+    height: '80vh',
+    borderRadius: '40px',
+    overflow: 'hidden',
+  },
+};
+
 const Predictor: React.FC = () => {
   const [entries, setEntries] = React.useState(false);
   const [outliers, setOutliers] = React.useState(false);
   const [others, setOthers] = React.useState(false);
   const [search, setSearch] = useState(60);
   const [open, setOpen] = useState(true);
-  const [uploadedFiles, setUploadedFiles] = useState<FileWithPath[]>([]);
-  const [prevFiles, setPrevFiles] = useState<FileWithPath[]>([]);
   const [hasRun, setHasRun] = useState(false);
-  const [fileError, setFileError] = useState('');
   const [selectedPredictor, setSelectedPredictor] = useState<OptionType | null>(
     null
   );
+  const [predictorName, setPredictorName] = useState('');
+  const [columns, setColumns] = useState<string[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<FileWithPath[]>([]);
+  const [prevFiles, setPrevFiles] = useState<FileWithPath[]>([]);
+  const [fileError, setFileError] = useState('');
 
-  // handle buttons in Predictor Dialog Box
-
-  const handleEntries = () => {
-    const newValue = !entries;
-    setEntries(newValue);
-  };
-  const handleOutliers = () => {
-    const newValue = !outliers;
-    setOutliers(newValue);
-  };
-  const handleOthers = () => {
-    const newValue = !others;
-    setOthers(newValue);
-  };
-
-  const handlePredictorChange = (selected: OptionType | null) => {
-    setSelectedPredictor(selected);
-  };
-
+  // File Upload features
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB Limit
 
-  const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) processFile(file);
+  };
+
+  const processFile = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      if (!e.target?.result) return;
+
+      const data = new Uint8Array(e.target.result as ArrayBuffer);
+      const workbook = XLSX.read(data, { type: 'array' });
+
+      const sheetName = workbook.SheetNames[0];
+      const sheet = XLSX.utils.sheet_to_json<string[]>(
+        workbook.Sheets[sheetName],
+        {
+          header: 1,
+        }
+      );
+
+      if (sheet.length > 0) {
+        setColumns(sheet[0] as string[]);
+      }
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
+
+  // Dropzone Functionality
+
+  const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'text/csv': ['.csv'],
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
@@ -109,12 +136,10 @@ const Predictor: React.FC = () => {
       setFileError(''); // Reset error state
 
       if (files.length === 0) {
-        // Restore previous files if no new file is selected (file manager canceled)
         setUploadedFiles(prevFiles);
         return;
       }
 
-      // Filter out duplicates before updating
       const newFiles = files.filter(
         (file) => !uploadedFiles.some((prevFile) => prevFile.name === file.name)
       );
@@ -122,6 +147,7 @@ const Predictor: React.FC = () => {
       if (newFiles.length > 0) {
         setUploadedFiles((prev) => [...prev, ...newFiles]); // Append new files
         setPrevFiles([...uploadedFiles, ...newFiles]); // Backup previous files
+        processFile(newFiles[0]);
         setHasRun(true);
       }
 
@@ -129,21 +155,30 @@ const Predictor: React.FC = () => {
     },
   });
 
+  // handle switches
+
+  const handleEntries = (): void => {
+    setEntries((prev) => !prev);
+  };
+
+  const handleOutliers = (): void => {
+    setOutliers((prev) => !prev);
+  };
+
+  const handleOthers = (): void => {
+    setOthers((prev) => !prev);
+  };
+
+  const handlePredictorChange = (selected: OptionType | null) => {
+    setSelectedPredictor(selected);
+  };
+
   const handleSearch = (_event: Event, newValue: number | number[]) => {
     setSearch(newValue as number);
   };
 
-  const handleClose = () => setOpen(false);
+  const handleClose = (): void => setOpen(false);
 
-  const boxStyles = {
-    '& .MuiPaper-root': {
-      width: { md: '90vw', lg: '70vw' },
-      maxWidth: '1400px',
-      height: '80vh',
-      borderRadius: '40px',
-      overflow: 'hidden',
-    },
-  };
   return (
     <Fragment>
       {/* Top bar */}
@@ -202,6 +237,8 @@ const Predictor: React.FC = () => {
               id="input"
               type="file"
               className="hidden"
+              accept=".xlsx, .xls"
+              onChange={handleFileUpload}
               {...getInputProps()}
             />
             <div className="relative">
@@ -229,17 +266,6 @@ const Predictor: React.FC = () => {
                   <p className="text-red-500 text-sm mt-2">{fileError}</p>
                 )}
               </div>
-
-              {/* {files.length > 0 && (
-                <aside className="absolute bottom-2 -right-1">
-                  <button className="bg-predictor lg:py-2 py-1.5 lg:px-6 px-5 md:text-sm text-xs rounded-lg text-white font-primary flex justify-center items-center gap-2 whitespace-nowrap">
-                    <PenIcon
-                      className={`md:w-[22px] w-[20px] md:h-[22px] h-[20px] fill-white`}
-                    />
-                    Generate
-                  </button>
-                </aside>
-              )} */}
             </div>
           </div>
 
@@ -278,26 +304,6 @@ const Predictor: React.FC = () => {
           )}
         </div>
         <aside className="xl:col-span-2 col-span-8">
-          {/* <h3 className="lg:text-base md:text-sm text-xs font-semibold text-[#414042] mb-2 font-primary">
-            File Formate
-          </h3>
-
-          <div className="flex w-full">
-            <PredictorSelect
-              options={[
-                {
-                  label: 'formats',
-                  options: [
-                    { value: '.csv', label: '.csv' },
-                    { value: '.xlsm', label: '.xlsm' },
-                    { value: '.json', label: '.json' },
-                  ],
-                },
-              ]}
-              placeholder="No file selected"
-            />
-          </div> */}
-
           {/** File Guidelines */}
           <div className="">
             <h3 className="lg:text-base md:text-sm text-xs font-semibold text-[#414042]">
@@ -342,7 +348,7 @@ const Predictor: React.FC = () => {
             </ul>
           </div>
 
-          {uploadedFiles.length > 0 && (
+          {selectedPredictor && (
             <div className="flex flex-col space-y-6">
               <h3 className="lg:text-base md:text-sm text-xs  font-medium text-[#414042] ">
                 File Preparation Tips
@@ -465,15 +471,14 @@ const Predictor: React.FC = () => {
                   </div>
 
                   {/**  Settings Settings */}
-                  <div className="flex flex-col mt-4 w-[90%]">
-                    <h2 className="lg:text-base text-sm  font-primary text-[#414042]">
-                      Search Parameter{' '}
-                      <Tooltip title="Tooltip Text" placement="top">
-                        <IconButton>
-                          <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
-                        </IconButton>
-                      </Tooltip>
-                    </h2>
+                  <div className="flex flex-col mt-4 w-full">
+                    <input
+                      type="text"
+                      placeholder="Type predictor name"
+                      className=" text-xs placeholder:text-gray-300 text-gray-500 font-primary py-2 px-3 border outline-none rounded-[30px] mb-2"
+                      value={predictorName}
+                      onChange={(e) => setPredictorName(e.target.value)}
+                    />
                     <div>
                       <label className="md:text-xs text-[10px] text-predictor font-primary flex justify-end -mb-3">
                         {search}%
@@ -498,19 +503,19 @@ const Predictor: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="line h-[0.5px] w-full bg-gradient-to-r from-predictor to-transparent my-4"></div>
+                  <div className="line min-h-[0.5px] w-full bg-gradient-to-r from-predictor to-transparent my-3"></div>
 
                   {/**  Settings Settings */}
-                  <div className="flex flex-col w-[90%]">
-                    <h2 className="lg:text-base text-sm  font-primary text-[#414042]">
-                      Additional Configuration{' '}
+                  <div className="flex flex-col w-full">
+                    <h2 className="lg:text-base text-sm font-primary text-[#414042] mb-1">
+                      Additional Configuration
                       <Tooltip title="Tooltip Text" placement="top">
                         <IconButton>
                           <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
                         </IconButton>
                       </Tooltip>
                     </h2>
-                    <div className="flex flex-col gap-3 my-2">
+                    <div className="flex flex-col gap-1 my-1">
                       <div className="flex justify-between">
                         <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
                           Remove NaN Entries
@@ -547,11 +552,11 @@ const Predictor: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="line h-[0.5px] w-full bg-gradient-to-r from-predictor to-transparent my-4"></div>
+                  <div className="flex line min-h-[1px] w-full bg-gradient-to-r from-predictor to-transparent my-3"></div>
 
                   {/**  Settings Settings */}
-                  <div className="flex flex-col w-[90%]">
-                    <h2 className="lg:text-lg text-sm font-primary text-[#414042] mb-2">
+                  <div className="flex flex-col w-full">
+                    <h2 className="lg:text-base text-sm font-primary text-[#414042] mb-1">
                       Training Details{' '}
                       <Tooltip title="Tooltip Text" placement="top">
                         <IconButton>
@@ -559,7 +564,7 @@ const Predictor: React.FC = () => {
                         </IconButton>
                       </Tooltip>
                     </h2>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1">
                       <div className="flex justify-between">
                         <p className="lg:text-sm text-xs font-light text-[#414042] font-primary ">
                           Estimated Time
