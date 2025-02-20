@@ -26,7 +26,7 @@ import ExtenderIcon from './Icons/ExtenderIcon';
 import APIKeyIcon from './Icons/APIKeyIcon';
 import UsageIcon from './Icons/UsageIcon';
 import BillingIcon from './Icons/BillingIcon';
-import { Button, IconButton, Menu, MenuItem } from '@mui/material';
+import { IconButton, Menu, MenuItem } from '@mui/material';
 import SettingsIcon from './Icons/SettingsIcon';
 import PlaygroundIcon from './Icons/PlaygroundIcon';
 
@@ -237,29 +237,26 @@ const TopBar: React.FC<Props> = ({ children, containerClassName }) => {
           </button>
 
           <Menu
-            id="basic-menu"
+            id="menu"
             anchorEl={anchorEl}
             open={openE}
             onClose={handleClose}
+            sx={{ mt: '45px', p: 0 }}
             MenuListProps={{
-              'aria-labelledby': 'basic-button',
-              className: 'p-2',
-            }}
-            PaperProps={{
-              className:
-                'rounded-[15px] bg-white shadow-xl border border-gray-200 min-w-[260px] transition-transform transform origin-top duration-300 ease-in-out',
+              sx: {
+                p: 0, // Remove padding inside the menu list
+              },
             }}
             anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
+              vertical: 'top',
+              horizontal: 'right',
             }}
             transformOrigin={{
               vertical: 'top',
-              horizontal: 'center',
+              horizontal: 'right',
             }}
           >
-            {/* Profile Section */}
-            <div className="flex items-center gap-3 p-3 border-b border-gray-200 rounded-t-[15px]">
+            <div className="flex items-center gap-3 px-4 py-3 rounded-t-[15px]">
               <img
                 src={profile.image}
                 className="w-10 h-10 rounded-full object-cover"
@@ -273,38 +270,29 @@ const TopBar: React.FC<Props> = ({ children, containerClassName }) => {
                 </p>
               </div>
             </div>
-
-            {/* Navigation Links */}
-            <div className="flex flex-col">
-              {[
-                { to: '#', label: 'Profile' },
-                { to: '/apikeys', label: 'API Keys' },
-                { to: '/billings', label: 'Billings' },
-                { to: '/usage', label: 'Usage' },
-              ].map((item) => (
-                <Link key={item.label} to={item.to} className="w-full">
-                  <MenuItem
-                    onClick={handleClose}
-                    className="rounded-[15px] px-4 py-2 hover:bg-gray-100 transition duration-200"
-                  >
-                    {item.label}
-                  </MenuItem>
-                </Link>
-              ))}
-            </div>
-
-            {/* Divider */}
-            <div className="border-t border-gray-200 my-2"></div>
-
-            {/* Logout */}
-            <Link to="#" className="w-full">
-              <MenuItem
-                onClick={handleClose}
-                className="rounded-[15px] px-4 py-2 text-red-500 font-semibold hover:bg-red-50 transition duration-200"
-              >
-                Logout
-              </MenuItem>
-            </Link>
+            <Divider />
+            {[
+              { to: '#', label: 'Profile' },
+              { to: '/apikeys', label: 'API Keys' },
+              { to: '/billings', label: 'Billings' },
+              { to: '/usage', label: 'Usage' },
+            ].map((item) => (
+              <Link key={item.label} to={item.to} className="w-full">
+                <MenuItem
+                  onClick={handleClose}
+                  className="rounded-[15px] !font-primary !text-sm"
+                >
+                  {item.label}
+                </MenuItem>
+              </Link>
+            ))}
+            <Divider />
+            <MenuItem
+              onClick={handleClose}
+              className="rounded-[15px] !py-3 !font-primary !text-sm"
+            >
+              Logout
+            </MenuItem>
           </Menu>
         </div>
       </nav>
