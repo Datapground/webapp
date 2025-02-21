@@ -21,6 +21,12 @@ import DeleteIcon from '../components/Icons/DeleteIcon';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import QuestionIcon from '../components/Icons/QuestionIcon';
 import * as XLSX from 'xlsx';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from '@hello-pangea/dnd';
 
 // custom switch
 
@@ -72,6 +78,12 @@ const boxStyles = {
   },
 };
 
+type IColumns = {
+  available: string[];
+  features: string[];
+  targets: string[];
+};
+
 const Predictor: React.FC = () => {
   const [entries, setEntries] = React.useState(false);
   const [outliers, setOutliers] = React.useState(false);
@@ -83,18 +95,17 @@ const Predictor: React.FC = () => {
     null
   );
   const [predictorName, setPredictorName] = useState('');
-  const [columns, setColumns] = useState<string[]>([]);
+  const [columns, setColumns] = useState<IColumns>({
+    available: [],
+    features: [],
+    targets: [],
+  });
   const [uploadedFiles, setUploadedFiles] = useState<FileWithPath[]>([]);
   const [prevFiles, setPrevFiles] = useState<FileWithPath[]>([]);
   const [fileError, setFileError] = useState('');
 
   // File Upload features
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB Limit
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) processFile(file);
-  };
 
   const processFile = (file: File) => {
     const reader = new FileReader();
@@ -113,11 +124,16 @@ const Predictor: React.FC = () => {
       );
 
       if (sheet.length > 0) {
-        setColumns(sheet[0] as string[]);
+        setColumns({ ...columns, available: sheet[0] });
       }
     };
 
     reader.readAsArrayBuffer(file);
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) processFile(file);
   };
 
   // Dropzone Functionality
@@ -178,6 +194,38 @@ const Predictor: React.FC = () => {
   };
 
   const handleClose = (): void => setOpen(false);
+
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+    if (!destination) return;
+
+    const updatedColumns = { ...columns };
+    const sourceList = Array.from(
+      updatedColumns[source.droppableId as keyof typeof columns]
+    );
+    const destList = Array.from(
+      updatedColumns[destination.droppableId as keyof typeof columns]
+    );
+
+    if (source.index >= sourceList.length) return;
+
+    const [moved] = sourceList.splice(source.index, 1);
+
+    // ✅ Check for duplicate before inserting
+    if (!destList.includes(moved)) {
+      destList.splice(destination.index, 0, moved);
+
+      if (source.droppableId === destination.droppableId) {
+        updatedColumns[source.droppableId as keyof typeof columns] = destList;
+      } else {
+        updatedColumns[source.droppableId as keyof typeof columns] = sourceList;
+        updatedColumns[destination.droppableId as keyof typeof columns] =
+          destList;
+      }
+
+      setColumns(updatedColumns);
+    }
+  };
 
   return (
     <Fragment>
@@ -385,7 +433,7 @@ const Predictor: React.FC = () => {
             flexDirection: 'column',
           }}
         >
-          <div className="grid grid-cols-7 bg-white rounded-[40px] relative border-l-0 w-full h-full  lg:p-4 p-3">
+          <div className="grid grid-cols-7 bg-white rounded-[40px] relative border-l-0 w-full h-full lg:p-4 p-3">
             <div className="col-span-5 lg:mx-10 mx-8 lg:py-6 py-4 overflow-y-auto no-scrollbar max-h-[80vh]">
               <div className="mb-8">
                 <h2 className="text-[#414042] xl:text-[26px] lg:text-[22px] md:text-[20px] text-base font-primary font-semibold">
@@ -402,60 +450,82 @@ const Predictor: React.FC = () => {
                   Available Columns Configuration
                 </h3>
                 {/* table */}
-                <div className="grid grid-cols-3 border border-[#0000000D] rounded-[40px]">
+                <div className="grid grid-cols-3 border border-[#0000000D] rounded-[40px] overflow-hidden">
                   {/* Header Row */}
-                  <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-r border-b">
-                    Available Columns
-                    <Tooltip title="Tooltip Text" placement="top">
-                      <IconButton>
-                        <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                  <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-r border-b">
-                    Feature Columns{' '}
-                    <Tooltip title="Tooltip Text" placement="top">
-                      <IconButton>
-                        <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                  <div className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2  text-center border-b">
-                    Target Columns{' '}
-                    <Tooltip title="Tooltip Text" placement="top">
-                      <IconButton>
-                        <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
+                  {[
+                    'Available Columns',
+                    'Feature Columns',
+                    'Target Columns',
+                  ].map((header, index) => (
+                    <div
+                      key={index}
+                      className="text-[#414042] font-medium font-primary lg:text-sm text-xs lg:py-3 py-2 text-center border-b"
+                      style={{
+                        borderRight: index < 2 ? '1px solid #0000000D' : 'none',
+                      }}
+                    >
+                      {header}
+                      <Tooltip title="Tooltip Text" placement="top">
+                        <IconButton>
+                          <QuestionIcon className="w-[14px] h-[14px] stroke-[#414042]" />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  ))}
 
                   {/* Data Rows */}
+                  <DragDropContext onDragEnd={onDragEnd}>
+                    {(['available', 'features', 'targets'] as const).map(
+                      (col, colIndex) => (
+                        <Droppable key={col} droppableId={col}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className={`min-h-[150px] ${colIndex < 2 ? 'border-r' : ''}`}
+                            >
+                              {columns[col].map((item, index) => (
+                                <Draggable
+                                  key={item}
+                                  draggableId={item}
+                                  index={index}
+                                >
+                                  {(provided) => (
+                                    <div
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      className="text-[#414042] truncate font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 text-center border-b bg-white cursor-grab"
+                                    >
+                                      {item}
+                                    </div>
+                                  )}
+                                </Draggable>
+                              ))}
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Droppable>
+                      )
+                    )}
+                  </DragDropContext>
+                </div>
+
+                {/* <div className="grid grid-cols-3 border border-[#0000000D] rounded-[40px] overflow-hidden">
                   {columns.map((column, index) => (
                     <React.Fragment key={index}>
-                      <div
-                        className={`text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 text-center border-r ${
-                          index !== columns.length - 1 ? 'border-b' : ''
-                        }`}
-                      >
+                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 text-center border-r border-b">
                         {column}
                       </div>
-                      <div
-                        className={`text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-r flex justify-center items-center ${
-                          index !== columns.length - 1 ? 'border-b' : ''
-                        }`}
-                      >
+                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-r border-b flex justify-center items-center">
                         <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
                       </div>
-                      <div
-                        className={`text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 flex justify-center items-center ${
-                          index !== columns.length - 1 ? 'border-b' : ''
-                        }`}
-                      >
+                      <div className="text-[#414042] font-primary lg:text-sm text-xs lg:py-4 md:py-3 py-2 border-b flex justify-center items-center">
                         <HandIcon className="lg:w-[22px] md:w-[18px] w-[16px] lg:h-[22px] md:h-[18px] h-[16px] fill-predictor" />
                       </div>
                     </React.Fragment>
                   ))}
-                </div>
+                </div> */}
               </div>
             </div>
 
