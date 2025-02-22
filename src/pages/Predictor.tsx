@@ -199,32 +199,41 @@ const Predictor: React.FC = () => {
     const { source, destination } = result;
     if (!destination) return;
 
-    const updatedColumns = { ...columns };
-    const sourceList = Array.from(
-      updatedColumns[source.droppableId as keyof typeof columns]
-    );
-    const destList = Array.from(
-      updatedColumns[destination.droppableId as keyof typeof columns]
-    );
+    // Clone columns deeply
+    const updatedColumns = {
+      available: [...columns.available],
+      features: [...columns.features],
+      targets: [...columns.targets],
+    };
+
+    const sourceList = updatedColumns[source.droppableId as keyof IColumns];
+    const destList = updatedColumns[destination.droppableId as keyof IColumns];
 
     if (source.index >= sourceList.length) return;
 
     const [moved] = sourceList.splice(source.index, 1);
 
-    // ✅ Check for duplicate before inserting
-    if (!destList.includes(moved)) {
-      destList.splice(destination.index, 0, moved);
-
-      if (source.droppableId === destination.droppableId) {
-        updatedColumns[source.droppableId as keyof typeof columns] = destList;
-      } else {
-        updatedColumns[source.droppableId as keyof typeof columns] = sourceList;
-        updatedColumns[destination.droppableId as keyof typeof columns] =
-          destList;
+    // ✅ Handle Target Column Restriction
+    if (destination.droppableId === 'targets') {
+      // If target already has an item, move it to available
+      if (updatedColumns.targets.length > 0) {
+        const previousItem = updatedColumns.targets.splice(0, 1)[0];
+        updatedColumns.available.push(previousItem); // Move old item to available
       }
 
-      setColumns(updatedColumns);
+      // Insert the moved item into targets
+      destList.splice(destination.index, 0, moved);
+    } else {
+      // ✅ Allow reordering in the same column or adding to different columns without duplicates
+      if (
+        source.droppableId === destination.droppableId ||
+        !destList.includes(moved)
+      ) {
+        destList.splice(destination.index, 0, moved);
+      }
     }
+
+    setColumns(updatedColumns);
   };
 
   return (
