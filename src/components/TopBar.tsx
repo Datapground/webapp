@@ -5,7 +5,7 @@ import QuestionIcon from './Icons/QuestionIcon';
 import BellIcon from './Icons/BellIcon';
 import ChevronDownIcon from './Icons/ChevronDownIcon';
 import { cn } from '../utils/tailwindClassesMerge';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -58,6 +58,8 @@ type Props = {
 };
 
 const TopBar: React.FC<Props> = ({ children, containerClassName }) => {
+  const location = useLocation();
+  const pathname = location.pathname;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -193,7 +195,7 @@ const TopBar: React.FC<Props> = ({ children, containerClassName }) => {
     <Fragment>
       <nav
         className={cn(
-          'lg:flex hidden justify-end items-center mb-4 pt-6',
+          `lg:flex hidden justify-end items-center mb-4 pt-6 sticky top-0 z-[100] ${pathname.includes('/generator') || pathname.includes('/predictor') || pathname.includes('/extender') ? '' : 'bg-white'}`,
           containerClassName
         )}
       >

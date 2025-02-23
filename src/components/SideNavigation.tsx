@@ -147,7 +147,7 @@ const SideNavigation = () => {
 
   return (
     <nav
-      className={`w-64 lg:flex hidden flex-col justify-between items-center rounded-[40px] bg-[#E3ECFF]`}
+      className={`w-64 lg:flex hidden h-screen flex-col justify-between sticky top-0 items-center rounded-[40px] bg-[#E3ECFF]`}
     >
       <div className="w-full relative z-50">
         <div className="p-4">

@@ -5,10 +5,10 @@ import Footer from '../components/Footer';
 
 const RootLayout = () => {
   return (
-    <div className={`min-h-screen lg:flex`}>
+    <div className={`lg:flex`}>
       <SideNavigation />
       <div className={`lg:flex-1 md:px-6 px-4 `}>
-        <div className={`min-h-[calc(100vh-76px)] mb-8`}>
+        <div className={`min-h-[calc(100vh-84px)] mb-8`}>
           <Outlet />
         </div>
         <Footer />
